@@ -1,0 +1,410 @@
+//============= Navbar Default Template Setup ===============//
+.navbar, 
+#navbar, 
+#navbar-special {
+  min-height: 65px;
+}
+
+body[data-special-navbar="true"] {
+  padding-top: 65px !important;
+}
+
+
+.navbar {
+  box-shadow: none;
+  border-bottom: 1px solid var(--global-divider-color);
+  background-color: var(--global-nav-color);
+  opacity: 0.95;
+}
+
+.navbar .dropdown-menu {
+  background-color: var(--global-text-nav-color) !important;
+  border: 1px solid var(--global-divider-color);
+
+  a:not(.active) {
+    color: var(--global-text-nav-color);
+  }
+
+  a:hover {
+    color: var(--global-hover-nav-color);
+  }
+
+  .dropdown-divider {
+    border-top: 1px solid var(--global-divider-color) !important;
+  }
+}
+
+.dropdown-item {
+  color: var(--global-text-nav-color);
+
+  &:hover {
+    color: var(--global-hover-nav-color);
+    background-color: var(--global-text-nav-color);
+  }
+}
+
+.navbar.navbar-light {
+  a {
+    &:hover {
+      text-decoration: none;
+    }
+  }
+
+  .navbar-brand {
+    color: var(--global-text-nav-color);
+    font-weight: normal; 
+    
+    &:hover {
+      color: var(--global-hover-nav-color);
+    }
+  }
+
+  .navbar-nav .nav-item .nav-link {
+    color: var(--global-text-nav-color);
+    font-weight: normal;
+
+    &:hover {
+      color: var(--global-hover-nav-color);
+    }
+  }
+
+  .navbar-nav .nav-item.active > .nav-link {
+    background-color: inherit;
+    font-weight: bolder;
+    color: var(--global-hover-nav-color);
+    font-weight: bold;
+
+    &:hover {
+      color: var(--global-hover-nav-color);
+    }
+  }
+
+  .navbar-brand.social {
+    padding-bottom: 0;
+    padding-top: 0;
+    font-size: 1.7rem;
+
+    a {
+      img {
+        width: 1.7rem;
+        height: 1.7rem;
+        margin-bottom: 0.5rem;
+        // margin: 0.5rem;
+      }
+
+      svg {
+        width: 1.7rem;
+        height: 1.7rem;
+        margin-bottom: 0.5rem;
+
+        image {
+          width: 1.7rem;
+          height: 1.7rem;
+        }
+      }
+
+      i::before {
+        color: var(--global-text-nav-color);
+        transition-property: all 0.2s ease-in-out;
+      }
+
+      &:hover {
+        i::before {
+          color: var(--global-hover-nav-color);
+        }
+      }
+    }
+  }
+}
+
+.navbar-toggler {
+  .icon-bar {
+    display: block;
+    width: 22px;
+    height: 2px;
+    background-color: var(--global-text-nav-color) !important;
+    border-radius: 1px;
+    margin-bottom: 4px;
+    transition: all 0.2s;
+  }
+
+  .top-bar {
+    transform: rotate(45deg);
+    transform-origin: 10% 10%;
+  }
+
+  .middle-bar {
+    opacity: 0;
+  }
+
+  .bottom-bar {
+    transform: rotate(-45deg);
+    transform-origin: 10% 90%;
+  }
+}
+
+.navbar-toggler.collapsed {
+  .top-bar {
+    transform: rotate(0);
+  }
+
+  .middle-bar {
+    opacity: 1;
+  }
+
+  .bottom-bar {
+    transform: rotate(0);
+  }
+}
+
+#light-toggle,
+#search-toggle,
+#navbar-language-toggle {
+  padding: 0;
+  border: 0;
+  background-color: inherit;
+  color: var(--global-text-nav-color);
+
+  &:hover {
+    color: var(--global-hover-nav-color);
+  }
+}
+
+//=================== Navbar auto-hide styles =========================//
+.navbar-autohide-enabled {
+  transition: transform 0.3s ease;
+}
+
+.navbar-hidden {
+  transform: translateY(-100%) !important;
+}
+
+/* Make sure the base transitions are defined for both navbar types */
+.navbar, #navbar, #navbar-special {
+  transition: transform 0.3s ease, opacity 0.3s ease !important;
+  will-change: transform, opacity;
+}
+
+/* Target both navbars with the hidden class */
+.navbar-hidden, 
+#navbar.navbar-hidden,
+#navbar-special.navbar-hidden {
+  transform: translateY(-100%) !important;
+  opacity: 0 !important;
+}
+
+/* Ensure the navbar-autohide-enabled class is properly recognized for all navbar types */
+.navbar-autohide-enabled, 
+#navbar.navbar-autohide-enabled,
+#navbar-special.navbar-autohide-enabled {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1030;
+}
+
+//=================== Button Space (Icons) =========================//
+.toggle-container + .nav-item {
+  margin-left: 14px !important;
+}
+
+// Ensure proper alignment of controls
+@media (min-width: 576px) {
+  #navbar-special .toggle-container {
+    margin-left: auto !important;
+    margin-right: 0 !important;
+  }
+
+  .navbar-collapse {
+    flex-grow: 0;
+    display: flex;
+    align-items: center;
+  }
+}
+
+@media (max-width: 576px) {
+  .navbar-nav .nav-item:last-child {
+    align-self: flex-end;
+    margin-left: auto;
+  }
+
+  .language-btn-navbar {
+    margin-right: 0 !important;
+  }
+}
+
+@media (max-width: 575.98px) {
+  .navbar-brand-container {
+    margin-left: 0 !important;
+    margin-right: auto !important;
+  }
+
+  .navbar-brand-container a.navbar-brand {
+    display: flex;
+    justify-content: flex-start;
+  }
+}
+
+//===================== Language Button ===========================//
+.language-btn-navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #d6d6d6 !important; /* Toggle track color */
+  border-radius: 30px;
+  padding: 3px !important;
+  position: relative;
+  width: 68px;
+  height: 28px;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  margin-top: 8px !important;
+  border: none;
+  box-shadow:
+    inset 0 1px 3px rgba(0, 0, 0, 0.1),
+    0 1px 3px rgba(0, 0, 0, 0.15);
+}
+
+/* Toggle indicator (circle) */
+.language-btn-navbar .toggle-indicator {
+  position: absolute;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background-color: #ffffff;
+  box-shadow:
+    0 2px 5px rgba(0, 0, 0, 0.15),
+    inset 0 -1px 1px rgba(0, 0, 0, 0.05);
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  will-change: transform;
+}
+
+/* Position based on language */
+.language-btn-navbar.en .toggle-indicator {
+  transform: translateX(3px);
+}
+.language-btn-navbar.alt-lang .toggle-indicator {
+  transform: translateX(43px);
+}
+
+/* Inner icon wrapper */
+.language-btn-navbar .navbar-lang-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+/* TH flag image */
+.language-btn-navbar .navbar-lang-icon img.circle-flag {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 1px solid white;
+  transform: scale(1.13) translateX(-1.23px);
+  transform-origin: center;
+  pointer-events: none;
+}
+
+/* Globe icon (non-TH) */
+.language-btn-navbar .navbar-lang-icon i.ti-world {
+  font-size: 1.75rem !important; /* slightly bigger */
+  color: #0d3b67;
+  transition: color 0.3s ease;
+  transform: translateX(-1.8px) !important; /* nudge left */
+}
+
+/* Text label */
+.language-btn-navbar .lang-label {
+  font-weight: 600;
+  font-size: 0.9rem;
+  position: absolute;
+  color: #0d3b67 !important;
+  text-shadow: 0 1px 1px rgba(255, 255, 255, 0.6);
+}
+
+.language-btn-navbar.en .lang-label {
+  right: 10px;
+}
+.language-btn-navbar.alt-lang .lang-label {
+  left: 10px;
+}
+
+//================ Special navbar-specific styles ================//
+#navbar-special {
+  // Center title container
+  .navbar-title-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-grow: 1;
+  }
+
+  // Title styling with responsive size
+  .navbar-title {
+    font-size: clamp(0.75rem, 3vw, 2rem); // Responsive scaling
+    color: var(--global-text-nav-color); // Use global color
+    margin: 0;
+    padding: 0;
+    text-align: center;
+    font-weight: bold;
+  }
+
+  // Logo container
+  .navbar-brand-container {
+    display: flex;
+    align-items: center;
+  }
+}
+
+//================ HERO-SECTION navbar-specific styles ================//
+// Landing Hero Header Container Styles
+#header-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1030;
+  transform: translateY(-100%);
+  opacity: 0;
+  transition: transform 0.5s ease, opacity 0.5s ease;
+  pointer-events: none;
+}
+
+// When navbar appears
+.navbar-appearing #header-container {
+  transform: translateY(0);
+  opacity: 1;
+  pointer-events: auto;
+}
+
+// Prevent content jump when navbar appears
+.landing-page-content {
+  padding-top: 0;
+}
+
+// Override hidden class on landing hero pages to ensure it works properly
+.navbar-appearing .navbar-hidden,
+.navbar-appearing #navbar.navbar-hidden,
+.navbar-appearing #navbar-special.navbar-hidden {
+  transform: translateY(0) !important;
+  opacity: 1 !important;
+}
+
+// Ensure auto-hide kicks in only after hero section
+.navbar-auto-hide .navbar-hidden {
+  transform: translateY(-100%) !important;
+  opacity: 0 !important;
+  transition: transform 0.3s ease, opacity 0.3s ease !important;
+}

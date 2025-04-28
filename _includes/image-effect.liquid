@@ -1,0 +1,138 @@
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  const picWrapper = document.querySelector('.profile-pic-wrapper');
+  let stateTimer;
+  let animationFrame;
+  let startTime = 0;
+  let isShowingOverlay = false;
+  let isAnimationRunning = false;
+  const animationDuration = 10000; // 10 seconds per state
+  
+  if (picWrapper) {
+    // Create SVG for the progress indicator
+    setupProgressIndicator(picWrapper);
+    
+    // Function to reset overlay state (hide text)
+    const resetOverlay = () => {
+      picWrapper.classList.remove('hover-ready');
+      picWrapper.classList.remove('state-text');
+      picWrapper.classList.add('state-image');
+      isShowingOverlay = false;
+      
+      // Start the progress animation
+      startProgressAnimation();
+      
+      // After the animation completes, show the overlay
+      stateTimer = setTimeout(() => {
+        showOverlay();
+      }, animationDuration);
+    };
+
+    // Function to show overlay (show text)
+    const showOverlay = () => {
+      picWrapper.classList.remove('state-image');
+      picWrapper.classList.add('hover-ready');
+      picWrapper.classList.add('state-text');
+      isShowingOverlay = true;
+      
+      // Start the progress animation again
+      startProgressAnimation();
+      
+      // After the animation completes, reset to image only
+      stateTimer = setTimeout(() => {
+        resetOverlay();
+        stopAnimationLoop();
+      }, animationDuration);
+    };
+
+    // Function to animate the SVG progress circle
+    function startProgressAnimation() {
+      // Cancel any existing animation
+      if (animationFrame) {
+        cancelAnimationFrame(animationFrame);
+      }
+      
+      const progressCircle = picWrapper.querySelector('.progress-circle');
+      const circumference = 2 * Math.PI * parseFloat(progressCircle.getAttribute('r'));
+      
+      // Set initial state - empty circle
+      progressCircle.style.strokeDasharray = `${circumference} ${circumference}`;
+      progressCircle.style.strokeDashoffset = circumference;
+      
+      // Start the animation
+      startTime = performance.now();
+      
+      function animateProgress(currentTime) {
+        const elapsed = currentTime - startTime;
+        const progress = Math.min(elapsed / animationDuration, 1);
+        const dashOffset = circumference * (1 - progress);
+        
+        progressCircle.style.strokeDashoffset = dashOffset;
+        
+        if (progress < 1) {
+          animationFrame = requestAnimationFrame(animateProgress);
+        }
+      }
+      
+      animationFrame = requestAnimationFrame(animateProgress);
+    }
+
+    // Create the SVG element for progress indicator
+    function setupProgressIndicator(wrapper) {
+      // Remove any existing progress indicator
+      const existingIndicator = wrapper.querySelector('.progress-indicator');
+      if (existingIndicator) {
+        existingIndicator.remove();
+      }
+      
+      // Create SVG element
+      const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+      svg.classList.add('progress-indicator');
+      svg.setAttribute('viewBox', '0 0 100 100');
+      
+      // Create circle element
+      const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+      circle.classList.add('progress-circle');
+      circle.setAttribute('cx', '50');
+      circle.setAttribute('cy', '50');
+      circle.setAttribute('r', '49.5'); // Just slightly inside the outer edge for thinner line
+      
+      // Append elements
+      svg.appendChild(circle);
+      wrapper.appendChild(svg);
+    }
+
+    // Start the automatic animation loop
+    const startAnimationLoop = () => {
+      isAnimationRunning = true;
+      // Initial state - start with just the picture
+      resetOverlay();
+    };
+
+    // Stop the animation loop
+    const stopAnimationLoop = () => {
+      isAnimationRunning = false;
+      clearTimeout(stateTimer);
+      if (animationFrame) {
+        cancelAnimationFrame(animationFrame);
+      }
+    };
+
+    // Handle click behavior
+    picWrapper.addEventListener('click', function (e) {
+      e.preventDefault();
+      e.stopPropagation();
+
+      // Toggle between quote and image manually
+      if (isShowingOverlay) {
+        resetOverlay();  // Go back to image
+      } else {
+        showOverlay();   // Show quote
+      }
+    });
+    
+    // Start the animation loop when the page loads
+    startAnimationLoop();
+  }
+});
+</script>

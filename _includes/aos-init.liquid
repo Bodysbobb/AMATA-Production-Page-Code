@@ -1,0 +1,15 @@
+{% if include.need_aos %}
+  <link href="https://unpkg.com/aos@next/dist/aos.css" rel="stylesheet" />
+  <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      AOS.init({
+        once: {% if include.once != nil %}{{ include.once | jsonify }}{% else %}true{% endif %},
+        duration: {{ include.duration | default: 700 }},
+        easing: '{{ include.easing | default: "ease-out-cubic" }}',
+        delay: {{ include.delay | default: 0 }},
+        mirror: {% if include.mirror != nil %}{{ include.mirror | jsonify }}{% else %}false{% endif %}
+      });
+    });
+  </script>
+{% endif %}

@@ -1,0 +1,9 @@
+github_users:
+  - bodysbobb
+
+repo_description_lines_max: 3
+
+github_repos:
+  - bodysbobb/HARplus
+  - bodysbobb/GTAPViz
+  - bodysbobb/GTAPViz-R-GTAPuser

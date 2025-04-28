@@ -1,0 +1,223 @@
+{% comment %}
+  Product Catalog with Theme Support
+  
+  Parameters:
+  - theme: Theme name (e.g., "product", "review")
+  - paths: Comma-separated list of image paths
+  - alts: Comma-separated list of alt texts
+  - tags: Comma-separated list of tags for filtering
+  - descriptions: Comma-separated list of descriptions
+  
+  Display Options:
+  - show_top_filters: Set to false to hide top filters
+  - show_dropdown_filters: Set to false to hide dropdown filters
+  - show_copy_url: Set to false to hide copy URL button
+  - images_per_row_max: Maximum number of images per row (for large screens)
+  - images_per_row_min: Minimum number of images per row (for small screens)
+  - image_aspect_ratio: Aspect ratio for images (e.g., "1/1", "16/9")
+  - line_account: LINE account URL (e.g., "https://line.me/ti/p/@example")
+  - allow_image_save: Set to true to allow users to save images, false to disable saving (default: false)
+  
+  Filter Options:
+  - top_filters: Comma-separated list of top-level filters
+  - filter_categories: Double-pipe separated list of filter categories
+  - filter_button_label: Custom label for filter button
+  - selected_filters_label: Custom label for selected filters section
+  - clear_all_label: Custom label for clear all button
+  - no_filters_label: Custom label for when no filters are selected
+  
+  Copy Options:
+  - copy_button_label: Custom label for copy button
+  - copy_button_label_finalstate: Custom label for copy button after copying
+  - copy_message_label: Custom message for copy feature
+  
+  Animation Options:
+  - image_animation: AOS animation type for images
+  - image_animation_once: Whether animation should happen once (true/false)
+  - image_animation_duration: Duration of animation in ms
+  - image_animation_easing: Easing function for animation
+  - image_animation_delay: Base delay for animation
+{% endcomment %}
+
+{% if include.image_animation %}
+  {% include aos-init.liquid 
+    need_aos=true 
+    once=include.image_animation_once
+    duration=include.image_animation_duration
+    easing=include.image_animation_easing
+    delay=include.image_animation_delay
+  %}
+{% endif %}
+
+<div class="product-catalog {% if include.theme %}theme-{{ include.theme }}{% endif %}" 
+  {% if include.copy_button_label %}data-copy-button-label="{{ include.copy_button_label }}"{% endif %}
+  {% if include.copy_button_label_finalstate %}data-copy-button-label-finalstate="{{ include.copy_button_label_finalstate }}"{% endif %}
+  {% if include.copy_message_label %}data-copy-message-label="{{ include.copy_message_label }}"{% endif %}
+  {% if include.selected_filters_label %}data-selected-filters-label="{{ include.selected_filters_label }}"{% endif %}
+  {% if include.clear_all_label %}data-clear-all-label="{{ include.clear_all_label }}"{% endif %}
+  {% if include.no_filters_label %}data-no-filters-label="{{ include.no_filters_label }}"{% endif %}
+  {% if include.show_copy_url == false %}data-show-copy-url="false"{% endif %}
+  {% if include.show_top_filters == false %}data-show-top-filters="false"{% endif %}
+  {% if include.show_dropdown_filters == false %}data-show-dropdown-filters="false"{% endif %}
+  {% if include.images_per_row_max %}data-images-per-row-max="{{ include.images_per_row_max }}"{% endif %}
+  {% if include.images_per_row_min %}data-images-per-row-min="{{ include.images_per_row_min }}"{% endif %}
+  {% if include.images_per_row %}data-images-per-row="{{ include.images_per_row }}"{% endif %}
+  {% if include.image_aspect_ratio %}data-image-aspect-ratio="{{ include.image_aspect_ratio }}"{% endif %}
+  {% if include.allow_image_save %}data-allow-image-save="{{ include.allow_image_save }}"{% endif %}
+  {% if include.line_account %}data-line-account="{{ include.line_account }}"{% endif %}
+  {% if include.middle_label_text %}data-middle-label-text="{{ include.middle_label_text }}"{% endif %}
+>
+
+  {% unless include.show_top_filters == false and include.show_dropdown_filters == false %}
+  <div class="catalog-filters">
+    <div class="top-filter-section">
+      {% unless include.show_top_filters == false %}
+      <div class="top-filter-tags-wrapper">
+        <div class="top-filter-tags">
+          <a href="#" class="filter-tag active" data-filter="all">All</a>
+          {% if include.top_filters %}
+            {% assign top_filters = include.top_filters | split: "," %}
+            {% for filter in top_filters %}
+              {% assign filter_parts = filter | strip | split: ":" %}
+              {% assign filter_value = filter_parts[0] | strip %}
+              {% assign filter_label = filter_parts[1] | default: filter_value | strip %}
+              {% if filter_value != "" %}
+                <a href="#" class="filter-tag" data-filter="{{ filter_value | slugify }}">{{ filter_label }}</a>
+              {% endif %}
+            {% endfor %}
+          {% endif %}
+        </div>
+      </div>
+      {% endunless %}
+      
+      {% unless include.show_dropdown_filters == false %}
+      <div class="filter-sort">
+        {% assign filter_button_text = include.filter_button_label | default: "FILTER & SORT" %}
+        <button class="filter-sort-button">{{ filter_button_text }}</button>
+
+        <div class="filter-dropdown">
+          {% if include.filter_categories %}
+            {% assign filter_categories = include.filter_categories | split: "||" %}
+            {% for category in filter_categories %}
+              {% assign category_parts = category | strip | split: ":" %}
+              {% assign category_name = category_parts[0] | strip %}
+              {% assign category_filters = category_parts[1] | strip | split: "," %}
+              
+              {% if category_name != "" and category_filters.size > 0 %}
+              <div class="filter-category">
+                <div class="category-header">
+                  <h4 class="category-title">{{ category_name }}</h4>
+                  <button class="toggle-category" aria-label="Toggle category">
+                    <span class="arrow-icon">&#9662;</span>
+                  </button>
+                </div>
+                <div class="category-filters hidden">
+                  {% for filter in category_filters %}
+                    {% assign filter = filter | strip %}
+                    {% if filter != "" %}
+                      <a href="#" class="dropdown-filter-tag" data-filter="{{ filter | slugify }}">{{ filter }}</a>
+                    {% endif %}
+                  {% endfor %}
+                </div>
+              </div>
+              {% endif %}
+            {% endfor %}
+          {% endif %}
+
+          <div class="selected-filters">
+            {% assign selected_filters_text = include.selected_filters_label | default: "Selected Filters" %}
+            <h4>{{ selected_filters_text }}</h4>
+            <div class="selected-filters-list"></div>
+            {% assign clear_all_text = include.clear_all_label | default: "Clear All" %}
+            <button class="clear-all-filters">{{ clear_all_text }}</button>
+          </div>
+        </div>
+      </div>
+      {% endunless %}
+    </div>
+  </div>
+  {% endunless %}
+
+  <div class="product-grid">
+    {% if include.paths %}
+      {% assign image_paths = include.paths | split: "," %}
+      {% assign image_alts = include.alts | split: "," %}
+      {% assign image_tags = include.tags | split: "," %}
+      {% assign image_descriptions = include.descriptions | split: "," %}
+      
+      {% for path in image_paths %}
+        {% assign path = path | strip %}
+        {% if path != "" %}
+          {% assign index = forloop.index0 %}
+          {% assign alt = image_alts[index] | default: "Product" | strip %}
+          {% assign tags = image_tags[index] | default: "" | strip %}
+          {% assign description = image_descriptions[index] | default: "" | strip %}
+          {% assign desc_slug = description | downcase | strip | replace: " ", "-" | replace: "'", "" | replace: "\"", "" %}
+          {% if include.redirect_link %}
+            {% assign slug = include.redirect_link | append: "-" | append: desc_slug %}
+          {% else %}
+            {% assign slug = desc_slug %}
+          {% endif %}
+
+          <div class="product-item" id="enlarge-{{ slug }}" data-tags="{{ tags | downcase | strip }}">
+            <a href="{{ path }}" class="product-link" data-lightbox="product-catalog" data-title="{{ description }}" data-product-slug="{{ slug }}">
+              <div class="product-image">
+                <img 
+                  src="{{ path }}" 
+                  alt="{{ alt }}" 
+                  loading="lazy"
+                  {% if include.image_aspect_ratio %}
+                    {% assign aspect_parts = include.image_aspect_ratio | split: "/" %}
+                    {% assign aspect_width = aspect_parts[0] | plus: 0 %}
+                    {% assign aspect_height = aspect_parts[1] | plus: 0 %}
+                    width="{{ aspect_width | times: 100 }}"
+                    height="{{ aspect_height | times: 100 }}"
+                  {% endif %}
+                  {% if include.image_animation %}
+                    data-aos="{{ include.image_animation }}"
+                    {% if include.image_animation_once %}data-aos-once="{{ include.image_animation_once }}"{% endif %}
+                    {% if include.image_animation_duration %}data-aos-duration="{{ include.image_animation_duration }}"{% endif %}
+                    {% if include.image_animation_easing %}data-aos-easing="{{ include.image_animation_easing }}"{% endif %}
+                    {% if include.image_animation_delay != nil %}
+                      {% if include.image_animation_delay == "0" %}
+                        data-aos-delay="0"
+                      {% else %}
+                        {% if include.image_animation_stagger %}
+                          {% assign item_delay = include.image_animation_delay | plus: forloop.index0 | times: include.image_animation_stagger %}
+                          data-aos-delay="{{ item_delay }}"
+                        {% else %}
+                          data-aos-delay="{{ include.image_animation_delay }}"
+                        {% endif %}
+                      {% endif %}
+                    {% endif %}
+                  {% endif %}
+                >
+              </div>
+            </a>
+            {% if description != "" %}
+            <div class="product-description">
+              {{ description }}
+            </div>
+            {% endif %}
+          </div>
+        {% endif %}
+      {% endfor %}
+    {% endif %}
+  </div>
+
+</div>
+
+<script src="{{ '/assets/js/product-catalog.js' | relative_url }}"></script>
+
+{% unless include.allow_image_save == "true" %}
+<style>
+  .product-image img, .lightbox img {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+  }
+</style>
+{% endunless %}

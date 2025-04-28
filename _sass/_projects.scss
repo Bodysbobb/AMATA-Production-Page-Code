@@ -1,0 +1,78 @@
+/* === PROJECT FEED === */
+#projects-start {
+	scroll-margin-top: -90px !important;
+}
+  
+.project-feed {
+	padding: 6vh 0;
+}
+
+.project-category-block {
+	margin: 12vh auto;
+	max-width: 960px;
+	padding: 0 1rem;
+	text-align: center;
+}
+
+.project-category-title {
+	font-size: clamp(2.5rem, 5vw, 3.5rem);
+	font-weight: 800;
+	margin-bottom: 0;
+	color: var(--global-text-color);
+	display: inline-block;
+	padding-bottom: 0.6rem;
+}
+
+.project-card-wrapper {
+	max-width: 520px;
+	margin: 2rem auto 3rem;
+}
+
+.project-card-wrapper .card {
+	transform: scale(0.9);
+	transition: transform 0.2s ease;
+}
+
+.project-card-wrapper .card img {
+	max-width: 100%;
+	height: auto;
+	border-radius: 6px;
+}
+
+.project-card-wrapper .card h3,
+.project-card-wrapper .card h2 {
+	font-size: 1.15rem;
+	margin-bottom: 0.5rem;
+}
+
+.project-card-wrapper .card p {
+	font-size: 0.9rem;
+	line-height: 1.5;
+	margin-bottom: 0.75rem;
+	color: var(--global-text-secondary-color);
+}
+
+.project-section,
+.category {
+	display: none;
+}
+
+.section-divider {
+	margin-top: 0;
+	margin-bottom: 3rem;
+	border: none;
+	height: 1px;
+	background-color: var(--global-theme-color);
+	width: 100%;
+	max-width: 1400px;
+}
+
+/* === HERO SECTION === */
+.landing-signature {
+	will-change: transform, opacity;
+}
+
+.landing-signature {
+	color: var(--global-text-secondary-color) !important;
+	animation-delay: 3.4s !important;
+}

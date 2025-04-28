@@ -1,0 +1,54 @@
+<br>
+<hr>
+<br>
+
+If you found this useful, please cite this as:
+
+{% capture citation_quote -%}
+> {{ site.last_name }}, {{ site.first_name }}{% if site.middle_name %} {{ site.middle_name }}{% endif %} ({{ page.date | date: "%b %Y" }}). {{ page.title }}. {% if site.title != 'blank' %}{{ site.title }}: GitHub Blog. {% endif %}{{ site.url }}.
+{%- endcapture %}
+{{ citation_quote | markdownify }}
+
+<!-- Toggle Button -->
+<div style="margin-top: 1em;">
+  <button class="bib-toggle-btn" onclick="toggleBibtex(this)">BIB</button>
+</div>
+
+<!-- BibTeX Block -->
+<div class="bibtex-block" style="display: none; margin-top: 1em;">
+  {% capture citation_code -%}
+```bibtex
+@misc{ {{- site.last_name | downcase }}{{ page.date | date: "%Y" }}{{ page.title | slugify }},
+  title   = { {{- page.title -}} },
+  author  = { {{- site.last_name -}}, {{ site.first_name }}{% if site.middle_name %} {{ site.middle_name }}{% endif -%} },
+  journal = { {{- site.title -}}: GitHub Blog },
+  year    = { {{- page.date | date: "%Y" -}} },
+  month   = { {{- page.date | date: "%b" -}} },
+  url     = { {{- site.url }}{{ page.url -}} }
+}
+```
+  {%- endcapture %}
+  {{ citation_code | markdownify }}
+</div>
+
+<script>
+function toggleBibtex(button) {
+  const block = button.parentElement.nextElementSibling;
+  block.style.display = (block.style.display === 'none') ? 'block' : 'none';
+}
+</script>
+
+<style>
+.bib-toggle-btn {
+  padding: 4px 12px;
+  font-weight: normal;
+  background-color: var(--global-theme-color);
+  color: var(--global-badge-text-color);
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.bib-toggle-btn:hover {
+  background-color: var(--global-link-hover-color);
+}
+</style>

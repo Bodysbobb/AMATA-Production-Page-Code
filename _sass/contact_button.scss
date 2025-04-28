@@ -1,0 +1,359 @@
+/* Global variables */
+:root {
+  --contact-toggle-size: 60px;
+  --contact-button-height: 56px;
+  --contact-options-width: 250px;
+  --contact-z-index-base: 5;
+  --contact-z-index-active: 9999;
+}
+
+/* Container styles with size constraints */
+.floating-contact-container {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: var(--contact-z-index-base);
+  min-width: var(--contact-toggle-size);
+  max-width: var(--contact-options-width);
+  min-height: var(--contact-toggle-size);
+  max-height: calc(100vh - 40px);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  pointer-events: auto;
+  transition: z-index 0.1s ease;
+  
+  &.active {
+    z-index: var(--contact-z-index-active);
+  }
+  
+  &[data-position="left"] {
+    left: 20px;
+    right: auto;
+    align-items: flex-start;
+  }
+  
+  /* Theme customization */
+  &.default-theme .contact-toggle {
+    background-color: var(--global-theme-color, #0076df);
+  }
+  
+  &.blue-theme .contact-toggle {
+    background-color: #1D4ED8;
+  }
+  
+  &.gold-theme .contact-toggle {
+    background-color: #D9B17D;
+  }
+  
+  &.business-theme .contact-toggle {
+    background-color: #2D3748;
+  }
+  
+  &.creative-theme .contact-toggle {
+    background-color: #8B5CF6;
+  }
+}
+
+.contact-toggle-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  z-index: var(--contact-z-index-active); /* Always keep toggle button accessible */
+}
+
+.contact-toggle {
+  width: var(--contact-toggle-size);
+  height: var(--contact-toggle-size);
+  border-radius: 50%;
+  background-color: var(--global-theme-color, #0076df);
+  color: white;
+  border: none;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.3s;
+  
+  &:hover {
+    transform: scale(1.05);
+  }
+  
+  svg {
+    width: 30px;
+    height: 30px;
+  }
+  
+  /* Fix for icon toggling */
+  .fa-comment {
+    display: block;
+  }
+  
+  .fa-times {
+    display: none;
+  }
+  
+  &.active {
+    .fa-comment {
+      display: none;
+    }
+    
+    .fa-times {
+      display: block;
+    }
+  }
+  
+  /* Main icon shake animation - increased frequency */
+  &.with-animation {
+    animation: shake 2.5s ease-in-out infinite; /* Reduced from 4s to 2.5s */
+  }
+  
+  @keyframes shake {
+    0%, 85%, 100% {
+      transform: rotate(0);
+    }
+    88% {
+      transform: rotate(15deg);
+    }
+    91% {
+      transform: rotate(-15deg);
+    }
+    94% {
+      transform: rotate(10deg);
+    }
+    97% {
+      transform: rotate(-10deg);
+    }
+  }
+}
+
+.contact-toggle-bubble {
+  position: absolute;
+  right: 70px;
+  background-color: var(--global-bg-color, white);
+  color: var(--global-text-color, #333);
+  padding: 5px 10px;
+  border-radius: 16px;
+  font-size: 14px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s, transform 0.2s;
+  transform: scale(0.95);
+  white-space: nowrap;
+  z-index: var(--contact-z-index-active);
+  
+  .floating-contact-container[data-position="left"] & {
+    left: 70px;
+    right: auto;
+  }
+  
+  .contact-toggle-wrapper:hover & {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.contact-options {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 15px;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(10px);
+  transition: opacity 0.3s, transform 0.3s, visibility 0.3s;
+  width: fit-content; /* Adapt to content */
+  min-width: 180px; /* Minimum reasonable size */
+  max-width: 280px; /* Maximum size constraint */
+  
+  &.active {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+  }
+}
+
+/* Button specific styles */
+.contact-button {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  border-radius: 30px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  transition: transform 0.2s;
+  height: var(--contact-button-height);
+  width: auto; /* Allow width to adapt */
+  white-space: nowrap; /* Prevent text wrapping */
+  
+  &:hover {
+    transform: scale(1.03);
+    text-decoration: none;
+  }
+  
+  &.with-wave-animation:hover .contact-button-icon {
+    animation: wave 0.6s ease-in-out;
+  }
+  
+  .contact-button-icon {
+    position: relative;
+    width: var(--contact-button-height);
+    min-width: var(--contact-button-height);
+    height: var(--contact-button-height);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+    
+    &::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: white;
+      border-radius: 50%;
+      z-index: -1;
+    }
+    
+    i {
+      position: relative;
+      z-index: 1;
+      font-size: 1.5rem;
+    }
+  }
+  
+  .contact-button-label {
+    flex: 1;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 16px;
+    color: white;
+    padding: 0 15px;
+  }
+  
+  @keyframes wave {
+    0%, 100% {
+      transform: rotate(0);
+    }
+    25% {
+      transform: rotate(10deg);
+    }
+    50% {
+      transform: rotate(-10deg);
+    }
+    75% {
+      transform: rotate(5deg);
+    }
+  }
+}
+
+/* Color variants */
+.call-button { 
+  background-color: #1DA1F2;
+  .contact-button-icon i { color: #1DA1F2; }
+}
+
+.email-button { 
+  background-color: #FF9800;
+  .contact-button-icon i { color: #FF9800; }
+}
+
+.location-button { 
+  background-color: #FF1493;
+  .contact-button-icon i { color: #FF1493; }
+}
+
+.chat-button { 
+  background-color: #4CAF50;
+  .contact-button-icon i { color: #4CAF50; }
+}
+
+.messenger-button { 
+  background-color: #0084FF;
+  .contact-button-icon i { color: #0084FF; }
+}
+
+.whatsapp-button { 
+  background-color: #25D366;
+  .contact-button-icon i { color: #25D366; }
+}
+
+.line-account-button { 
+  background-color: #06C755;
+  .contact-button-icon i { color: #06C755; }
+}
+
+.digitalcard-button { 
+  background-color: #673AB7;
+  .contact-button-icon i { color: #673AB7; }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  :root {
+    --contact-toggle-size: 55px;
+    --contact-button-height: 50px;
+    --contact-options-width: 220px;
+  }
+  
+  .floating-contact-container {
+    bottom: 15px;
+    right: 15px;
+    
+    &[data-position="left"] {
+      left: 15px;
+      right: auto;
+    }
+  }
+  
+  .contact-button {
+    .contact-button-label {
+      font-size: 14px;
+      padding: 0 12px;
+    }
+    
+    .contact-button-icon i {
+      font-size: 1.3rem;
+    }
+  }
+}
+
+/* Small screen optimization */
+@media (max-width: 480px) {
+  :root {
+    --contact-toggle-size: 50px;
+    --contact-button-height: 46px;
+    --contact-options-width: 200px;
+  }
+  
+  .contact-options {
+    gap: 8px;
+    margin-bottom: 12px;
+  }
+  
+  .contact-button {
+    border-radius: 25px;
+    
+    .contact-button-label {
+      font-size: 13px;
+      padding: 0 10px;
+    }
+    
+    .contact-button-icon i {
+      font-size: 1.2rem;
+    }
+  }
+  
+  .contact-toggle svg {
+    width: 24px;
+    height: 24px;
+  }
+}

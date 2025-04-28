@@ -1,0 +1,16 @@
+{% if page.background_logo %}
+  <div class="background-logo{% if page.background_logo_class %} {{ page.background_logo_class }}{% endif %}" style="
+    background-image: url('{{ page.background_logo | relative_url }}');
+    background-position: 
+      {% if page.background_position == 'left-top' %}left top
+      {% elsif page.background_position == 'left-bottom' %}left bottom
+      {% elsif page.background_position == 'right-top' %}right top
+      {% elsif page.background_position == 'right-bottom' %}right bottom
+      {% elsif page.background_position == 'top' %}center top
+      {% elsif page.background_position == 'bottom' %}center bottom
+      {% elsif page.background_position == 'left' %}left center
+      {% elsif page.background_position == 'right' %}right center
+      {% else %}center center
+      {% endif %};
+  "></div>
+{% endif %}

@@ -1,0 +1,63 @@
+<header>
+  <!-- Set data attributes for JavaScript to detect navbar capabilities -->
+  {% if page.special_navbar %}
+    <script>
+      document.body.setAttribute('data-special-navbar', 'true');
+      {% if page.switch_navbar %}
+        document.body.setAttribute('data-switch-navbar', 'true');
+      {% endif %}
+      {% if page.navbar_auto_hide %}
+        document.body.classList.add('navbar-auto-hide');
+      {% endif %}
+      {% if page.navbar_initial_hide %}
+        document.body.setAttribute('data-navbar-initial-hide', 'true');
+      {% endif %}
+      
+      // Set custom tooltip texts from page front matter
+      {% if page.default_tooltip %}
+        document.body.setAttribute('data-default-tooltip', "{{ page.default_tooltip | escape }}");
+      {% endif %}
+      {% if page.special_tooltip %}
+        document.body.setAttribute('data-special-tooltip', "{{ page.special_tooltip | escape }}");
+      {% endif %}
+    </script>
+    
+    <!-- For special pages, show special navbar by default and hide default -->
+    <div id="default-navbar" style="display: none;">
+      {% include default_navbar.liquid %}
+    </div>
+    
+    <div id="special-navbar" style="display: block;">
+      {% include special_navbar.liquid %}
+    </div>
+    
+    <!-- Include navbar toggle script if switching is enabled -->
+    {% if page.switch_navbar %}
+      <script src="{{ '/assets/js/navbar_toggle.js' | relative_url }}"></script>
+    {% endif %}
+  {% else %}
+    <!-- For regular pages, only include default navbar -->
+    <div id="default-navbar">
+      {% include default_navbar.liquid %}
+    </div>
+    {% if page.navbar_auto_hide %}
+      <script>
+        document.body.classList.add('navbar-auto-hide');
+      </script>
+      {% if page.navbar_initial_hide %}
+        <script>
+          document.body.setAttribute('data-navbar-initial-hide', 'true');
+        </script>
+      {% endif %}
+    {% endif %}
+  {% endif %}
+   
+  {% if site.enable_progressbar and page.navbar_auto_hide != true %}
+    <!-- Scrolling Progress Bar -->
+    <progress id="progress" value="0">
+      <div class="progress-container">
+        <span class="progress-bar"></span>
+      </div>
+    </progress>
+  {% endif %}
+</header>
