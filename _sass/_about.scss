@@ -1,0 +1,597 @@
+/*******************************************************************************
+ * Profile Image with Ultra-Thin Glowing Border
+ ******************************************************************************/
+ :root {
+  --profile-overlay-bg: var(--global-card-bg-color);
+  --profile-overlay-text-size: 1.8rem;
+  --profile-overlay-subtext-size: 1.5rem;
+  --profile-overlay-image-opacity: 0.35;
+  --profile-overlay-image-brightness: 0.35;
+  
+  /* Animation progress indicators - elegant glowing colors */
+  --image-state-color: var(--global-text-color); /* blue glow for image state */
+  --text-state-color: var(--global-text-secondary-color);  /* orange glow for text state */
+  --progress-glow-blur: 1.1px;                   /* Glow effect blur radius */
+}
+
+.profile-pic-wrapper {
+  position: relative;
+  display: inline-block;
+  border-radius: 50%;
+  overflow: visible;
+  cursor: pointer;
+  box-shadow: 0 10px 25px var(--global-shadow-color);
+  user-select: none;
+  z-index: 1;
+  transition: all 0.6s ease;
+
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background: transparent;
+    z-index: -1;
+  }
+
+  .progress-indicator {
+    position: absolute;
+    top: -1px;
+    left: -1px;
+    width: calc(100% + 2px);
+    height: calc(100% + 2px);
+    z-index: 3;
+    pointer-events: none;
+  }
+
+  .progress-circle {
+    fill: none;
+    stroke-width: 0.25px;
+    stroke-linecap: round;
+    filter: drop-shadow(0 0 var(--progress-glow-blur) currentColor);
+    stroke: currentColor;
+    transform-origin: center;
+    transform: rotate(-90deg);
+  }
+
+  img {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: 50%;
+    position: relative;
+    z-index: 1;
+    transition: opacity 0.4s ease, filter 0.4s ease;
+    pointer-events: none;
+  }
+
+  .profile-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    opacity: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: var(--profile-overlay-text-size);
+    color: var(--global-text-color);
+    background-color: transparent !important; // ✅ fully transparent
+    pointer-events: none;
+    transition: opacity 0.6s ease;
+    text-align: center;
+    padding: 1rem;
+    z-index: 2;
+  
+    > * {
+      position: relative;
+      z-index: 1;
+      opacity: 1 !important; // ✅ fully visible text
+      color: var(--global-text-color); // ✅ keep text readable
+    }
+  }
+  
+  .overlay-subtext {
+    font-size: var(--profile-overlay-subtext-size);
+    font-weight: 500;
+    color: var(--global-text-secondary-color);
+    margin-top: 0.4rem;
+  } 
+
+  &:hover {
+    animation: none;
+  }
+
+  &.state-image img,
+  &.state-text img {
+    transition: opacity 0.6s ease, filter 0.6s ease;
+  }
+
+  &.state-image .progress-circle {
+    color: var(--image-state-color);
+    stroke: var(--image-state-color);
+  }
+
+  &.state-text .progress-circle,
+  &.hover-ready .progress-circle {
+    color: var(--text-state-color);
+    stroke: var(--text-state-color);
+  }
+
+  &.hover-ready img,
+  &.state-text img {
+    opacity: var(--profile-overlay-image-opacity);
+    filter: brightness(var(--profile-overlay-image-brightness));
+  }
+
+  &.hover-ready .profile-overlay {
+    opacity: 1;
+  }
+}
+
+/* Keep original overlay fadeIn animation */
+@keyframes showOverlay {
+  to {
+    opacity: 1;
+  }
+}
+
+/* Mobile responsiveness */
+@media (max-width: 576px) {
+  .profile-pic-wrapper {
+    .progress-circle {
+      stroke-width: 0.25px; /* Even thinner on mobile */
+    }
+    
+    .profile-overlay {
+      font-size: calc(var(--profile-overlay-text-size) * 0.8);
+      padding: 0.8rem;
+    }
+    
+    .overlay-subtext {
+      font-size: calc(var(--profile-overlay-subtext-size) * 0.8);
+    }
+  }
+}
+
+.about-page {
+  /* Page Title & Header */
+  .post-title {
+    font-size: 3.75rem !important;
+    color: var(--global-text-color);
+    margin-bottom: 0.5rem;
+  }
+  
+  .post-header .desc {
+    display: block;
+    margin-bottom: 3rem;
+    font-size: 1.5rem;
+    color: var(--global-text-secondary-color);
+  }
+  
+  /* Profile Section */
+  .profile {
+    width: 100%;
+    
+    @media (min-width: 576px) {
+      width: 30%;
+      
+      .address p {
+        display: block;
+      }
+    }
+    
+    &.float-right {
+      margin-left: 1.5rem;
+    }
+    
+    &.float-left {
+      margin-right: 1.5rem;
+    }
+    
+    .more-info {
+      margin-bottom: 40px !important;
+      margin-top: 5px;
+      text-align: center !important;
+      font-family: monospace;
+      font-size: 1.5rem !important;
+  
+      p {
+        display: inline-block;
+        margin: 0;
+        color: var(--global-theme-color) !important; 
+  
+        &:hover {
+          color: var(--global-link-color); 
+          text-decoration: underline;
+          cursor: pointer; 
+        }
+      }
+      
+      a {
+        display: inline-block;
+        margin: 0;
+        color: var(--global-theme-color) !important;
+        text-decoration: none;
+        transition: transform 0.25s ease, color 0.25s ease;
+      
+        &:hover {
+          transform: scale(1.06);
+          color: var(--global-link-color) !important;
+          text-decoration: none;
+          cursor: pointer;
+        }
+      }      
+    }
+        // Add styling for anchor tags
+    a {
+      display: inline-block;
+      margin: 0;
+      color: var(--global-theme-color) !important; 
+      text-decoration: none;
+
+      &:hover {
+        color: var(--global-link-color) !important; 
+        text-decoration: underline;
+        font-weight: bold;
+        cursor: pointer; 
+      }
+    }
+  }
+  
+  /* Section Headings & Dividers */
+  .section-heading {
+    font-size: 2.2rem;
+    margin-top: 2rem;
+    margin-bottom: 1.5rem;
+    font-weight: 600;
+    color: var(--global-text-color);
+  }
+  
+  .section-divider {
+    height: 2px;
+    background-color: var(--global-theme-color);
+    opacity: 0.15;
+    border: none;
+    margin: 3rem 0;
+  }
+  
+  /* General Content Styling */
+  article p {
+    line-height: 1.8;
+    margin-bottom: 1.5rem;
+    font-size: 1.1rem;
+  }
+  
+  /* Hyperlink Content Styling */
+  article a {
+    color: var(--global-link-color);
+  
+    &:hover {
+      color: var(--global-hover-color);
+      text-decoration: underline;
+      font-weight: 700;
+    }
+  }
+
+  h2 {
+    margin-top: 3rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  /* Section Spacing */
+  .clearfix,
+  article > div,
+  article > section {
+    margin-bottom: 3rem;
+  }
+   
+  /* Latest News and Latest Post */
+  .about-news-section,
+  .about-posts-section {
+    margin-bottom: 3rem;
+
+    /* Make the section heading bold */
+    .section-heading {
+      font-size: 2rem; /* Add this */
+      margin-bottom: 1.5rem; /* Add this if needed */
+      font-weight: 700;
+      color: var(--global-text-color);
+
+      a {
+        text-decoration: none; /* Optional: remove underline */
+      }
+
+      a:hover {
+        color: var(--global-text-color) !important;
+        text-decoration: underline; /* Optional: underline on hover */
+        font-weight: normal;
+      }
+    }
+
+    /* Shared table structure for news and blog posts */
+    .news {
+      table.table {
+        margin-bottom: 0;
+
+        /* Reduce spacing between rows */
+        tr {
+          margin-bottom: 0.3rem;
+        }
+
+        /* Style the date cell */
+        th {
+          font-size: 1.15rem !important;
+          color: var(--global-text-color);
+          font-weight: 700 !important;
+          padding-right: 0.75rem !important;
+          padding-bottom: 0.3rem !important;
+          vertical-align: top;
+        }
+
+        /* Style the content cell */
+        td {
+          padding-bottom: 0.3rem !important;
+
+          /* Style the news/blog title link */
+          .news-title {
+            font-size: 1.15rem !important;
+            color: var(--global-link-color);
+            font-weight: normal;
+            line-height: 1.4;
+
+            &:hover {
+              color: var(--global-text-color);
+              text-decoration: underline;
+              font-weight: 700;
+            }
+          }
+
+          /* Style for inline content (non-link) */
+          p, div {
+            font-size: 1.15rem !important;
+            margin-bottom: 0;
+          }
+
+          /* Style for anchor tags */
+          a {
+            font-size: 1.15rem !important;
+            color: var(--global-link-color);
+
+            &:hover {
+              color: var(--global-hover-color);
+              text-decoration: underline;
+              font-weight: 700;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  /* Selected Papers Section */
+  .about-papers-section {
+    margin-bottom: 3rem;
+    
+    .about-papers-items {
+      /* Similar styling as news and blogs for consistency */
+      li, .paper-item {
+        margin-bottom: 1rem;
+        
+        .paper-date, time {
+          font-size: 1.1rem;
+          color: var(--global-text-secondary-color);
+          font-weight: normal;
+        }
+        
+        .paper-title, a.title {
+          font-size: 1.2rem;
+          line-height: 1.4;
+          font-weight: 600;
+        }
+      }
+    }
+  }
+  
+  /* Social Section */
+  .about-social-section {
+    margin-bottom: 2rem;
+  }
+  
+  .about-social-section a {
+    color: var(--global-link-color); 
+    text-decoration: none;
+  
+    &:hover {
+      color: var(--global-hover-color); 
+      text-decoration: underline;
+    }
+  }
+
+  
+  /* Newsletter Section */
+  .about-newsletter-section {
+    font-size: 1rem;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+  }
+  
+  /* Badge styling */
+  .date-column .badge {
+    color: var(--global-text-color) !important;
+    background-color: var(--global-theme-color);
+  }
+}
+
+//=== Quote Block ===//
+.quote-block {
+  max-width: 1300px;
+  margin: 0 auto;
+  padding: 0;
+  text-align: center;
+  position: relative;
+}
+
+.quote-content {
+  max-width: 1000px;
+  margin: 1.8rem auto 1rem auto;
+}
+
+.quote-line {
+  display: block;          // not inline-block
+  margin-bottom: 1.1rem;  // adjust this to control vertical gap
+  font-size: 1.7rem;
+  font-style: italic;
+  font-weight: 400;
+  line-height: 1.5;
+  color: var(--global-theme-color);
+}
+
+// Last quote line
+.quote-line:not(:last-child) {
+  margin-bottom: 1.2rem;
+}
+
+.quote-line span {
+  color: var(--global-text-secondary-color); // Initial animation color
+  opacity: 0;
+  display: inline-block;
+  transition: opacity 0.8s ease, color 1.5s cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+// Final color state class that will be applied after animation
+.quote-line.animation-complete span {
+  color: var(--global-quote-color);
+  transition: color 1.5s cubic-bezier(0.19, 1, 0.22, 1); 
+}
+
+.blue-quote-symbol {
+  font-family: Georgia, serif;
+  font-size: 4rem;
+  line-height: 1;
+  color: var(--global-text-secondary-color);
+  opacity: 0;
+  position: absolute;
+  transition: opacity 0.8s ease;
+}
+
+.left-quote {
+  top: -1.2rem;
+  left: 50%;
+  transform: translateX(-510px);
+}
+
+.right-quote {
+  bottom: 58px;
+  right: 50%;
+  transform: translateX(470px);
+}
+
+.quote-signature {
+  margin-top: 1.2rem;
+  font-size: 1rem;
+  color: var(--global-text-secondary-color) !important;
+  letter-spacing: 0.5px;
+  font-style: normal;
+  opacity: 0;
+  transition: opacity 1s ease;
+}
+
+.signature-text {
+  position: relative;
+  display: inline-block;
+}
+
+.signature-text::after {
+  content: '';
+  position: absolute;
+  bottom: -0.3rem;
+  left: 50%;
+  width: 0;
+  height: 1px;
+  background-color: var(--global-text-secondary-color);
+  opacity: 0.4;
+  transform: translateX(-50%);
+}
+
+.signature-text.animate-line::after {
+  animation: expandLine 1.5s ease forwards;
+}
+
+@keyframes expandLine {
+  from { width: 0; }
+  to   { width: 80px; }
+}
+
+.quote-center-btn {
+  margin-top: 0.8rem;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  background: none;
+  border: none;
+  color: var(--global-text-secondary-color);
+  font-size: 1.1rem;
+  opacity: 0.2;
+  cursor: pointer;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+.quote-center-btn:hover {
+  opacity: 0.7;
+  transform: scale(1.2);
+  color: var(--global-theme-color);
+}
+
+
+/* Media query for better mobile display */
+@media (max-width: 576px) {
+  .left-quote {
+    transform: translateX(-300px);
+  }
+  
+  .right-quote {
+    transform: translateX(300px);
+  }
+}
+
+@media (max-width: 576px) {
+  .quote-line {
+    font-size: 1.4rem;
+  }
+  
+  .blue-quote-symbol {
+    font-size: 3rem;
+  }
+  
+  .left-quote {
+    transform: translateX(-200px);
+  }
+  
+  .right-quote {
+    transform: translateX(200px);
+  }
+  
+  .quote-signature {
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .left-quote {
+    transform: translateX(-150px);
+  }
+  
+  .right-quote {
+    transform: translateX(150px);
+  }
+}
+
+

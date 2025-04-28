@@ -1,0 +1,55 @@
+<div class="list-groups">
+  {% for content in data[1] %}
+    <!-- Skip the description-only entry to be used at the bottom -->
+    {% if content.description and content.categories == nil %}
+      {% continue %}
+    {% endif %}
+    
+    <div class="list-group col-md-12">
+      <table class="table-cv list-group-table">
+        <tbody>
+          <tr>
+            <!-- Skill Icon -->
+            {% if content.icon %}
+              <td class="list-group-category-icon">
+                <i class="{{ content.icon }}"></i>
+              </td>
+            {% else %}
+              <td class="list-group-category-icon"></td>
+            {% endif %}
+
+            <!-- Skill Name -->
+            <td class="list-group-category" colspan="2">
+              {{ content.name }}
+            </td>
+          </tr>
+
+          <!-- Grouped Skills by Categories -->
+          {% for category_group in content.categories %}
+            <tr class="skill-category-row">
+              <td></td>
+              <td class="skill-level-column">
+                <span class="skill-level skill-level-{{ category_group.level | downcase | replace: ' ', '-' }}">
+                  {{ category_group.level }}
+                </span>
+              </td>
+              <td class="skill-keywords">
+                {{ category_group.keywords | join: " • " }}
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% endfor %}
+  
+  <!-- Description at the bottom without any border -->
+  <div class="skill-description-container">
+    {% for content in data[1] %}
+      {% if content.description and content.description != "" %}
+        {{ content.description }}
+        {% break %}
+      {% endif %}
+    {% endfor %}
+  </div>
+</div>

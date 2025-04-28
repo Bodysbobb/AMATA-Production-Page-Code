@@ -1,0 +1,45 @@
+<!-- Particle Effects -->
+{% include particles-background.liquid mode=include.particle_mode %}
+
+<section class="landing-hero">
+  <div class="landing-center">
+
+    <!-- NO AOS needed anymore -->
+    <div>
+
+      <h1 class="landing-title animate-fade-in">
+        {{ include.title }}
+      </h1>
+
+      <!-- Letter-by-letter animated text -->
+      <p class="landing-subtext animate-by-letter init-hidden"
+        {% if include.letter_delay %} data-letter-delay="{{ include.letter_delay }}" {% endif %}
+        {% if include.initial_delay %} data-initial-delay="{{ include.initial_delay }}" {% endif %}
+        {% if include.final_color %} data-final-color="{{ include.final_color }}" {% endif %}
+        {% if include.data-final-class %} data-final-class="{{ include.data-final-class }}" {% endif %}
+      >
+        {{ include.subtext }}
+      </p>
+
+      <!-- Signature fade after text is done -->
+      <p class="landing-signature">
+        {{ include.signature | default: "— Pattawee Puangchit —" }}
+      </p>
+
+    </div>
+
+  </div>
+
+  <!-- Scroll Down Arrow -->
+  <div class="scroll-down-hero">
+    <a href="#projects-start" class="scroll-down-link" aria-label="Scroll to projects">
+      <div class="scroll-down-text">{{ include.scroll_text | default: "SCROLL DOWN" }}</div>
+      <div class="scroll-down-icon">
+        <span class="chevron"></span>
+      </div>
+    </a>
+  </div>
+</section>
+
+<!-- Include the hero navbar script -->
+<script src="{{ '/assets/js/hero-navbar.js' | relative_url }}" defer></script>

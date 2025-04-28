@@ -1,0 +1,17 @@
+<div class="quote-block" id="quote">
+  <div class="blue-quote-symbol left-quote" id="left-quote">&ldquo;</div>
+
+  <div class="quote-content">
+    {% if include.line1 %}<div class="quote-line" id="line1">{{ include.line1 }}</div>{% endif %}
+    {% if include.line2 %}<div class="quote-line" id="line2">{{ include.line2 }}</div>{% endif %}
+    {% if include.line3 %}<div class="quote-line" id="line3">{{ include.line3 }}</div>{% endif %}
+    {% if include.line4 %}<div class="quote-line" id="line4">{{ include.line4 }}</div>{% endif %}
+  </div>
+
+  <div class="blue-quote-symbol right-quote" id="right-quote">&rdquo;</div>
+  <p class="quote-signature" id="quote-signature"><span class="signature-text">&mdash; Pattawee Puangchit &mdash;</span></p>
+
+  <button id="quote-toggle-btn" class="quote-center-btn" title="Replay / Finish">
+    <i class="fa-solid fa-rotate-right"></i>
+  </button>
+</div>

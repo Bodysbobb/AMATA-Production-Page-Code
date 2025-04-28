@@ -1,0 +1,227 @@
+{% assign particle_mode = include.mode | default: "full-page" %}
+
+<div id="particles-js" 
+     class="particles-container {% if particle_mode == 'hero-only' %}hero-only-particles{% elsif particle_mode == 'mix' %}mix-particles{% else %}full-page-particles{% endif %}"
+     style="{% if particle_mode == 'full-page' %}position:fixed; top:0; left:0; width:100%; height:100%; z-index:-1;{% else %}position:absolute; top:0; left:0; width:100%; height:100%; z-index:0;{% endif %}">
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/particles.js"></script>
+<script>
+  let particleInstance;
+  let lastScrollTop = 0;
+  let particleMode = "{{ particle_mode }}";
+  
+  function initParticles() {
+    const rootStyle = getComputedStyle(document.documentElement);
+    const particleColor = rootStyle.getPropertyValue('--global-text-secondary-color').trim();
+    const bgColor = rootStyle.getPropertyValue('--global-bg-color').trim();
+
+    document.getElementById("particles-js").style.background = bgColor;
+
+    if (particleInstance) {
+      particleInstance.destroy();
+    }
+
+    particleInstance = particlesJS('particles-js', {
+      particles: {
+        number: { value: 80 },
+        color: { value: particleColor },
+        shape: { type: "circle" },
+        opacity: { value: 0.35 },
+        size: { value: 3 },
+        line_linked: {
+          enable: true,
+          distance: 150,
+          color: particleColor,
+          opacity: 0.2,
+          width: 1
+        },
+        move: { enable: true, speed: 1 }
+      },
+      interactivity: {
+        detect_on: "canvas",
+        events: {
+          onhover: { enable: true, mode: "repulse" }
+        },
+        modes: {
+          repulse: { distance: 100 }
+        }
+      },
+      retina_detect: true
+    });
+  }
+
+  function handleScroll() {
+    if (particleMode !== "hero-only" && particleMode !== "mix") return;
+    
+    const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+    const heroSection = document.querySelector('.landing-hero');
+    
+    if (!heroSection) return;
+    
+    const heroHeight = heroSection.offsetHeight;
+    const scrollProgress = Math.min(scrollTop / heroHeight, 1);
+    
+    // For hero-only mode
+    if (particleMode === "hero-only") {
+      // Create animation effect for particles when scrolling
+      const particlesCanvas = document.querySelector('#particles-js canvas');
+      if (particlesCanvas) {
+        // As we scroll down, make particles move toward center and fade out
+        particlesCanvas.style.opacity = Math.max(1 - scrollProgress * 1.5, 0);
+        
+        // Add transform to make particles move to center
+        if (scrollProgress > 0.1) {
+          particlesCanvas.style.transform = `scale(${1 - scrollProgress * 0.3})`;
+        }
+      }
+      
+      // Hide particles completely when scrolled past hero
+      if (scrollTop > heroHeight) {
+        const particlesContainer = document.getElementById('particles-js');
+        if (particlesContainer) {
+          particlesContainer.style.visibility = 'hidden';
+        }
+      } else {
+        const particlesContainer = document.getElementById('particles-js');
+        if (particlesContainer) {
+          particlesContainer.style.visibility = 'visible';
+        }
+      }
+    } 
+    // For mix mode
+    else if (particleMode === "mix") {
+      const particlesContainer = document.getElementById('particles-js');
+      const particlesCanvas = document.querySelector('#particles-js canvas');
+      
+      if (!particlesContainer || !particlesCanvas) return;
+      
+      if (scrollTop <= heroHeight) {
+        // In hero section - normal full-page particles
+        document.documentElement.classList.remove('past-hero');
+        particlesContainer.classList.remove('side-only');
+        particlesCanvas.style.clipPath = 'none';
+        particlesContainer.style.visibility = 'visible';
+        
+        // Reset position styles for hero section
+        particlesContainer.style.position = 'absolute';
+        particlesContainer.style.top = '0';
+        particlesContainer.style.height = '100%';
+        particlesContainer.style.zIndex = '0';
+      } else {
+        // Past hero section - side-only particles
+        document.documentElement.classList.add('past-hero');
+        particlesContainer.classList.add('side-only');
+        
+        // Calculate the width of the center empty area (40% of viewport)
+        // This ensures it always scales proportionally on all devices
+        const centerWidth = window.innerWidth * 0.4;
+        const sideWidth = (window.innerWidth - centerWidth) / 2;
+        
+        // Create a CSS gradient mask that only shows left and right sides
+        const leftEdge = Math.floor(sideWidth);
+        const rightEdge = Math.floor(window.innerWidth - sideWidth);
+        
+        // Create a linear gradient mask: solid on sides, transparent in middle
+        // This will scale automatically for all screen sizes
+        const mask = `linear-gradient(to right, 
+          rgba(0,0,0,1) 0%, 
+          rgba(0,0,0,1) ${leftEdge}px, 
+          rgba(0,0,0,0) ${leftEdge+1}px, 
+          rgba(0,0,0,0) ${rightEdge-1}px, 
+          rgba(0,0,0,1) ${rightEdge}px, 
+          rgba(0,0,0,1) 100%)`;
+        
+        // Apply the mask with fallbacks for cross-browser support
+        particlesCanvas.style.webkitMaskImage = mask;
+        particlesCanvas.style.maskImage = mask;
+        particlesCanvas.style.mozMaskImage = mask;
+        particlesCanvas.style.msMaskImage = mask;
+        particlesContainer.style.visibility = 'visible';
+        
+        // Apply fixed positioning to follow scroll
+        particlesContainer.style.position = 'fixed';
+        particlesContainer.style.top = '0';
+        particlesContainer.style.height = '100vh';
+        particlesContainer.style.zIndex = '-1';
+      }
+    }
+    
+    lastScrollTop = scrollTop;
+  }
+
+  document.addEventListener("DOMContentLoaded", function() {
+    initParticles();
+    
+    if (particleMode === "hero-only" || particleMode === "mix") {
+      window.addEventListener('scroll', handleScroll);
+      
+      // Set initial position
+      const particlesContainer = document.getElementById('particles-js');
+      if (particlesContainer) {
+        const heroSection = document.querySelector('.landing-hero');
+        if (heroSection) {
+          if (particleMode === "hero-only") {
+            particlesContainer.style.height = `${heroSection.offsetHeight}px`;
+          }
+          
+          // Run initial scroll check
+          handleScroll();
+        }
+      }
+    }
+  });
+  
+  // Re-initialize particles when window resizes
+  window.addEventListener('resize', function() {
+    if (particleMode === "hero-only" || particleMode === "mix") {
+      const particlesContainer = document.getElementById('particles-js');
+      if (particlesContainer) {
+        const heroSection = document.querySelector('.landing-hero');
+        if (heroSection && particleMode === "hero-only") {
+          particlesContainer.style.height = `${heroSection.offsetHeight}px`;
+        }
+        
+        // Always update mask for mix mode when resize happens
+        if (particleMode === "mix" && document.documentElement.classList.contains('past-hero')) {
+          handleScroll();
+        }
+      }
+    }
+    initParticles();
+  });
+</script>
+
+<style>
+  .hero-only-particles {
+    overflow: hidden;
+    pointer-events: none;
+  }
+  
+  .full-page-particles {
+    pointer-events: none;
+  }
+  
+  .mix-particles {
+    pointer-events: none;
+    transition: clip-path 0.4s ease;
+  }
+  
+  .side-only {
+    z-index: -1 !important;
+  }
+  
+  /* Add transition for smooth particle effects */
+  #particles-js canvas {
+    transition: clip-path 0.4s ease, opacity 0.4s ease, transform 0.4s ease, mask-image 0.4s ease, -webkit-mask-image 0.4s ease;
+    will-change: mask-image, -webkit-mask-image;
+  }
+  
+  html.past-hero .mix-particles {
+    position: fixed !important;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+  }
+</style>

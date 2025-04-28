@@ -1,0 +1,163 @@
+<nav id="navbar-special"
+     class="navbar navbar-light navbar-expand-sm {% if site.navbar_fixed %}fixed-top{% else %}sticky-top{% endif %} {% if page.navbar_auto_hide %}navbar-autohide-enabled{% endif %}"
+     {% if page.special_navbar_color %}
+     style="background-color: {{ page.special_navbar_color }};"
+     {% endif %}
+     role="navigation">
+  <div class="container">
+    <!-- Logo Section (Left) -->
+    <div class="navbar-brand-container">
+      {% if page.special_navbar_logo_one %}
+        <!-- Use href attribute for proper cursor pointer but JS will handle clicks -->
+        <a class="navbar-brand logo" href="{{ site.baseurl }}/">
+          <img src="{{ page.special_navbar_logo_one | relative_url }}" alt="{{ site.title }}" style="max-height: 40px; width: auto; margin-right: 10px;" />
+        </a>
+      {% endif %}
+
+      {% if page.special_navbar_logo_two %}
+        <!-- Use href attribute for proper cursor pointer but JS will handle clicks -->
+        <a class="navbar-brand logo" href="{{ site.baseurl }}/">
+          <img src="{{ page.special_navbar_logo_two | relative_url }}" alt="{{ site.title }}" style="max-height: 40px; width: auto;" />
+        </a>
+      {% endif %}
+    </div>
+    
+    <!-- Rest of the navbar code remains unchanged -->
+    <div class="navbar-title-container text-center mx-auto">
+      <h1 class="navbar-title font-weight-bold">
+        {% if page.special_navbar_title %}
+          {{ page.special_navbar_title }}
+        {% else %}
+          {{ page.title }}
+        {% endif %}
+      </h1>
+    </div>
+    
+    <!-- Navbar Toggle -->
+    <button
+      class="navbar-toggler collapsed ml-auto"
+      type="button"
+      data-toggle="collapse"
+      data-target="#navbarSpecialNav"
+      aria-controls="navbarSpecialNav"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+    >
+      <span class="sr-only">Toggle navigation</span>
+      <span class="icon-bar top-bar"></span>
+      <span class="icon-bar middle-bar"></span>
+      <span class="icon-bar bottom-bar"></span>
+    </button>
+    
+    <!-- Right-aligned control elements -->
+    <div class="collapse navbar-collapse text-right" id="navbarSpecialNav">
+      <ul class="navbar-nav ml-auto flex-nowrap">
+        {% if site.enable_darkmode %}
+          <!-- Toggle theme mode -->
+          <li class="toggle-container">
+            <button id="light-toggle" title="Change theme">
+              <i class="ti ti-sun-moon" id="light-toggle-system"></i>
+              <i class="ti ti-moon-filled" id="light-toggle-dark"></i>
+              <i class="ti ti-sun-filled" id="light-toggle-light"></i>
+            </button>
+          </li>
+        {% endif %}
+        <!-- Language switcher button (if enabled) -->
+        {% if page.language_switch %}
+          <li class="nav-item">
+            <button id="navbar-language-toggle" title="{% if page.lang == 'en' %}Switch to TH{% else %}Switch to EN{% endif %}"
+                    class="navbar-control-btn language-btn-navbar {% if page.lang == 'en' %}en{% else %}alt-lang{% endif %}"
+                    onclick="window.location.href='{{ page.alternate_lang_url | relative_url }}'">
+              <div class="toggle-indicator">
+                {% if page.lang == 'en' %}
+                  <span class="navbar-lang-icon">
+                     <img src="{{ '/assets/img/icon/thailand.png' | relative_url }}" alt="TH" class="circle-flag" />
+                  </span>
+                {% else %}
+                  <span class="navbar-lang-icon">
+                    <i class="ti ti-world"></i>
+                  </span>
+                {% endif %}
+              </div>
+              <span class="lang-label">
+                {% if page.lang == 'en' %}TH{% else %}EN{% endif %}
+              </span>
+            </button>
+          </li>
+        {% endif %}
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- Add force initialization script to ensure auto-hide works -->
+{% if page.navbar_auto_hide %}
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // Force the body class to be set
+    document.body.classList.add('navbar-auto-hide');
+    
+    // Force the special navbar to have the class
+    const specialNavbar = document.getElementById('navbar-special');
+    if (specialNavbar) {
+      specialNavbar.classList.add('navbar-autohide-enabled');
+      
+      // Force a reflow to ensure the browser recognizes the class
+      void specialNavbar.offsetWidth;
+    }
+  });
+</script>
+{% endif %}
+
+        
+<!-- Direct script to handle special navbar theme toggle -->
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // Direct event handler for special navbar theme button
+    const specialThemeButton = document.querySelector('#special-navbar #light-toggle');
+    if (specialThemeButton) {
+      specialThemeButton.addEventListener('click', function() {
+        // Try to find the theme toggle function
+        if (typeof toggleThemeSetting === 'function') {
+          toggleThemeSetting();
+        } else if (window.toggleThemeSetting) {
+          window.toggleThemeSetting();
+        } else {
+          // Fallback: manually toggle through light/dark/system
+          const html = document.documentElement;
+          const currentTheme = localStorage.getItem('theme') || 'system';
+          
+          let newTheme = 'light';
+          if (currentTheme === 'light') newTheme = 'dark';
+          if (currentTheme === 'dark') newTheme = 'system';
+          
+          localStorage.setItem('theme', newTheme);
+          html.setAttribute('data-theme-setting', newTheme);
+          
+          if (newTheme === 'system') {
+            const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            html.setAttribute('data-theme', isDark ? 'dark' : 'light');
+          } else {
+            html.setAttribute('data-theme', newTheme);
+          }
+          
+          // Update the icon display
+          const systemIcon = document.querySelector('#light-toggle-system');
+          const darkIcon = document.querySelector('#light-toggle-dark');
+          const lightIcon = document.querySelector('#light-toggle-light');
+          
+          if (systemIcon && darkIcon && lightIcon) {
+            systemIcon.style.display = newTheme === 'system' ? 'block' : 'none';
+            darkIcon.style.display = newTheme === 'dark' ? 'block' : 'none';
+            lightIcon.style.display = newTheme === 'light' ? 'block' : 'none';
+          }
+          
+          // Trigger theme application
+          if (typeof applyTheme === 'function') {
+            applyTheme();
+          }
+        }
+      });
+    }
+  });
+</script>

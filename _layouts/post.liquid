@@ -1,0 +1,114 @@
+---
+layout: default
+---
+{% assign year = page.date | date: '%Y' %}
+{% assign tags = page.tags | join: '' %}
+{% assign categories = page.categories | join: '' %}
+{% assign url_beginning = page.url | slice: 0, 6 %}
+
+{% if page._styles %}
+  <!-- Page/Post style -->
+  <style type="text/css">
+    {{ page._styles }}
+  </style>
+{% endif %}
+
+<div class="post {% if page.category == 'Business' %}business-project{% endif %}">
+  <!-- post.liquid (modified section) -->
+  <header class="post-header">
+    <h1 class="post-title">{{ page.title }}</h1>
+    
+    <!-- Year tag and category at top -->
+    <p class="post-year">
+      {% if url_beginning == '/blog/' %}
+        <a href="{{ year | prepend: '/blog/' | relative_url }}"> <i class="fa-solid fa-calendar fa-sm"></i> {{ year }} </a>
+      {% else %}
+        <i class="fa-solid fa-calendar fa-sm"></i> {{ year }}
+      {% endif %}
+      
+      {% if categories != '' %}
+        &nbsp; &middot; &nbsp;
+        <span class="post-category">
+          <i class="fa-solid fa-tag fa-sm"></i> 
+          {% for category in page.categories limit:1 %}
+            {% if url_beginning == '/blog/' %}
+              <a href="{{ category | slugify | prepend: '/blog/category/' | relative_url }}">{{ category }}</a>
+            {% else %}
+              {{ category }}
+            {% endif %}
+          {% endfor %}
+        </span>
+      {% endif %}
+    </p>
+    
+    <p class="post-meta">
+      Created on {{ page.date | date: '%B %d, %Y' }}
+      {% if page.last_updated %} | Last updated on {{ page.last_updated | date: '%B %d, %Y' }}{% endif %}<br>
+
+      {% if page.author %}<span class="post-author">{{ page.author }}</span>{% endif %}
+      {% if page.meta %} &bull; {{ page.meta }}{% endif %}
+    </p>
+  </header>
+
+  {% if page.toc and page.toc.inline %}
+    <!-- If TOC inline is enabled, use section-divider both before and after -->
+    <hr class="header-content-divider">
+    <div id="table-of-contents">
+      <h2 class="toc-heading">Table of Contents</h2>
+      {% toc %}
+    </div>
+    <hr class="TOC-section-divider">
+  {% else %}
+    <!-- If no TOC inline, use header-content-divider -->
+    <hr class="header-content-divider">
+  {% endif %}
+
+  <article class="post-content">
+    <div id="markdown-content">
+      {{ content }}
+    </div>
+  </article>
+
+  {% if page.citation %}
+    {% include citation.liquid %}
+  {% endif %}
+
+  {% if page.related_publications %}
+    <h2>References</h2>
+    <div class="publications">
+      {% bibliography --group_by none --cited_in_order %}
+    </div>
+  {% endif %}
+
+  <!-- Move other tags to end (except year which stays at top) -->
+  {% if tags != '' %}
+    <hr class="section-divider">
+    <p class="post-tags">
+      {% for tag in page.tags %}
+        {% if url_beginning == '/blog/' %}
+          <a href="{{ tag | slugify | prepend: '/blog/tag/' | relative_url }}"><i class="fa-solid fa-hashtag fa-sm"></i>&nbsp;{{ tag }}</a>
+        {% else %}
+          <i class="fa-solid fa-hashtag fa-sm"></i>&nbsp;{{ tag }}
+        {% endif %}
+        {% if forloop.index < page.tags.size %}
+          &nbsp;&bull;&nbsp;
+        {% endif %}
+      {% endfor %}
+    </p>
+  {% endif %}
+
+  {% if site.related_blog_posts and site.related_blog_posts.enabled %}
+    {% if page.related_posts == null or page.related_posts %}
+      {% include related_posts.liquid %}
+    {% endif %}
+  {% endif %}
+
+  {% if site.disqus_shortname and page.disqus_comments %}
+    <br>
+    {% include disqus.liquid %}
+  {% endif %}
+  {% if site.giscus and page.giscus_comments %}
+    <br>
+    {% include giscus.liquid %}
+  {% endif %}
+</div>
