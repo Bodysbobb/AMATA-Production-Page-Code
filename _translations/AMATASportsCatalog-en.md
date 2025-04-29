@@ -1,11 +1,8 @@
 ---
 layout: page
-title: Sports
-description: "ภาพตัวอย่างสินค้า AMATA Production เสื้อกีฬา เสื้อพิมพ์ลาย รับผลิตและออกแบบ ราคาโรงงาน ดีไซน์ล้ำ ทันสมัย งานคุณภาพ ส่งมอบไว"
+title: AMATA Production Sports Designs
+description: "AMATA Production Sports Designs"
 img: assets/img/project_covers/AMATASport_cover.jpg
-permalink: /AMATASportsCatalog/
-nav: true
-nav_order: 1
 
 # Display settings
 hide_title: true
@@ -29,15 +26,23 @@ og_image: /assets/img/project_covers/AMATA_Meta.png
 
 # Contact Info Button Configuration
 contact_info: true
-contact_position: "right"
 main_animation: "true"
 wave_animation: "true"
-contact_call: "+66818888866"
-contact_messenger: "amataproduction.sport"
 contact_line_url: "https://line.me/ti/p/@amatapr"
+contact_messenger: "amataproduction.sport"
+contact_call: "+66818888866"
 contact_email: "sales@amataproduction.com"
 contact_location_url: "https://maps.app.goo.gl/46SZnCwHuesWyBwm7"
 contact_digitalcard_url: "https://vcard-admin.pkp.homes/U0NtnOPAOx"
+contact_position: "right"
+
+# Custom button labels
+call_label: "Call Us"
+line_label: "Line Official"
+email_label: "Email Us"
+contact_title: "Get In Touch"
+smart_card_label: "Digital Card"
+location_label: "Visit Us"
 
 contact_order:
   - email
@@ -47,20 +52,12 @@ contact_order:
   - messenger
   - line
 
-# Custom button labels
-contact_title: "ติดต่อเรา"
-call_label: "โทร"
-messenger_label: "Messenger"
-line_label: "ไลน์@"
-email_label: "อีเมล"
-smart_card_label: "Digital Card"
-location_label: "ที่อยู่"
-
 # Language Switch
 language_switch: true
-lang: "th"
-hreflang: "th"
-alternate_lang_url: "/translations/AMATASportsCatalog-en/"
+lang: "en"
+hreflang: "en"
+permalink: /translations/AMATASportsCatalog-en/
+alternate_lang_url: "/AMATASportsCatalog"
 
 # Background
 background_logo: /assets/img/custom_logo/amata/AMATA_Logo_Hover.svg
@@ -107,14 +104,14 @@ background_position: center
   images_per_row_max="4"
   images_per_row_min="2"
   image_aspect_ratio="1/1"
-  filter_button_label="ตัวกรอง "
-  copy_message_label="ชอบกดไลค์ อยากได้กดลิงก์!"
-  copy_button_label="คัดลอกลิงก์"
-  copy_button_label_finalstate="คัดลอกแล้ว!"
-  selected_filters_label="ตัวกรองที่เลือก"
-  clear_all_label="ล้างทั้งหมด"
-  no_filters_label="ไม่มีตัวกรองที่เลือก"
-  middle_label_text="ส่งลิงก์ผ่าน LINE ได้เลย!"
+  filter_button_label="Filter & Sort "
+  copy_message_label="Like this design? Click and send us the link!"
+  copy_button_label="Copy Link"
+  copy_button_label_finalstate="Link Copied!"
+  selected_filters_label="Selected Filter"
+  clear_all_label="Clear All"
+  no_filters_label="Non selected"
+  middle_label_text="Send it to us!"
 
   paths="
     https://lh3.googleusercontent.com/d/1Kh2Jx05jyGWhtDptIdminb78mW7wC5sg,
@@ -2324,7 +2321,7 @@ background_position: center
     Sports 549,
     Sports 550"
 
-  top_filters="สีขาว:สีขาว, สีเทาอ่อน:สีเทาอ่อน, สีดำ:สีดำ, สีน้ำเงินเทาเข้ม:สีน้ำเงินเทาเข้ม, สีเลือดหมู:สีเลือดหมู, สีส้มเข้ม:สีส้มเข้ม, สีแดงเข้ม:สีแดงเข้ม, สีแดง:สีแดง, สีฟ้าน้ำทะเลเข้ม:สีฟ้าน้ำทะเลเข้ม, สีเขียวทะเล:สีเขียวทะเล"
+  top_filters="white:white, light-gray:light-gray, black:black, dark-slate-blue:dark-slate-blue, maroon:maroon, dark-orange:dark-orange, crimson:crimson, red:red, dark-turquoise:dark-turquoise, sea-green:sea-green"
 
-  filter_categories="สี:สีดำ, สีชมพูเข้ม, สีม่วงแดง, สีแดงเข้ม, สีเทาอ่อน, สีน้ำเงินเข้ม, สีคราม, สีน้ำเงินเทาเข้ม, สีเขียวเข้ม, สีเขียวมะกอกเข้ม, สีขาว, สีเขียวน้ำทะเล, สีทองแดงเหลือง, สีทอง, สีน้ำเงินม่วง, สีฟ้าน้ำทะเล, สีส้มเข้ม, สีเลือดหมู, สีแดง, สีเขียวทะเล, สีชมพู, สีกรมท่า, สีส้มแดงเข้ม, สีส้ม, สีน้ำเงินเข้มสุด, สีฟ้าน้ำทะเลเข้ม, สีเทาเข้ม, สีส้มแดง, สีเทา, สีม่วง, สีบานเย็น, สีเหลืองเขียว, สีเหลือง, สีเขียวใบไม้, สีเขียวมะกอก, สีเขียว, สีบานเย็นเข้ม || แบบเสื้อ:แขนสั้น, แขนยาว, ชุด"
+  filter_categories="Colors:black, deep-pink, violet-red, crimson, light-gray, royal-blue, indigo, dark-slate-blue, dark-green, olive-drab, white, teal, golden-rod, gold, blue-violet, turquoise, dark-orange, maroon, red, sea-green, pink, navy, dark-orange-red, orange, midnight-blue, dark-turquoise, dark-gray, orange-red, gray, purple, magenta, yellow-green, yellow, spring-green, olive, green, dark-magenta || Sleeve:Short Sleeve, Long Sleeve, Uniform"
 %}

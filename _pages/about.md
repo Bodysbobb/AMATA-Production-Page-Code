@@ -54,7 +54,7 @@ location_label: "ที่อยู่"
 language_switch: true
 lang: "th"
 hreflang: "th"
-alternate_lang_url: "/translations/AMATAProduction/"
+alternate_lang_url: "/translations/AMATAProduction-en/"
 ---
 
 <!-- Hero Section -->
