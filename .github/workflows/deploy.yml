@@ -110,5 +110,5 @@ jobs:
           publish_dir: ./_site
           personal_token: ${{ secrets.DEPLOY_REPO_TOKEN_AMATA }}
           cname: www.amataproduction.com
-          force_orphan: true 
+          force_orphan: true
           verbose: true
