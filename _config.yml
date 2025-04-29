@@ -167,9 +167,10 @@ collections:
   news:
     defaults:
       layout: post
-    output: true
+    output: false
   projects:
-    output: true
+    output: false
+  
 
 # -----------------------------------------------------------------------------
 # Jekyll settings
@@ -219,6 +220,7 @@ exclude:
   - _pages/cv.md
   - _pages/repositories.md
   - _pages/publications.md
+  - _pages/projects.md
   
 keep_files:
   - CNAME

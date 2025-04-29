@@ -10,14 +10,7 @@ hide_title: true
 hide_description: true
 
 # Navbar
-special_navbar: true
-special_navbar_title: AMATA Production
-switch_navbar: true
-default_tooltip: "Back to Business"
-special_tooltip: "Let Get Personal"
-default_navbar_logo: /assets/img/page_logo/navbar-icon_white.png
-special_navbar_logo_one: /assets/img/page_logo/amata_white.png
-#special_navbar_logo_two: /assets/img/page_logo/navbar-icon_white.png
+default_navbar_logo: /assets/img/page_logo/amata_white.png
 
 # OG Setup
 og_title: AMATA Production Co., Ltd. (Thailand)
@@ -25,6 +18,8 @@ og_image: /assets/img/project_covers/AMATA_Meta.png
 
 # Contact Info Button Configuration
 contact_info: true
+main_animation: "true"
+wave_animation: "true"
 contact_line_url: "https://line.me/ti/p/@amatapr"
 contact_messenger: "amataproduction.sport"
 contact_call: "+66818888866"
@@ -53,16 +48,23 @@ contact_order:
 language_switch: true
 lang: "en"
 hreflang: "en"
-alternate_lang_url: "/translations/AMATAProduction-th/"
+permalink: /translations/AMATAProduction/
+alternate_lang_url: "/"
 ---
 
-<h1 class="page-heading">
-  AMATA Production Co., Ltd. (Thailand)
-</h1>
-
-<p class="big-centered-quote animate-by-letter">
-  "Every design has a story. Print quality brings it to life."
-</p>
+<!-- Hero Section -->
+{% include landing-hero.liquid
+  title="AMATA Production Co., Ltd."
+  subtext="Every design has a story. Print quality brings it to life."
+  signature="— AMATA Production —"
+  scroll_text="Get in Touch"
+  particle_mode="hero-only"
+  letter_delay="0.05"
+  initial_delay="300"
+  data-final-class="animation-complete"
+  has_navbar=true 
+%}
+<a id="projects-start"></a>
 
 <hr class="section-divider">
 

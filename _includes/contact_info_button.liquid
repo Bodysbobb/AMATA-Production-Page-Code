@@ -1,8 +1,12 @@
 {% assign position = include.position | default: page.contact_position | default: "right" %}
 {% assign theme = include.theme | default: page.contact_theme | default: "default-theme" %}
 {% assign current_lang = page.lang | default: site.lang | default: 'en' %}
-{% assign main_animation = include.main_animation | default: page.main_animation | default: "false" %}
-{% assign wave_animation = include.wave_animation | default: page.wave_animation | default: "false" %}
+
+{% comment %}
+Animation settings - enable by default for attention-grabbing features
+{% endcomment %}
+{% assign main_animation = include.main_animation | default: page.main_animation | default: "true" %}
+{% assign wave_animation = include.wave_animation | default: page.wave_animation | default: "true" %}
 
 {%- assign call = include.call | default: page.contact_call -%}
 {%- assign email = include.email | default: page.contact_email -%}

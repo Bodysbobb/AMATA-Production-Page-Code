@@ -105,26 +105,39 @@
     }
   }
   
-  /* Main icon shake animation - increased frequency */
+  /* Main icon shake animation - plays every 6 seconds */
   &.with-animation {
-    animation: shake 2.5s ease-in-out infinite; /* Reduced from 4s to 2.5s */
+    animation: shake 6s cubic-bezier(0.36, 0.07, 0.19, 0.97) infinite;
+    animation-delay: 0.5s;
   }
   
   @keyframes shake {
-    0%, 85%, 100% {
-      transform: rotate(0);
+    0%, 70%, 100% {
+      transform: scale(1) rotate(0);
+    }
+    74% {
+      transform: scale(1.1) rotate(0);
+    }
+    76% {
+      transform: scale(1.1) rotate(15deg);
+    }
+    78% {
+      transform: scale(1.1) rotate(-15deg);
+    }
+    80% {
+      transform: scale(1.08) rotate(10deg);
+    }
+    82% {
+      transform: scale(1.08) rotate(-10deg);
+    }
+    84% {
+      transform: scale(1.05) rotate(5deg);
+    }
+    86% {
+      transform: scale(1.05) rotate(-5deg);
     }
     88% {
-      transform: rotate(15deg);
-    }
-    91% {
-      transform: rotate(-15deg);
-    }
-    94% {
-      transform: rotate(10deg);
-    }
-    97% {
-      transform: rotate(-10deg);
+      transform: scale(1) rotate(0);
     }
   }
 }
@@ -162,16 +175,16 @@
   gap: 10px;
   margin-bottom: 15px;
   opacity: 0;
-  visibility: hidden;
+  pointer-events: none;
   transform: translateY(10px);
-  transition: opacity 0.3s, transform 0.3s, visibility 0.3s;
-  width: fit-content; /* Adapt to content */
-  min-width: 180px; /* Minimum reasonable size */
-  max-width: 280px; /* Maximum size constraint */
+  transition: opacity 0.3s, transform 0.3s;
+  width: fit-content;
+  min-width: 180px;
+  max-width: 280px;
   
   &.active {
     opacity: 1;
-    visibility: visible;
+    pointer-events: auto;
     transform: translateY(0);
   }
 }
@@ -186,16 +199,17 @@
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
   transition: transform 0.2s;
   height: var(--contact-button-height);
-  width: auto; /* Allow width to adapt */
-  white-space: nowrap; /* Prevent text wrapping */
+  width: auto;
+  white-space: nowrap;
   
   &:hover {
     transform: scale(1.03);
     text-decoration: none;
   }
   
-  &.with-wave-animation:hover .contact-button-icon {
-    animation: wave 0.6s ease-in-out;
+  /* Wave animation only when active */
+  &.with-wave-animation {
+    animation: continuousWave 2s ease-in-out infinite;
   }
   
   .contact-button-icon {
@@ -239,18 +253,13 @@
     padding: 0 15px;
   }
   
-  @keyframes wave {
+  /* Continuous wave animation */
+  @keyframes continuousWave {
     0%, 100% {
-      transform: rotate(0);
-    }
-    25% {
-      transform: rotate(10deg);
+      transform: translateY(0);
     }
     50% {
-      transform: rotate(-10deg);
-    }
-    75% {
-      transform: rotate(5deg);
+      transform: translateY(-5px);
     }
   }
 }

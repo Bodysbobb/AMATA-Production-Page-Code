@@ -3,7 +3,7 @@ layout: page
 title: Portfolio
 permalink: /projects/
 description: "An academic mind, a business heart, and a creator’s soul. | Please see all of my projects on this page!"
-nav: true
+nav: false
 nav_order: 3
 display_categories: [Academic, Business, Programming]
 horizontal: false
@@ -11,7 +11,7 @@ horizontal: false
 hide_title: true
 hide_description: true
 landing_hero: true
-landing_hero_disable_contact_button: true
+
 
 # META Setup
 og_title: Pattawee Puangchit | Portfolio

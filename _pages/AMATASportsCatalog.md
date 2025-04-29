@@ -1,13 +1,11 @@
 ---
 layout: page
-title: AMATA Sports
-permalink: /
-class: about-page
-title: AMATA Production Product Catalog (Sports)
+title: Sports
 description: "ภาพตัวอย่างสินค้า AMATA Production เสื้อกีฬา เสื้อพิมพ์ลาย รับผลิตและออกแบบ ราคาโรงงาน ดีไซน์ล้ำ ทันสมัย งานคุณภาพ ส่งมอบไว"
 img: assets/img/project_covers/AMATASport_cover.jpg
-importance: 2
-category: Business
+permalink: /AMATASportsCatalog/
+nav: true
+nav_order: 1
 
 # Display settings
 hide_title: true
@@ -18,20 +16,24 @@ special_navbar: true
 special_navbar_title: AMATA Production Sports Designs
 special_navbar_color: "#58595A"
 switch_navbar: true
-default_tooltip: "Back to Business"
-special_tooltip: "Let Get Personal"
-default_navbar_logo: /assets/img/page_logo/navbar-icon_white.png
+toggle_down: true
+
+default_tooltip: "AMATA Production"
+special_tooltip: "AMATA Sports"
+default_navbar_logo: /assets/img/page_logo/amata_white.png
 special_navbar_logo_one: /assets/img/page_logo/amata_sport.png
 
+
+
 # OG Setup
-og_title: AMATA Production Product Catalog
+og_title: AMATA Production Sports Catalog
 og_image: /assets/img/project_covers/AMATA_Meta.png
 
 # Contact Info Button Configuration
 contact_info: true
 contact_position: "right"
-main_animation: true
-wave_animation: true
+main_animation: "true"
+wave_animation: "true"
 contact_call: "+66818888866"
 contact_messenger: "amataproduction.sport"
 contact_line_url: "https://line.me/ti/p/@amatapr"

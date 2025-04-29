@@ -1,5 +1,14 @@
 <!-- Particle Effects -->
-{% include particles-background.liquid mode=include.particle_mode %}
+{% include particles-background.liquid 
+   mode=include.particle_mode 
+   has_navbar=include.has_navbar %}
+
+{% assign subtext_classes = "landing-subtext init-hidden" %}
+{% if include.animation_type == 'thai' %}
+  {% assign subtext_classes = subtext_classes | append: " animate-thai" %}
+{% else %}
+  {% assign subtext_classes = subtext_classes | append: " animate-by-letter" %}
+{% endif %}
 
 <section class="landing-hero">
   <div class="landing-center">
@@ -11,8 +20,7 @@
         {{ include.title }}
       </h1>
 
-      <!-- Letter-by-letter animated text -->
-      <p class="landing-subtext animate-by-letter init-hidden"
+      <p class="{{ subtext_classes }}"
         {% if include.letter_delay %} data-letter-delay="{{ include.letter_delay }}" {% endif %}
         {% if include.initial_delay %} data-initial-delay="{{ include.initial_delay }}" {% endif %}
         {% if include.final_color %} data-final-color="{{ include.final_color }}" {% endif %}

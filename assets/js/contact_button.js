@@ -21,15 +21,9 @@ function initContactButtons() {
     const mainAnimation = container.getAttribute('data-main-animation');
     const waveAnimation = container.getAttribute('data-wave-animation');
     
+    // Add the main button animation if enabled
     if (mainAnimation === 'true') {
       toggleButton.classList.add('with-animation');
-    }
-    
-    if (waveAnimation === 'true') {
-      const contactButtons = container.querySelectorAll('.contact-button');
-      contactButtons.forEach(button => {
-        button.classList.add('with-wave-animation');
-      });
     }
     
     // Get the SVG icon elements
@@ -46,9 +40,28 @@ function initContactButtons() {
       if (toggleButton.classList.contains('active')) {
         commentIcon.style.display = 'none';
         timesIcon.style.display = 'block';
+        
+        // Add wave animation to all buttons immediately if enabled
+        if (waveAnimation === 'true') {
+          const contactButtons = container.querySelectorAll('.contact-button');
+          contactButtons.forEach((button, index) => {
+            button.classList.add('with-wave-animation');
+            // Set staggered animation delays for the continuous wave effect
+            button.style.animationDelay = (index * 0.2) + 's';
+          });
+        }
       } else {
         commentIcon.style.display = 'block';
         timesIcon.style.display = 'none';
+        
+        // Remove wave animations when closed
+        if (waveAnimation === 'true') {
+          const contactButtons = container.querySelectorAll('.contact-button');
+          contactButtons.forEach(button => {
+            button.classList.remove('with-wave-animation');
+            button.style.animationDelay = '0s';
+          });
+        }
       }
       
       // Also toggle the container active state for z-index control
@@ -81,6 +94,13 @@ function initContactButtons() {
       
       activeContainers.forEach(element => {
         element.classList.remove('active');
+        
+        // Remove wave animations when closed
+        const contactButtons = element.querySelectorAll('.contact-button');
+        contactButtons.forEach(button => {
+          button.classList.remove('with-wave-animation');
+          button.style.animationDelay = '0s';
+        });
       });
     }
   });

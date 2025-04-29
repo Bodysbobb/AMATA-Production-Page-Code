@@ -1,4 +1,5 @@
 {% assign particle_mode = include.mode | default: "full-page" %}
+{% assign has_navbar = include.has_navbar | default: false %}
 
 <div id="particles-js" 
      class="particles-container {% if particle_mode == 'hero-only' %}hero-only-particles{% elsif particle_mode == 'mix' %}mix-particles{% else %}full-page-particles{% endif %}"
@@ -10,6 +11,7 @@
   let particleInstance;
   let lastScrollTop = 0;
   let particleMode = "{{ particle_mode }}";
+  let hasNavbar = {{ include.has_navbar | default: false }};
   
   function initParticles() {
     const rootStyle = getComputedStyle(document.documentElement);
@@ -22,9 +24,13 @@
       particleInstance.destroy();
     }
 
+    // Detect if mobile screen
+    const isMobile = window.innerWidth <= 768; 
+    const particleNumber = isMobile ? 50 : 120;
+    
     particleInstance = particlesJS('particles-js', {
       particles: {
-        number: { value: 80 },
+        number: { value: particleNumber },
         color: { value: particleColor },
         shape: { type: "circle" },
         opacity: { value: 0.35 },
@@ -41,10 +47,26 @@
       interactivity: {
         detect_on: "canvas",
         events: {
-          onhover: { enable: true, mode: "repulse" }
+          onhover: {
+            enable: true,
+            mode: isMobile ? "repulse" : "grab" // <<< auto switch here
+          },
+          onclick: {
+            enable: true,
+            mode: "repulse"
+          }
         },
         modes: {
-          repulse: { distance: 100 }
+          grab: {
+            distance: 200,
+            line_linked: {
+              opacity: 0.5
+            }
+          },
+          repulse: {
+            distance: 200,
+            duration: 0.6
+          }
         }
       },
       retina_detect: true
@@ -162,7 +184,20 @@
         const heroSection = document.querySelector('.landing-hero');
         if (heroSection) {
           if (particleMode === "hero-only") {
-            particlesContainer.style.height = `${heroSection.offsetHeight}px`;
+            // Use full height calculation considering navbar if it exists
+            if (hasNavbar) {
+              // Get navbar height
+              const navbar = document.querySelector('nav.navbar') || document.querySelector('header nav');
+              const navbarHeight = navbar ? navbar.offsetHeight : 0;
+              
+              // Position the particle container below the navbar
+              particlesContainer.style.top = `${navbarHeight}px`;
+              // Set height to hero section height minus navbar height
+              particlesContainer.style.height = `${heroSection.offsetHeight}px`;
+            } else {
+              // Original calculation
+              particlesContainer.style.height = `${heroSection.offsetHeight}px`;
+            }
           }
           
           // Run initial scroll check
@@ -179,7 +214,19 @@
       if (particlesContainer) {
         const heroSection = document.querySelector('.landing-hero');
         if (heroSection && particleMode === "hero-only") {
-          particlesContainer.style.height = `${heroSection.offsetHeight}px`;
+          if (hasNavbar) {
+            // Recalculate with navbar considerations on resize
+            const navbar = document.querySelector('nav.navbar') || document.querySelector('header nav');
+            const navbarHeight = navbar ? navbar.offsetHeight : 0;
+            
+            // Position the particle container below the navbar
+            particlesContainer.style.top = `${navbarHeight}px`;
+            // Set height to hero section height minus navbar height
+            particlesContainer.style.height = `${heroSection.offsetHeight}px`;
+          } else {
+            // Original calculation
+            particlesContainer.style.height = `${heroSection.offsetHeight}px`;
+          }
         }
         
         // Always update mask for mix mode when resize happens
@@ -210,11 +257,16 @@
   .side-only {
     z-index: -1 !important;
   }
-  
+
+  #particles-js {
+    pointer-events: none; /* container itself: still ignore pointer */
+  }
+
   /* Add transition for smooth particle effects */
   #particles-js canvas {
     transition: clip-path 0.4s ease, opacity 0.4s ease, transform 0.4s ease, mask-image 0.4s ease, -webkit-mask-image 0.4s ease;
     will-change: mask-image, -webkit-mask-image;
+    pointer-events: auto;
   }
   
   html.past-hero .mix-particles {
@@ -222,6 +274,6 @@
     top: 0;
     left: 0;
     width: 100%;
-    height: 100vh;
+    height: 120vh;
   }
 </style>

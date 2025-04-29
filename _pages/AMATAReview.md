@@ -1,10 +1,11 @@
 ---
 layout: page
-title: AMATA Production Customer Review
+title: Review
 description: "ความประทับใจจากลูกค้าที่ไว้วางใจ AMATA Production รับผลิตและออกแบบ เสื้อกีฬา เสื้อพิมพ์ลาย เสื้อหน่วยงาน เสื้อโปโล เสื้อองค์กร งานพิมพ์ งานออกแบบ ดีไซน์ล้ำ ทันสมัย งานคุณภาพ ส่งมอบไว ราคาโรงงาน รับผลิตเสื้อ และสิ่งพิมพ์"
 img: assets/img/project_covers/Customer_Review_AMATASport.jpg
-importance: 3
-category: Business
+permalink: /AMATASportsReview/
+nav: true
+nav_order: 2
 
 # Display settings
 hide_title: true
@@ -12,13 +13,16 @@ hide_description: true
 
 # Navbar
 special_navbar: true
-special_navbar_title: AMATA Production Customer Review
+special_navbar_title: AMATA Customer Reviews
 special_navbar_color: "#58595A"
 switch_navbar: true
-default_tooltip: "Back to Business"
-special_tooltip: "Let Get Personal"
-default_navbar_logo: /assets/img/page_logo/navbar-icon_white.png
+toggle_down: true
+
+default_tooltip: "AMATA Production"
+special_tooltip: "AMATA Review"
+default_navbar_logo: /assets/img/page_logo/amata_white.png
 special_navbar_logo_one: /assets/img/page_logo/amata_sport.png
+
 
 # OG Setup
 og_title: AMATA Production Customer Review
@@ -26,6 +30,8 @@ og_image: /assets/img/project_covers/AMATA_Meta.png
 
 # Contact Info Button Configuration
 contact_info: true
+main_animation: "true"
+wave_animation: "true"
 contact_position: "right"
 contact_call: "+66818888866"
 contact_messenger: "amataproduction.sport"
@@ -79,14 +85,6 @@ background_position: center
     text-decoration: none;
   }
 </style>
-
-<div style="text-align: center;">
-  <h2>
-    <a href="https://www.pattawee-pp.com/projects/AMATASportsCatalog/" class="textc-click-link">
-      ดูตัวอย่างเสื้อกีฬาดีไซน์เท่ๆ จาก AMATA Production
-    </a>
-  </h2>
-</div>
 
 {% include product-catalog.liquid 
   theme="review"

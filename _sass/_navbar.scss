@@ -368,6 +368,105 @@ body[data-special-navbar="true"] {
   }
 }
 
+//================ Toggle Down Mode Styles ================//
+
+// Special navbar with toggle_down enabled
+.navbar-toggle-always {
+  // Always display the toggle button regardless of screen size
+  .navbar-toggler {
+    display: block !important;
+  }
+  
+  // Title container adjustments
+  .navbar-title-container.toggle-down-title {
+    text-align: center;
+    margin: 0 auto;
+  }
+  
+  // Force collapse to be hidden on all screen sizes when toggle_down is true
+  &.navbar-expand-sm {
+    @media (min-width: 576px) {
+      .navbar-toggler {
+        display: block !important; // Always show toggle
+      }
+      
+      .navbar-collapse {
+        display: none !important; // Always collapsed by default
+        
+        &.show {
+          display: block !important; // Only show when toggled
+        }
+      }
+    }
+  }
+  
+  // Styling for the collapsed menu when toggled
+  .navbar-collapse {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    width: 100%;
+    z-index: 1029;
+    padding: 0.5rem 0;
+    border-top: 1px solid var(--global-divider-color);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    text-align: right; // Right-align text
+    
+    // Set the correct flex direction for navbar items
+    .navbar-nav {
+      flex-direction: column;
+      align-items: flex-end; // Align items to the right
+      width: 100%;
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 15px;
+      
+      .nav-item {
+        margin: 0.5rem 0;
+        
+        .nav-link {
+          display: block; 
+          text-align: right;
+          padding-right: 0;
+        }
+      }
+      
+      // Properly handle dropdowns within the collapsed navbar
+      .dropdown-menu {
+        position: static !important;
+        float: none;
+        width: auto;
+        margin-top: 0.5rem;
+        padding-right: 1rem;
+        border: none;
+        box-shadow: none;
+        background-color: transparent !important;
+        text-align: right;
+        right: 0;
+        left: auto;
+      }
+    }
+  }
+}
+
+// Ensure dropdown toggle caret appears correctly
+.navbar-toggle-always .dropdown-toggle::after {
+  display: inline-block;
+  margin-left: 0.255em;
+  vertical-align: 0.255em;
+  content: "";
+  border-top: 0.3em solid;
+  border-right: 0.3em solid transparent;
+  border-bottom: 0;
+  border-left: 0.3em solid transparent;
+}
+
+// Ensure the navbar maintains proper height
+#navbar-special.navbar-toggle-always {
+  min-height: 65px !important;
+}
+
 //================ HERO-SECTION navbar-specific styles ================//
 // Landing Hero Header Container Styles
 #header-container {

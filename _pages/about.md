@@ -1,9 +1,10 @@
 ---
-layout: about
+layout: page
 title: Home
+subtitle: บริษัท อมตะ โปรดักชั่น จำกัด
+img: https://lh3.googleusercontent.com/d/11AU3iNRRkApAnZlL3lTy5og8vaLMYtMQ
 permalink: /
 class: about-page
-subtitle: "รับผลิตและออกแบบ"
 default_navbar_logo: /assets/img/page_logo/amata_white.png
 
 hide_title: true
@@ -12,11 +13,6 @@ hide_description: true
 # META Setup
 og_title: AMATA Production Co., Ltd. (บริษัท อมตะ โปรดักชั่น จำกัด)
 og_description: AMATA Production AMATA Production, เสื้อกีฬา, เสื้อพิมพ์ลาย, รับผลิตเสื้อกีฬา, เสื้อทีม, เสื้อสั่งทำ, เสื้อองค์กร, เสื้อหน่วยงาน, ออกแบบเสื้อ, พิมพ์เสื้อ, งานพิมพ์คุณภาพ, เสื้อกีฬาออกแบบพิเศษ, รับทำเสื้อกีฬา, โรงงานเสื้อกีฬา, เสื้อโปโลพิมพ์ลาย, เสื้อวิ่ง, เสื้อกิจกรรม, เสื้อฟิตเนส, เสื้อพรีเมียม, ผลิตเสื้อราคาส่ง, ผลิตเสื้อด่วน, ดีไซน์เสื้อกีฬา, เสื้อกีฬาแฟชั่น, เสื้อกีฬาโมเดิร์น, สั่งทำเสื้อกีฬา, เสื้อพิมพ์ลายทันสมัย, เสื้อกีฬาโรงงาน
-
-# Quote
-quote: true
-line1: "ทุกลวดลายมีเรื่องราว"
-line2: "คุณภาพงานพิมพ์จึงสำคัญ"
 
 # Selected Paper
 selected_papers: FALSE # includes a list of papers marked as "selected={true}"
@@ -34,7 +30,8 @@ latest_posts:
 
 # Contact Info Button Configuration
 contact_info: true
-button_animate: true
+main_animation: "true"
+wave_animation: "true"
 contact_messenger: "amataproduction.sport"
 contact_call: "+66818888866"
 contact_messenger: "amataproduction.sport"
@@ -52,16 +49,28 @@ email_label: "อีเมล"
 contact_title: "ติดต่อเรา"
 smart_card_label: "Digital Card"
 location_label: "ที่อยู่"
+
+# Language Switch
+language_switch: true
+lang: "th"
+hreflang: "th"
+alternate_lang_url: "/translations/AMATAProduction/"
 ---
 
-
-<h1 class="page-heading">
-  บริษัท อมตะ โปรดักชั่น จำกัด
-</h1>
-
-<p class="big-centered-quote animate-thai">
-  “ทุกลวดลายมีเรื่องราว คุณภาพงานพิมพ์จึงสำคัญ”
-</p>
+<!-- Hero Section -->
+{% include landing-hero.liquid
+  title="AMATA Production Co., Ltd."
+  subtext="ทุกลวดลายมีเรื่องราว คุณภาพงานพิมพ์จึงสำคัญ"
+  signature="— อมตะ โปรดักชั่น —"
+  scroll_text="Get in Touch"
+  particle_mode="hero-only"
+  letter_delay="0.05"
+  initial_delay="300"
+  data-final-class="animation-complete"
+  animation_type="thai"
+  has_navbar=true 
+%}
+<a id="projects-start"></a>
 
 <hr class="section-divider">
 
@@ -311,22 +320,149 @@ location_label: "ที่อยู่"
 
 <!-- PAGE STYLE -->
 <style>
-  /* Animate main content only */
-  .page-content {
-    animation: zoomInContent 0.8s ease-out;
-    transform-origin: center top;
+  #projects-start {
+	  scroll-margin-top: 0px !important;
+  }
+
+  /* === HERO SECTION === */
+  .landing-signature {
     will-change: transform, opacity;
   }
 
-  @keyframes zoomInContent {
-    0% {
-      opacity: 0;
-      transform: scale(0.96);
-    }
-    100% {
-      opacity: 1;
-      transform: scale(1);
-    }
+  .landing-signature {
+    color: var(--global-text-secondary-color) !important;
+    animation-delay: 3.4s !important;
   }
 
   /* Apply Prompt Thai font globally but exclude icons */
+  .post, .post *:not(i[class^="fa-"]):not(i[class*=" fa-"]) {
+    font-family: 'Prompt', sans-serif !important;
+  }
+
+  /* Font Awesome: solid and regular icons */
+  .post i.fa-solid,
+  .post i.fa-regular {
+    font-family: "Font Awesome 6 Free" !important;
+    font-weight: 900 !important;
+  }
+
+  /* Font Awesome: brand icons */
+  .post i.fa-brands {
+    font-family: "Font Awesome 6 Brands" !important;
+    font-weight: 400 !important;
+  }
+
+  /* Optional: ensure headings also use Prompt */
+  .post h1, .post h2, .post h3, .post h4, .post h5, .post h6 {
+    font-family: 'Prompt', sans-serif !important;
+  }
+
+  .page-heading {
+    font-size: clamp(1.75rem, 4vw, 3rem);
+    font-weight: bold;
+    color: var(--global-text-color);
+    text-align: center;
+    margin-top: 0vh;
+  }
+
+  .section-heading {
+    font-size: clamp(1.75rem, 4vw, 3rem);
+    font-weight: bold;
+    color: var(--global-text-color);
+    text-align: center;
+    margin-top: 10vh;
+  }
+
+  .section-subtitle {
+    font-size: clamp(1rem, 2vw, 1.5rem);
+    font-weight: normal;
+    display: inline-block;
+    margin-top: 10px;
+  }
+
+  .section-link-wrapper {
+    display: block;
+    margin-top: 8px;
+    font-size: 1.5rem;
+    color: var(--global-text-color);
+  }
+
+  .section-link {
+    font-size: clamp(0.9rem, 1.8vw, 1.25rem);
+    font-weight: bold;
+    color: var(--global-link-color);
+    transition: transform 0.25s ease, color 0.25s ease;
+    display: inline-block;
+  }
+
+  .section-text:has(a) {
+    text-indent: 0;
+  }
+
+  .section-link:hover {
+    transform: scale(1.12);
+    color: var(--global-hover-color);
+    text-decoration: none;
+  }
+
+  .section-link i {
+    margin-right: 1px;
+  }
+
+  ul.tick-list {
+    list-style: none;
+    padding-left: 0;
+    margin-top: 1em;
+    margin-bottom: 1em;
+  }
+
+  ul.tick-list li {
+    position: relative;
+    padding-left: 1.6em;
+    margin-bottom: 0.6em;
+    line-height: 1.6;
+  }
+
+  ul.tick-list li::before {
+    content: "✔";
+    position: absolute;
+    left: 0;
+    top: 0.2em;
+    color: var(--global-theme-color);
+    font-weight: bold;
+    font-size: 1rem;
+  }
+
+  .section-text {
+    text-indent: 3em;
+  }
+
+  .section-text a {
+    color: var(--global-link-color);
+    font-weight: 600;
+    text-decoration: none;
+    display: inline-block;
+    transition:
+      color 0.35s ease-in-out,
+      transform 0.35s cubic-bezier(0.25, 1, 0.5, 1),
+      margin 0.35s ease-in-out;
+  }
+
+  .section-text a:hover {
+    color: var(--global-hover-color);
+    transform: scale(1.05);
+    margin: 0 2px;
+  }
+
+  .section-divider {
+    border: none;
+    height: 1px;
+    background-color: var(--global-divider-color);
+    margin: 2rem 0;
+  }
+
+  .animate-thai {
+    font-weight: 200 !important;
+  }
+</style>
+<!-- END STYLE -->

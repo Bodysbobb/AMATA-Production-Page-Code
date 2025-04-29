@@ -1657,8 +1657,8 @@ figure.cover {
   display: flex;
   flex-direction: column;
   justify-content: space-between; // Push scroll-down to bottom
-  min-height: 75vh;
-  padding: 5vh 1rem 9vh; 
+  min-height: 82vh;
+  padding: 5vh 2rem 12vh; 
   text-align: center;
 }
 
@@ -1674,22 +1674,24 @@ figure.cover {
 
 /* === TITLE === */
 .landing-title {
-  font-size: clamp(4rem, 8vw, 6rem) !important;
-  min-height: 8rem;
+  font-size: clamp(2.5rem, 5vw, 6.5rem) !important;
+  min-height: 7.5rem;
+  max-width: 1300px;
   font-weight: 800;
   color: var(--global-text-color);
   contain: layout style;
+  opacity: 1;
 }
 
 .landing-title.animate-fade-in {
   opacity: 0;
-  animation: landing-title-fade 1s ease-out forwards;
+  animation: landing-title-fade 5s cubic-bezier(0.25, 0.8, 0.25, 1) forwards;
+  animation-delay: 0.3s; 
 }
 
 @keyframes landing-title-fade {
-  to {
-    opacity: 1;
-  }
+  0% { opacity: 0; }
+  100% { opacity: 1; }
 }
 
 /* === SUBTEXT === */
@@ -1810,5 +1812,20 @@ figure.cover {
     box-shadow: 2px 2px 0 var(--global-text-secondary-color);
     width: 10px;
     height: 10px;
+  }
+}
+
+#particles-js {
+  opacity: 0;
+  animation: fadeInParticles 3s cubic-bezier(0.25, 0.8, 0.25, 1) forwards;
+  animation-delay: 0.5s; /* optional slight delay for nicer effect */
+}
+
+@keyframes fadeInParticles {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
   }
 }

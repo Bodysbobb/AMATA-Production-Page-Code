@@ -3,7 +3,7 @@ layout: page
 permalink: /repositories/
 title: GitHub
 description: "My journey in the coding universe begins here — one commit at a time."
-nav: true
+nav: false
 nav_order: 4
 
 # META Setup
