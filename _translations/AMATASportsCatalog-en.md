@@ -15,13 +15,13 @@ special_navbar_color: "#58595A"
 switch_navbar: true
 toggle_down: true
 
-default_tooltip: "AMATA Production"
-special_tooltip: "AMATA Sports"
 default_navbar_logo: /assets/img/page_logo/amata_white.png
 special_navbar_logo_one: /assets/img/page_logo/amata_sport.png
 
 # OG Setup
-og_title: AMATA Production Sports Catalog
+og_title: AMATA Production – Custom Sportswear with Unique Designs
+og_description: >
+  AMATA Production specializes in designing and manufacturing custom sportswear, team shirts, university uniforms, corporate apparel, and sublimation print shirts. Unique styles, standout designs, and high-quality embroidery and screen printing – all in one place.
 og_image: /assets/img/project_covers/AMATA_Meta.png
 
 # Contact Info Button Configuration

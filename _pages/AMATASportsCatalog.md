@@ -18,13 +18,13 @@ special_navbar_color: "#58595A"
 switch_navbar: true
 toggle_down: true
 
-default_tooltip: "AMATA Production"
-special_tooltip: "AMATA Sports"
 default_navbar_logo: /assets/img/page_logo/amata_white.png
 special_navbar_logo_one: /assets/img/page_logo/amata_sport.png
 
 # OG Setup
-og_title: AMATA Production Sports Catalog
+og_title: AMATA Production รวมดีไซน์เสื้อกีฬา สไตล์ไม่ซ้ำใคร
+og_description: > 
+  อมตะ โปรดักชั่น รับผลิตและออกแบบ เสื้อกีฬา เสื้อกิจกรรม เสื้อกีฬาสี เสื้อทีม เสื้อมหาลัย เสื้อหน่วยงาน เสื้อองค์กร ยูนิฟอร์ม เสื้อพิมพ์ลาย งานปัก งานสกรีน ดีไซน์สุดล้ำ ไม่ซ้ำใคร
 og_image: /assets/img/project_covers/AMATA_Meta.png
 
 # Contact Info Button Configuration

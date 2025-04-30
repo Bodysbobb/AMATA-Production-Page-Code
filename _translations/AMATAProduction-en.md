@@ -14,6 +14,8 @@ default_navbar_logo: /assets/img/page_logo/amata_white.png
 
 # OG Setup
 og_title: AMATA Production Co., Ltd. (Thailand)
+og_description: >
+  AMATA Production specializes in designing and manufacturing all types of custom apparel and printed media — including sublimation shirts, sportswear, uniforms for teams, organizations, universities, and school events, as well as advertising banners and campaign signs. Affordable, fast production with professional brand-building solutions.
 og_image: /assets/img/project_covers/AMATA_Meta.png
 
 # Contact Info Button Configuration
