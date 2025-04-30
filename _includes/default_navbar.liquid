@@ -194,3 +194,15 @@
     </div>
   </div>
 </nav>
+
+<!-- Force auto-hide class addition to ensure it works with the controller -->
+{% if page.navbar_auto_hide %}
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const defaultNavbar = document.getElementById('navbar');
+    if (defaultNavbar) {
+      defaultNavbar.classList.add('navbar-autohide-enabled');
+    }
+  });
+</script>
+{% endif %}

@@ -12,10 +12,7 @@
 
 <section class="landing-hero">
   <div class="landing-center">
-
-    <!-- NO AOS needed anymore -->
     <div>
-
       <h1 class="landing-title animate-fade-in">
         {{ include.title }}
       </h1>
@@ -33,9 +30,7 @@
       <p class="landing-signature">
         {{ include.signature | default: "— Pattawee Puangchit —" }}
       </p>
-
     </div>
-
   </div>
 
   <!-- Scroll Down Arrow -->
@@ -49,5 +44,4 @@
   </div>
 </section>
 
-<!-- Include the hero navbar script -->
-<script src="{{ '/assets/js/hero-navbar.js' | relative_url }}" defer></script>
+<!-- No need for hero-navbar.js as it's handled by navbar-controller.js -->

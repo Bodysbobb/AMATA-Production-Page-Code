@@ -50,6 +50,9 @@ lang: "en"
 hreflang: "en"
 permalink: /translations/AMATAProduction-en/
 alternate_lang_url: "/"
+
+# Hero Section Configuration
+landing_hero: true      
 ---
 
 <!-- Hero Section -->

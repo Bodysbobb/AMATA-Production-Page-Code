@@ -3,13 +3,16 @@
 #navbar, 
 #navbar-special {
   min-height: 65px;
+  will-change: transform, opacity;
+  transition: transform 0.4s cubic-bezier(0.215, 0.61, 0.355, 1),
+              opacity 0.4s cubic-bezier(0.215, 0.61, 0.355, 1);
 }
 
 body[data-special-navbar="true"] {
   padding-top: 65px !important;
 }
 
-
+// Base navbar styles
 .navbar {
   box-shadow: none;
   border-bottom: 1px solid var(--global-divider-color);
@@ -17,9 +20,79 @@ body[data-special-navbar="true"] {
   opacity: 0.95;
 }
 
+// Enhanced transition states
+#default-navbar, #special-navbar {
+  position: relative;
+  z-index: 1030;
+  transform-origin: top center;
+}
+
+body[data-switch-navbar="true"] #default-navbar {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s ease;
+}
+body[data-switch-navbar="true"] #default-navbar.visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+// Transition animations
+@keyframes slideInDown {
+  from {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideOutUp {
+  from {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes fadeOut {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+// Animated navbar states
+.navbar-appearing {
+  animation: slideInDown 0.5s forwards;
+}
+
+.navbar-disappearing {
+  animation: slideOutUp 0.4s forwards;
+}
+
+.navbar-fade-in {
+  animation: fadeIn 0.4s forwards;
+}
+
+.navbar-fade-out {
+  animation: fadeOut 0.3s forwards;
+}
+
+// Dropdown menu styling
 .navbar .dropdown-menu {
   background-color: var(--global-text-nav-color) !important;
   border: 1px solid var(--global-divider-color);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  transform-origin: top center;
 
   a:not(.active) {
     color: var(--global-text-nav-color);
@@ -53,15 +126,18 @@ body[data-special-navbar="true"] {
   .navbar-brand {
     color: var(--global-text-nav-color);
     font-weight: normal; 
+    transition: color 0.3s ease, transform 0.3s ease;
     
     &:hover {
       color: var(--global-hover-nav-color);
+      transform: scale(1.02);
     }
   }
 
   .navbar-nav .nav-item .nav-link {
     color: var(--global-text-nav-color);
     font-weight: normal;
+    transition: color 0.3s ease, transform 0.3s ease;
 
     &:hover {
       color: var(--global-hover-nav-color);
@@ -89,13 +165,14 @@ body[data-special-navbar="true"] {
         width: 1.7rem;
         height: 1.7rem;
         margin-bottom: 0.5rem;
-        // margin: 0.5rem;
+        transition: transform 0.3s ease;
       }
 
       svg {
         width: 1.7rem;
         height: 1.7rem;
         margin-bottom: 0.5rem;
+        transition: transform 0.3s ease;
 
         image {
           width: 1.7rem;
@@ -105,19 +182,31 @@ body[data-special-navbar="true"] {
 
       i::before {
         color: var(--global-text-nav-color);
-        transition-property: all 0.2s ease-in-out;
+        transition: color 0.2s ease-in-out, transform 0.2s ease-in-out;
       }
 
       &:hover {
         i::before {
           color: var(--global-hover-nav-color);
+          transform: scale(1.1);
+        }
+        
+        img, svg {
+          transform: scale(1.1);
         }
       }
     }
   }
 }
 
+// Hamburger menu animation
 .navbar-toggler {
+  transition: transform 0.3s ease;
+  
+  &:hover {
+    transform: scale(1.05);
+  }
+  
   .icon-bar {
     display: block;
     width: 22px;
@@ -125,7 +214,7 @@ body[data-special-navbar="true"] {
     background-color: var(--global-text-nav-color) !important;
     border-radius: 1px;
     margin-bottom: 4px;
-    transition: all 0.2s;
+    transition: all 0.3s;
   }
 
   .top-bar {
@@ -157,6 +246,7 @@ body[data-special-navbar="true"] {
   }
 }
 
+// Control buttons styling
 #light-toggle,
 #search-toggle,
 #navbar-language-toggle {
@@ -164,25 +254,25 @@ body[data-special-navbar="true"] {
   border: 0;
   background-color: inherit;
   color: var(--global-text-nav-color);
+  transition: color 0.3s ease, transform 0.3s ease;
 
   &:hover {
     color: var(--global-hover-nav-color);
+    transform: scale(1.1);
   }
 }
 
 //=================== Navbar auto-hide styles =========================//
 .navbar-autohide-enabled {
-  transition: transform 0.3s ease;
+  transition: transform 0.4s cubic-bezier(0.215, 0.61, 0.355, 1),
+              opacity 0.4s cubic-bezier(0.215, 0.61, 0.355, 1);
+  will-change: transform, opacity;
 }
 
 .navbar-hidden {
   transform: translateY(-100%) !important;
-}
-
-/* Make sure the base transitions are defined for both navbar types */
-.navbar, #navbar, #navbar-special {
-  transition: transform 0.3s ease, opacity 0.3s ease !important;
-  will-change: transform, opacity;
+  opacity: 0 !important;
+  pointer-events: none;
 }
 
 /* Target both navbars with the hidden class */
@@ -191,6 +281,7 @@ body[data-special-navbar="true"] {
 #navbar-special.navbar-hidden {
   transform: translateY(-100%) !important;
   opacity: 0 !important;
+  pointer-events: none;
 }
 
 /* Ensure the navbar-autohide-enabled class is properly recognized for all navbar types */
@@ -219,6 +310,19 @@ body[data-special-navbar="true"] {
   .navbar-collapse {
     flex-grow: 0;
     display: flex;
+    align-items: center;
+  }
+
+  .navbar-brand-container {
+    margin-left: 0 !important;
+    margin-right: auto !important;
+    display: flex;
+    justify-content: flex-start;
+  }
+
+  .navbar-brand-container a.navbar-brand {
+    display: flex;
+    justify-content: flex-start;
     align-items: center;
   }
 }
@@ -264,6 +368,13 @@ body[data-special-navbar="true"] {
   box-shadow:
     inset 0 1px 3px rgba(0, 0, 0, 0.1),
     0 1px 3px rgba(0, 0, 0, 0.15);
+    
+  &:hover {
+    transform: scale(1.05);
+    box-shadow:
+      inset 0 1px 3px rgba(0, 0, 0, 0.15),
+      0 2px 5px rgba(0, 0, 0, 0.2);
+  }
 }
 
 /* Toggle indicator (circle) */
@@ -280,7 +391,7 @@ body[data-special-navbar="true"] {
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   will-change: transform;
 }
 
@@ -292,6 +403,14 @@ body[data-special-navbar="true"] {
   transform: translateX(43px);
 }
 
+/* Animation classes for toggle indicator */
+.language-btn-navbar.en.animating-to-alt .toggle-indicator {
+  transform: translateX(43px);
+}
+.language-btn-navbar.alt-lang.animating-to-en .toggle-indicator {
+  transform: translateX(3px);
+}
+
 /* Inner icon wrapper */
 .language-btn-navbar .navbar-lang-icon {
   display: flex;
@@ -300,6 +419,7 @@ body[data-special-navbar="true"] {
   position: relative;
   width: 100%;
   height: 100%;
+  transition: transform 0.3s ease;
 }
 
 /* TH flag image */
@@ -315,13 +435,14 @@ body[data-special-navbar="true"] {
   transform: scale(1.13) translateX(-1.23px);
   transform-origin: center;
   pointer-events: none;
+  transition: transform 0.3s ease;
 }
 
 /* Globe icon (non-TH) */
 .language-btn-navbar .navbar-lang-icon i.ti-world {
   font-size: 1.75rem !important; /* slightly bigger */
   color: #0d3b67;
-  transition: color 0.3s ease;
+  transition: color 0.3s ease, transform 0.3s ease;
   transform: translateX(-1.8px) !important; /* nudge left */
 }
 
@@ -332,6 +453,7 @@ body[data-special-navbar="true"] {
   position: absolute;
   color: #0d3b67 !important;
   text-shadow: 0 1px 1px rgba(255, 255, 255, 0.6);
+  transition: opacity 0.3s ease;
 }
 
 .language-btn-navbar.en .lang-label {
@@ -349,6 +471,7 @@ body[data-special-navbar="true"] {
     justify-content: center;
     align-items: center;
     flex-grow: 1;
+    transition: transform 0.3s ease, opacity 0.3s ease;
   }
 
   // Title styling with responsive size
@@ -359,22 +482,45 @@ body[data-special-navbar="true"] {
     padding: 0;
     text-align: center;
     font-weight: bold;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+    
+    &:hover {
+      transform: scale(1.02);
+    }
   }
 
   // Logo container
   .navbar-brand-container {
     display: flex;
     align-items: center;
+    transition: transform 0.3s ease;
+    
+    .navbar-brand.logo {
+      transition: transform 0.3s ease, opacity 0.3s ease;
+      
+      img {
+        transition: transform 0.3s ease, opacity 0.3s ease;
+      }
+      
+      &:hover img {
+        transform: scale(1.05);
+      }
+    }
   }
 }
 
 //================ Toggle Down Mode Styles ================//
-
 // Special navbar with toggle_down enabled
 .navbar-toggle-always {
   // Always display the toggle button regardless of screen size
   .navbar-toggler {
     display: block !important;
+  }
+
+  .navbar-collapse {
+    transition: none !important;
+    animation-duration: 0.05s !important;
+    animation-timing-function: ease-in-out !important;
   }
   
   // Title container adjustments
@@ -395,6 +541,7 @@ body[data-special-navbar="true"] {
         
         &.show {
           display: block !important; // Only show when toggled
+          animation: fadeIn 0.1s forwards;
         }
       }
     }
@@ -424,11 +571,26 @@ body[data-special-navbar="true"] {
       
       .nav-item {
         margin: 0.5rem 0;
+        transition: transform 0.3s ease, opacity 0.3s ease;
         
         .nav-link {
           display: block; 
           text-align: right;
           padding-right: 0;
+          transition: transform 0.3s ease, color 0.3s ease;
+          
+          &:hover {
+            transform: translateX(-3px);
+          }
+        }
+      }
+      
+      // Staggered animation for menu items
+      @for $i from 1 through 10 {
+        .nav-item:nth-child(#{$i}) {
+          animation: fadeIn 0.3s forwards;
+          animation-delay: 0.05s * $i;
+          opacity: 0;
         }
       }
       
@@ -445,6 +607,7 @@ body[data-special-navbar="true"] {
         text-align: right;
         right: 0;
         left: auto;
+        animation: fadeIn 0.3s forwards;
       }
     }
   }
@@ -460,6 +623,7 @@ body[data-special-navbar="true"] {
   border-right: 0.3em solid transparent;
   border-bottom: 0;
   border-left: 0.3em solid transparent;
+  transition: transform 0.3s ease;
 }
 
 // Ensure the navbar maintains proper height
@@ -477,12 +641,14 @@ body[data-special-navbar="true"] {
   z-index: 1030;
   transform: translateY(-100%);
   opacity: 0;
-  transition: transform 0.5s ease, opacity 0.5s ease;
+  transition: transform 0.5s cubic-bezier(0.215, 0.61, 0.355, 1), 
+              opacity 0.5s cubic-bezier(0.215, 0.61, 0.355, 1);
   pointer-events: none;
+  will-change: transform, opacity;
 }
 
-// When navbar appears
-.navbar-appearing #header-container {
+// When header container is visible
+#header-container.visible {
   transform: translateY(0);
   opacity: 1;
   pointer-events: auto;
@@ -494,9 +660,9 @@ body[data-special-navbar="true"] {
 }
 
 // Override hidden class on landing hero pages to ensure it works properly
-.navbar-appearing .navbar-hidden,
-.navbar-appearing #navbar.navbar-hidden,
-.navbar-appearing #navbar-special.navbar-hidden {
+#header-container.visible .navbar-hidden,
+#header-container.visible #navbar.navbar-hidden,
+#header-container.visible #navbar-special.navbar-hidden {
   transform: translateY(0) !important;
   opacity: 1 !important;
 }
@@ -505,5 +671,31 @@ body[data-special-navbar="true"] {
 .navbar-auto-hide .navbar-hidden {
   transform: translateY(-100%) !important;
   opacity: 0 !important;
-  transition: transform 0.3s ease, opacity 0.3s ease !important;
+  transition: transform 0.3s cubic-bezier(0.215, 0.61, 0.355, 1), 
+              opacity 0.3s cubic-bezier(0.215, 0.61, 0.355, 1) !important;
+}
+
+// Navbar switch transition styles
+.navbar-switch-container {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+}
+
+// Smooth transition between navbar types
+.navbar-switch-animation {
+  .navbar-entering {
+    animation: slideInDown 0.5s forwards;
+    z-index: 1031;
+    position: relative;
+  }
+  
+  .navbar-exiting {
+    animation: fadeOut 0.3s forwards;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1030;
+  }
 }

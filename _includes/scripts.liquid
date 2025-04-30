@@ -331,13 +331,11 @@
 <!-- Text Animation -->
 <script src="{{ '/assets/js/text_animation.js' | relative_url | bust_file_cache }}" defer></script>
 
-<!-- Auto-hide Navbar -->
-{% if page.navbar_auto_hide %}
-<script src="{{ '/assets/js/navbar-autohide.js' | relative_url | bust_file_cache }}"></script>
-{% endif %}
+<!-- Unified Navbar Controller -->
+<script src="{{ '/assets/js/navbar-controller.js' | relative_url | bust_file_cache }}"></script>
 
-<!-- Language Toggle Script -->
-{% if page.special_navbar %}
+<!-- Simplified Language Toggle (only loaded when needed) -->
+{% if page.language_switch %}
 <script src="{{ '/assets/js/language-toggle.js' | relative_url | bust_file_cache }}"></script>
 {% endif %}
 

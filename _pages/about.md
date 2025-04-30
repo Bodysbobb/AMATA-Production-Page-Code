@@ -16,7 +16,7 @@ og_description: AMATA Production AMATA Production, เสื้อกีฬา, 
 
 # Selected Paper
 selected_papers: FALSE # includes a list of papers marked as "selected={true}"
-social: true # includes social icons at the bottom of the page
+social: FALSE # includes social icons at the bottom of the page
 
 announcements:
   enabled: false # includes a list of news items
@@ -55,6 +55,9 @@ language_switch: true
 lang: "th"
 hreflang: "th"
 alternate_lang_url: "/translations/AMATAProduction-en/"
+
+# Hero Section Configuration
+landing_hero: true             
 ---
 
 <!-- Hero Section -->
