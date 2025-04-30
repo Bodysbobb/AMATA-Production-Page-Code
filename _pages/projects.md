@@ -1,94 +1,108 @@
 ---
 layout: page
-title: Portfolio
-permalink: /projects/
-description: "An academic mind, a business heart, and a creator’s soul. | Please see all of my projects on this page!"
-nav: false
-nav_order: 3
-display_categories: [Academic, Business, Programming]
+title: สินค้า
+title_en: Products
+permalink: /สินค้า/
+nav: true
+nav_order: 2
+display_categories: [กีฬา, รีวิว]
 horizontal: false
-
-hide_title: true
+default_navbar_logo: /assets/img/page_logo/amata_white.png
 hide_description: true
-landing_hero: true
 
+# JSON Business Meta
+schema_type: business
 
-# META Setup
-og_title: Pattawee Puangchit | Portfolio
-og_description: "An academic mind, a business heart, and a creator’s soul. | Please see all of my projects on this page!"
+# Google META
+description: AMATA Production รับผลิตและออกแบบเสื้อทุกประเภท เสื้อพิมพ์ลาย เสื้อกีฬา เสื้อโปโล เสื้อหน่วยงาน พร้อมงานป้ายโฆษณา ป้ายหาเสียง และสื่อสิ่งพิมพ์ครบวงจร ด้วยดีไซน์ทันสมัย คุณภาพสูง ราคาจากโรงงาน ส่งไว ตรงเวลา
+keywords: เสื้อพิมพ์ลาย, เสื้อกีฬา, เสื้อโปโล, เสื้อองค์กร, เสื้อหน่วยงาน, ป้ายโฆษณา, ป้ายหาเสียง, สื่อสิ่งพิมพ์, รับออกแบบเสื้อ, รับผลิตเสื้อ, โรงงานเสื้อ, ผลิตงานพิมพ์, ผลิตสื่อพิมพ์, เสื้อทีม, รับพิมพ์ป้าย, เสื้อพรีเมียม
 
-# NAVBAR
-navbar_auto_hide: false
-default_navbar_logo: /assets/img/page_logo/navbar-icon_white.png
+# OG META
+og_title: AMATA Production Co., Ltd. (บริษัท อมตะ โปรดักชั่น จำกัด)
+og_description: ศูนย์รวมบริการผลิตและออกแบบ เสื้อกีฬา เสื้อพิมพ์ลาย เสื้อองค์กร เสื้อโปโล พร้อมงานป้ายโฆษณา ป้ายหาเสียง และสื่อสิ่งพิมพ์ทุกชนิด โดยทีมงานมืออาชีพ ผลิตเร็ว ส่งไว ราคาโรงงาน ครบจบในที่เดียว
+
 
 # Contact Info Button Configuration
 contact_info: true
-contact_title: "Contact Info"
-contact_email: "ppuangch@purdue.edu"
-contact_digitalcard_url: "https://vcard-admin.pkp.homes/ZYrVxC2m6S"
+main_animation: "true"
+wave_animation: "true"
+contact_messenger: "amataproduction.sport"
+contact_call: "+66818888866"
+contact_messenger: "amataproduction.sport"
+contact_line_url: "https://line.me/ti/p/@amatapr"
+contact_email: "sales@amataproduction.com"
+contact_location_url: "https://maps.app.goo.gl/46SZnCwHuesWyBwm7"
+contact_digitalcard_url: "https://vcard-admin.pkp.homes/U0NtnOPAOx"
 contact_position: "right"
 
-need_aos: true
+# Custom button labels
+call_label: "โทร"
+messenger_label: "Messenger"
+line_label: "ไลน์@"
+email_label: "อีเมล"
+contact_title: "ติดต่อเรา"
+smart_card_label: "Digital Card"
+location_label: "ที่อยู่"
+
+# Language Switch
+language_switch: true
+lang: "th"
+hreflang: "th"
+alternate_lang_url: "/english/AMATA-Products-en/"
 ---
 
-<!-- Hero Section -->
-{% include landing-hero.liquid
-  title="Portfolio"
-  subtext="An academic mind, a business heart, and a creator's soul."
-  signature="— Pattawee Puangchit —"
-  scroll_text="See My Projects"
-  particle_mode="mix"
-  letter_delay="0.05"
-  initial_delay="300"
-  data-final-class="animation-complete"
-%}
-<a id="projects-start"></a>
 
-<!-- Scroll-stacked projects by category -->
-<div class="project-feed">
+<!-- pages/projects.md -->
+<div class="projects">
+{% if site.enable_project_categories and page.display_categories %}
+  <!-- Display categorized projects -->
   {% for category in page.display_categories %}
-    <section class="project-category-block">
-      
-      {% case category %}
-        {% when "Business" %}
-          {% assign display_label = "A business heart" %}
-        {% when "Programming" %}
-          {% assign display_label = "A creator’s soul" %}
-        {% when "Academic" %}
-          {% assign display_label = "An academic mind" %}
-        {% else %}
-          {% assign display_label = category %}
-      {% endcase %}
-
-      <h2 
-        class="project-category-title" 
-        data-aos="fade"
-        data-aos-duration="300"
-        data-aos-easing="ease-in"
-      >
-        {{ display_label }}
-      </h2>
-
-      <hr class="section-divider">
-
-      {% assign categorized_projects = site.projects | where: "category", category %}
-      {% assign sorted_projects = categorized_projects | sort: "importance" %}
-      {% for project in sorted_projects %}
-        <div 
-          class="project-card-wrapper"
-          data-aos="fade-up"
-          data-aos-delay="{{ forloop.index0 | times: 30 }}"
-          data-aos-duration="600"
-          data-aos-easing="ease-in-out-back"
-          data-aos-once="false"
-        >
-          {% include projects.liquid %}
-        </div>
-      {% endfor %}
-      
-    </section>
+  <a id="{{ category }}" href=".#{{ category }}">
+    <h2 class="category">{{ category }}</h2>
+  </a>
+  {% assign categorized_projects = site.projects | where: "category", category %}
+  {% assign sorted_projects = categorized_projects | sort: "importance" %}
+  <!-- Generate cards for each project -->
+  {% if page.horizontal %}
+  <div class="container">
+    <div class="row row-cols-1 row-cols-md-2">
+    {% for project in sorted_projects %}
+      {% include projects_horizontal.liquid %}
+    {% endfor %}
+    </div>
+  </div>
+  {% else %}
+  <div class="row row-cols-1 row-cols-md-3">
+    {% for project in sorted_projects %}
+      {% include projects.liquid %}
+    {% endfor %}
+  </div>
+  {% endif %}
   {% endfor %}
-</div>
 
-<!-- All Projects -->
-{% include project_summary.liquid %}
+{% else %}
+
+<!-- Display projects without categories -->
+
+{% assign sorted_projects = site.projects | sort: "importance" %}
+
+  <!-- Generate cards for each project -->
+
+{% if page.horizontal %}
+
+  <div class="container">
+    <div class="row row-cols-1 row-cols-md-2">
+    {% for project in sorted_projects %}
+      {% include projects_horizontal.liquid %}
+    {% endfor %}
+    </div>
+  </div>
+  {% else %}
+  <div class="row row-cols-1 row-cols-md-3">
+    {% for project in sorted_projects %}
+      {% include projects.liquid %}
+    {% endfor %}
+  </div>
+  {% endif %}
+{% endif %}
+</div>

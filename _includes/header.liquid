@@ -1,59 +1,50 @@
 <header>
-  <!-- Set data attributes for JavaScript to detect navbar capabilities -->
-  {% if page.special_navbar %}
+  {% comment %}
+  Simplified header that handles:
+  1. Hero section detection
+  2. Special navbar configuration
+  3. Auto-hide functionality
+  {% endcomment %}
+  
+  {% assign has_hero = page.landing_hero %}
+  {% assign has_special_navbar = page.special_navbar %}
+  {% assign has_auto_hide = page.navbar_auto_hide %}
+  {% assign has_switch_navbar = page.switch_navbar %}
+  
+  {% if has_hero or has_auto_hide %}
     <script>
-      document.body.setAttribute('data-special-navbar', 'true');
-      {% if page.switch_navbar %}
-        document.body.setAttribute('data-switch-navbar', 'true');
-      {% endif %}
-      {% if page.navbar_auto_hide %}
+      document.body.setAttribute('data-navbar-mode', '{{ has_hero | default: "false" }}');
+      {% if has_auto_hide %}
         document.body.classList.add('navbar-auto-hide');
       {% endif %}
-      {% if page.navbar_initial_hide %}
-        document.body.setAttribute('data-navbar-initial-hide', 'true');
-      {% endif %}
-      
-      // Set custom tooltip texts from page front matter
-      {% if page.default_tooltip %}
-        document.body.setAttribute('data-default-tooltip', "{{ page.default_tooltip | escape }}");
-      {% endif %}
-      {% if page.special_tooltip %}
-        document.body.setAttribute('data-special-tooltip', "{{ page.special_tooltip | escape }}");
+    </script>
+  {% endif %}
+  
+  {% if has_special_navbar %}
+    <script>
+      document.body.setAttribute('data-special-navbar', 'true');
+      {% if has_switch_navbar %}
+        document.body.setAttribute('data-switch-navbar', 'true');
       {% endif %}
     </script>
     
-    <!-- For special pages, show special navbar by default and hide default -->
-    <div id="default-navbar" style="display: none;">
+    {% comment %} Container for both navbar types {% endcomment %}
+    <div id="default-navbar" style="{% if has_hero %}display: none;{% else %}display: block;{% endif %}">
       {% include default_navbar.liquid %}
     </div>
     
-    <div id="special-navbar" style="display: block;">
+    <div id="special-navbar" style="{% if has_hero or has_switch_navbar %}display: block;{% else %}display: none;{% endif %}">
       {% include special_navbar.liquid %}
     </div>
-    
-    <!-- Include navbar toggle script if switching is enabled -->
-    {% if page.switch_navbar %}
-      <script src="{{ '/assets/js/navbar_toggle.js' | relative_url }}"></script>
-    {% endif %}
   {% else %}
-    <!-- For regular pages, only include default navbar -->
+    {% comment %} Only include default navbar {% endcomment %}
     <div id="default-navbar">
       {% include default_navbar.liquid %}
     </div>
-    {% if page.navbar_auto_hide %}
-      <script>
-        document.body.classList.add('navbar-auto-hide');
-      </script>
-      {% if page.navbar_initial_hide %}
-        <script>
-          document.body.setAttribute('data-navbar-initial-hide', 'true');
-        </script>
-      {% endif %}
-    {% endif %}
   {% endif %}
-   
-  {% if site.enable_progressbar and page.navbar_auto_hide != true %}
-    <!-- Scrolling Progress Bar -->
+  
+  {% comment %} Only include progress bar if auto-hide is disabled {% endcomment %}
+  {% if site.enable_progressbar and has_auto_hide != true %}
     <progress id="progress" value="0">
       <div class="progress-container">
         <span class="progress-bar"></span>

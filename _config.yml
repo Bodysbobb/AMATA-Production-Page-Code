@@ -8,8 +8,7 @@ middle_name:
 last_name:
 contact_note: "<a href='mailto:sales@amataproduction.com'>sales@amataproduction.com</a>"
 description: >
-  "AMATA Production AMATA Production, เสื้อกีฬา, เสื้อพิมพ์ลาย, รับผลิตเสื้อกีฬา, เสื้อทีม, เสื้อสั่งทำ, เสื้อองค์กร, เสื้อหน่วยงาน, ออกแบบเสื้อ, พิมพ์เสื้อ, งานพิมพ์คุณภาพ, เสื้อกีฬาออกแบบพิเศษ, รับทำเสื้อกีฬา, โรงงานเสื้อกีฬา, เสื้อโปโลพิมพ์ลาย, เสื้อวิ่ง, เสื้อกิจกรรม, เสื้อฟิตเนส, เสื้อพรีเมียม, ผลิตเสื้อราคาส่ง, ผลิตเสื้อด่วน, ดีไซน์เสื้อกีฬา, เสื้อกีฬาแฟชั่น, เสื้อกีฬาโมเดิร์น, สั่งทำเสื้อกีฬา, เสื้อพิมพ์ลายทันสมัย, เสื้อกีฬาโรงงาน"
-footer_text: > 
+  อมตะ โปรดักชั่น รับผลิตและออกแบบเสื้อและสื่อสิ่งพิมพ์ทุกชนิด ทั้ง เสื้อพิมพ์ลาย เสื้อกีฬา หน่วยงาน องค์กร มหาลัย กีฬาสี และงานป้ายโฆษณา ป้ายหาเสียง ราคาถูก ผลิตด่วน ส่งไว สร้างแบรนด์อย่างมืออาชีพ
 #  Powered by <a href="https://jekyllrb.com/" target="_blank">Jekyll</a> with <a href="https://github.com/alshedivat/al-folio">al-folio</a> theme.
 #  Hosted by <a href="https://pages.github.com/" target="_blank">GitHub Pages</a>.
 #  Photos from <a href="https://unsplash.com" target="_blank">Unsplash</a>.
@@ -169,7 +168,23 @@ collections:
       layout: post
     output: false
   projects:
-    output: false
+    output: true
+    permalink: /สินค้า/:path/
+    defaults:
+      - scope:
+          path: ""
+          type: projects
+        values:
+          layout: page
+  english:   
+    output: true
+    permalink: /english/:path/
+    defaults:
+      - scope:
+          path: ""
+          type: english
+        values:
+          layout: page
   
 
 # -----------------------------------------------------------------------------
@@ -190,7 +205,7 @@ kramdown:
       start_line: 1
 
 # Includes & excludes
-include: ["_pages", "_scripts", "_translations"]
+include: ["_pages", "_scripts"]
 exclude:
   - bin/
   - CONTRIBUTING.md
@@ -220,7 +235,6 @@ exclude:
   - _pages/cv.md
   - _pages/repositories.md
   - _pages/publications.md
-  - _pages/projects.md
   
 keep_files:
   - CNAME

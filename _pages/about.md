@@ -1,22 +1,30 @@
 ---
 layout: page
-title: Home
+title: หน้าหลัก
+title_en: Home
 subtitle: บริษัท อมตะ โปรดักชั่น จำกัด
 img: https://lh3.googleusercontent.com/d/11AU3iNRRkApAnZlL3lTy5og8vaLMYtMQ
 permalink: /
 class: about-page
 default_navbar_logo: /assets/img/page_logo/amata_white.png
 
+# JSON Business Meta
+schema_type: business
+
+# Google META
+description: อมตะ โปรดักชั่น รับผลิตและออกแบบเสื้อพิมพ์ลาย เสื้อกีฬา เสื้อหน่วยงาน ป้ายโฆษณา ราคาถูก ผลิตด่วน ส่งไว สร้างแบรนด์อย่างมืออาชีพ
+keywords: เสื้อพิมพ์ลาย, รับผลิตเสื้อกีฬา, เสื้อทีม, เสื้อหน่วยงาน, เสื้อองค์กร, ออกแบบเสื้อกีฬา, โรงงานเสื้อ, ป้ายโฆษณา, ผลิตสื่อพิมพ์, เสื้อโปโล, เสื้อกีฬา, โรงงานผลิตเสื้อ, โรงพิมพ์, ผลิตเสื้อราคาถูก
+
+# OG META
+og_title: AMATA Production Co., Ltd. (บริษัท อมตะ โปรดักชั่น จำกัด)
+og_description: อมตะ โปรดักชั่น รับผลิตและออกแบบเสื้อและสื่อสิ่งพิมพ์ทุกชนิด เสื้อพิมพ์ลาย เสื้อกีฬา หน่วยงาน องค์กร มหาลัย กีฬาสี และงานป้ายโฆษณา ป้ายหาเสียง ราคาถูก ผลิตด่วน ส่งไว สร้างแบรนด์อย่างมืออาชีพ
+
 hide_title: true
 hide_description: true
 
-# META Setup
-og_title: AMATA Production Co., Ltd. (บริษัท อมตะ โปรดักชั่น จำกัด)
-og_description: AMATA Production AMATA Production, เสื้อกีฬา, เสื้อพิมพ์ลาย, รับผลิตเสื้อกีฬา, เสื้อทีม, เสื้อสั่งทำ, เสื้อองค์กร, เสื้อหน่วยงาน, ออกแบบเสื้อ, พิมพ์เสื้อ, งานพิมพ์คุณภาพ, เสื้อกีฬาออกแบบพิเศษ, รับทำเสื้อกีฬา, โรงงานเสื้อกีฬา, เสื้อโปโลพิมพ์ลาย, เสื้อวิ่ง, เสื้อกิจกรรม, เสื้อฟิตเนส, เสื้อพรีเมียม, ผลิตเสื้อราคาส่ง, ผลิตเสื้อด่วน, ดีไซน์เสื้อกีฬา, เสื้อกีฬาแฟชั่น, เสื้อกีฬาโมเดิร์น, สั่งทำเสื้อกีฬา, เสื้อพิมพ์ลายทันสมัย, เสื้อกีฬาโรงงาน
-
 # Selected Paper
 selected_papers: FALSE # includes a list of papers marked as "selected={true}"
-social: true # includes social icons at the bottom of the page
+social: FALSE # includes social icons at the bottom of the page
 
 announcements:
   enabled: false # includes a list of news items
@@ -54,7 +62,10 @@ location_label: "ที่อยู่"
 language_switch: true
 lang: "th"
 hreflang: "th"
-alternate_lang_url: "/translations/AMATAProduction-en/"
+alternate_lang_url: "/english/AMATA-Production-en/"
+
+# Hero Section Configuration
+landing_hero: true             
 ---
 
 <!-- Hero Section -->
