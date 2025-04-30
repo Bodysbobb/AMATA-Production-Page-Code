@@ -73,9 +73,16 @@
 
     <div class="collapse navbar-collapse text-right" id="navbarNav">
       <ul class="navbar-nav ml-auto flex-nowrap">
-        {% for page in site.pages %}
-          {% if page.permalink == '/' %} {% assign about_title = page.title %} {% endif %}
-        {% endfor %}
+        {% assign home_page = site.pages | where: "permalink", "/" | first %}
+        {% if home_page %}
+          {% if page.title_en == true and home_page.title_en %}
+            {% assign about_title = home_page.title_en %}
+          {% else %}
+            {% assign about_title = home_page.title %}
+          {% endif %}
+        {% else %}
+          {% assign about_title = "Home" %}
+        {% endif %}
 
         <!-- About -->
         <li class="nav-item {% if page.permalink == '/' %}active{% endif %}">
@@ -108,7 +115,11 @@
                   aria-haspopup="true"
                   aria-expanded="false"
                 >
-                  {{- p.title }}
+                  {% if page.title_en == true and p.title_en != nil and p.title_en != false %}
+                    {{- p.title_en }}
+                  {% else %}
+                    {{- p.title }}
+                  {% endif %}
                   {% if page.title == p.title or has_active_child %}
                     <span class="sr-only">(current)</span>
                   {% endif %}
@@ -122,7 +133,11 @@
                         class="dropdown-item {% if page.title == child.title %}active{% endif %}"
                         href="{% if child.permalink contains '://' %}{{ child.permalink }}{% else %}{{ child.permalink | relative_url }}{% endif %}"
                       >
-                        {{- child.title -}}
+                        {% if page.title_en == true and child.title_en != nil and child.title_en != false %}
+                          {{- child.title_en -}}
+                        {% else %}
+                          {{- child.title -}}
+                        {% endif %}
                       </a>
                     {% endif %}
                   {% endfor %}
@@ -139,7 +154,11 @@
                   {%- assign url = p.url -%}
                 {%- endif %}
                 <a class="nav-link" href="{{ url | relative_url }}">
-                  {{- p.title }}
+                  {% if page.title_en == true and p.title_en != nil and p.title_en != false %}
+                    {{- p.title_en }}
+                  {% else %}
+                    {{- p.title }}
+                  {% endif %}
                   {% if page.url contains p.url %}
                     <span class="sr-only">(current)</span>
                   {% endif %}

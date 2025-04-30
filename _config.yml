@@ -168,7 +168,23 @@ collections:
       layout: post
     output: false
   projects:
-    output: false
+    output: true
+    permalink: /สินค้า/:path/
+    defaults:
+      - scope:
+          path: ""
+          type: projects
+        values:
+          layout: page
+  english:   
+    output: true
+    permalink: /english/:path/
+    defaults:
+      - scope:
+          path: ""
+          type: english
+        values:
+          layout: page
   
 
 # -----------------------------------------------------------------------------
@@ -189,7 +205,7 @@ kramdown:
       start_line: 1
 
 # Includes & excludes
-include: ["_pages", "_scripts", "_translations"]
+include: ["_pages", "_scripts"]
 exclude:
   - bin/
   - CONTRIBUTING.md
@@ -219,7 +235,6 @@ exclude:
   - _pages/cv.md
   - _pages/repositories.md
   - _pages/publications.md
-  - _pages/projects.md
   
 keep_files:
   - CNAME

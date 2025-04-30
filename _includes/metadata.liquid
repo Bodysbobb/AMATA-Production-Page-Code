@@ -237,22 +237,69 @@
     {% assign sameaslinks = sameaslinks | split: '' %}
   {% endif %}
 
-  <script type="application/ld+json">
+    {% if page.schema_type == "business" %}
+    <script type="application/ld+json">
     {
-        "author":
-        {
-            "@type": "Person",
-            "name": "{{ author_name }}"
-        },
-        "url": "{{ page.url | prepend: site.baseurl | prepend: site.url }}",
-        "@type": "{% if is_blog_post %}BlogPosting{% else %}WebSite{% endif %}",
-        "description": "{% if page.description %}{{ page.description }}{% else if site.description %}{{ site.description }}{% endif %}",
-        "headline": "{% if page.title %}{{ page.title }}{% else %}{{ site.title }}{% endif %}",
-        {% if sameaslinks != blank %}
-        "sameAs": {{ sameaslinks }},
-        {% endif %}
-        "name": "{{ author_name }}",
-        "@context": "https://schema.org"
+      "@context": "https://schema.org",
+      "@type": "LocalBusiness",
+      "name": "AMATA Production Co., Ltd.",
+      "description": "อมตะ โปรดักชั่น เป็นโรงงานรับผลิตและออกแบบเสื้อพิมพ์ลาย เสื้อกีฬา เสื้อหน่วยงาน เสื้อทีม องค์กร มหาวิทยาลัย และงานป้ายโฆษณา ป้ายหาเสียงทุกชนิด ด้วยบริการคุณภาพ ราคาถูก ส่งไว พร้อมช่วยสร้างแบรนด์อย่างมืออาชีพ",
+      "url": "https://www.amataproduction.com",
+      "logo": "https://www.amataproduction.com/assets/img/page_logo/amata_logo.png",
+      "telephone": "+66 881 888 8866",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "110/2 ถนนสามชัย ตำบลหาดใหญ่",
+        "addressLocality": "อำเภอหาดใหญ่",
+        "addressRegion": "สงขลา",
+        "postalCode": "90110",
+        "addressCountry": "TH"
+      },
+      "openingHours": "Mo-Sa 09:00-18:00",
+      "priceRange": "฿฿",
+      "sameAs": [
+        "https://www.facebook.com/amataproduction.sport",
+        "https://www.instagram.com/amata.production/"
+      ]
     }
-  </script>
+    </script>
+  {% elsif page.schema_type == "product" %}
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Product",
+      "name": "{{ page.title | escape }}",
+      "description": "{{ page.description | strip_newlines | escape }}",
+      "brand": {
+        "@type": "Organization",
+        "name": "AMATA Production"
+      },
+      "image": "{{ page.og_image | prepend: site.baseurl | prepend: site.url }}",
+      "url": "{{ page.url | prepend: site.baseurl | prepend: site.url }}",
+      "offers": {
+        "@type": "Offer",
+        "availability": "https://schema.org/InStock",
+        "priceCurrency": "THB"
+      }
+    }
+    </script>
+  {% else %}
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "{% if is_blog_post %}BlogPosting{% else %}WebSite{% endif %}",
+      "author": {
+        "@type": "Person",
+        "name": "{{ author_name }}"
+      },
+      "url": "{{ page.url | prepend: site.baseurl | prepend: site.url }}",
+      "description": "{% if page.description %}{{ page.description | strip_newlines | escape }}{% else if site.description %}{{ site.description | strip_newlines | escape }}{% endif %}",
+      "headline": "{% if page.title %}{{ page.title | escape }}{% else %}{{ site.title | escape }}{% endif %}",
+      {% if sameaslinks != blank %}
+      "sameAs": {{ sameaslinks }},
+      {% endif %}
+      "name": "{{ author_name }}"
+    }
+    </script>
+  {% endif %}
 {% endif %}

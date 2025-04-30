@@ -140,7 +140,7 @@
 }
 
 .filter-sort-button {
-  background: var(--global-bg-color);
+  background: var(--global-code-bg-color);
   border: 1px solid rgba(0, 0, 0, 0.2); /* Softer border color with transparency */
   border-radius: 4px; /* Rounded corners */
   padding: 8px 12px;
@@ -796,4 +796,37 @@
   .product-image img {
     transition: none;
   }
+}
+
+.lightbox-size-guide {
+  text-align: center;
+  margin-top: 0rem;
+  font-size: 1rem;
+}
+
+.size-guide-link {
+  color: var(--global-link-color);
+  font-weight: 500;
+}
+
+.size-guide-link:hover {
+  color: var(--global-hover-color);
+  text-decoration: underline;
+}
+
+.product-image-wrapper {
+  position: relative;
+}
+
+.product-badge.image-badge {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  font-size: 0.7rem;
+  font-weight: bold;
+  color: #fff;
+  padding: 0.3em 0.6em;
+  border-radius: 6px;
+  z-index: 5;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }

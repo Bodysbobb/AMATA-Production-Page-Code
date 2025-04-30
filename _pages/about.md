@@ -1,18 +1,26 @@
 ---
 layout: page
-title: Home
+title: หน้าหลัก
+title_en: Home
 subtitle: บริษัท อมตะ โปรดักชั่น จำกัด
 img: https://lh3.googleusercontent.com/d/11AU3iNRRkApAnZlL3lTy5og8vaLMYtMQ
 permalink: /
 class: about-page
 default_navbar_logo: /assets/img/page_logo/amata_white.png
 
+# JSON Business Meta
+schema_type: business
+
+# Google META
+description: อมตะ โปรดักชั่น รับผลิตและออกแบบเสื้อพิมพ์ลาย เสื้อกีฬา เสื้อหน่วยงาน ป้ายโฆษณา ราคาถูก ผลิตด่วน ส่งไว สร้างแบรนด์อย่างมืออาชีพ
+keywords: เสื้อพิมพ์ลาย, รับผลิตเสื้อกีฬา, เสื้อทีม, เสื้อหน่วยงาน, เสื้อองค์กร, ออกแบบเสื้อกีฬา, โรงงานเสื้อ, ป้ายโฆษณา, ผลิตสื่อพิมพ์, เสื้อโปโล, เสื้อกีฬา, โรงงานผลิตเสื้อ, โรงพิมพ์, ผลิตเสื้อราคาถูก
+
+# OG META
+og_title: AMATA Production Co., Ltd. (บริษัท อมตะ โปรดักชั่น จำกัด)
+og_description: อมตะ โปรดักชั่น รับผลิตและออกแบบเสื้อและสื่อสิ่งพิมพ์ทุกชนิด เสื้อพิมพ์ลาย เสื้อกีฬา หน่วยงาน องค์กร มหาลัย กีฬาสี และงานป้ายโฆษณา ป้ายหาเสียง ราคาถูก ผลิตด่วน ส่งไว สร้างแบรนด์อย่างมืออาชีพ
+
 hide_title: true
 hide_description: true
-
-# META Setup
-og_title: AMATA Production Co., Ltd. (บริษัท อมตะ โปรดักชั่น จำกัด)
-og_description: อมตะ โปรดักชั่น รับผลิตและออกแบบเสื้อและสื่อสิ่งพิมพ์ทุกชนิด ทั้ง เสื้อพิมพ์ลาย เสื้อกีฬา หน่วยงาน องค์กร มหาลัย กีฬาสี และงานป้ายโฆษณา ป้ายหาเสียง ราคาถูก ผลิตด่วน ส่งไว สร้างแบรนด์อย่างมืออาชีพ
 
 # Selected Paper
 selected_papers: FALSE # includes a list of papers marked as "selected={true}"
@@ -54,7 +62,7 @@ location_label: "ที่อยู่"
 language_switch: true
 lang: "th"
 hreflang: "th"
-alternate_lang_url: "/translations/AMATAProduction-en/"
+alternate_lang_url: "/english/AMATA-Production-en/"
 
 # Hero Section Configuration
 landing_hero: true             

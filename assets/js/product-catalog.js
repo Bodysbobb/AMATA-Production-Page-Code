@@ -491,6 +491,10 @@ document.addEventListener('DOMContentLoaded', function() {
     const caption = document.createElement('div');
     caption.className = 'lightbox-caption';
     caption.textContent = imgTitle;
+
+    const hasGlobalSizeGuide = catalogContainer.dataset.sizeGuide === 'true';
+    const globalSizeContent = catalogContainer.dataset.sizeContent || '';
+    const globalSizePicture = catalogContainer.dataset.sizePicture || '';
     
     // Create navigation arrows (only if there are multiple products)
     if (allProducts.length > 1) {
@@ -647,6 +651,20 @@ document.addEventListener('DOMContentLoaded', function() {
     if (imgTitle) {
       lightboxContent.appendChild(caption);
     }
+
+    if (hasGlobalSizeGuide && globalSizeContent && globalSizePicture) {
+      const guideDiv = document.createElement('div');
+      guideDiv.className = 'lightbox-size-guide';
+    
+      const guideLink = document.createElement('a');
+      guideLink.className = 'size-guide-link';
+      guideLink.href = globalSizePicture;
+      guideLink.target = '_blank';
+      guideLink.textContent = globalSizeContent;
+    
+      guideDiv.appendChild(guideLink);
+      lightboxContent.appendChild(guideDiv);
+    }  
     
     lightbox.appendChild(lightboxContent);
     document.body.appendChild(lightbox);
