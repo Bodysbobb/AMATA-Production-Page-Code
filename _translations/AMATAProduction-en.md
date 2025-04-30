@@ -48,7 +48,7 @@ contact_order:
 language_switch: true
 lang: "en"
 hreflang: "en"
-permalink: /translations/AMATAProduction/
+permalink: /translations/AMATAProduction-en/
 alternate_lang_url: "/"
 ---
 
