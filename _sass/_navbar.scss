@@ -360,6 +360,13 @@ body[data-switch-navbar="true"] #default-navbar.visible {
   }
 }
 
+// Fix for iPhone background color issue
+@media screen and (max-width: 480px) {
+  #navbarNav.show {
+    background-color: var(--global-nav-color) !important;
+  }
+}
+
 //===================== Language Button ===========================//
 .language-btn-navbar {
   display: flex;
