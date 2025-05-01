@@ -40,6 +40,9 @@ og_description: AMATA Production provides one-stop manufacturing for custom-desi
 og_image: /assets/img/project_covers/sports_product.png
 ---
 
+<!-- All Projects -->
+{% include project_summary.liquid title="Our Products" %}
+
 <!-- pages/projects.md -->
 <div class="projects">
 {% if site.enable_project_categories and page.display_categories %}

@@ -1,9 +1,9 @@
 ---
 layout: page
-title: ไซซ์เสื้อ
+title: Size Guide
 img: assets/img/Size/Sports-Size-Guide.jpg
 importance: 1
-category: บริการ
+category: Services
 
 # ================ TITLE & Description ================ #
 hide_title: true
@@ -17,31 +17,30 @@ navbar_default_logo_bg_color: "#ffffff"
 
 # ================ Contact Info Button Configuration ================ #
 contact_info: true
-contact_theme: "amata_th"
+contact_theme: "amata_en"
 
 # ================ Language Switch ================ #
 language_switch: true
-lang: "th"
-hreflang: "th"
-alternate_lang_url: "/english/AMATA-Size-Guide-en/"
+lang: "en"
+hreflang: "en"
+alternate_lang_url: "/สินค้า/อมตะ-โปรดักชั่น-ไซซ์-เสื้อกีฬา"
 
 # ================ Background ================ #
 background_logo: /assets/img/custom_logo/amata/AMATA_Logo.svg
 background_position: center
 need_aos: false
 
-
 # ================ META ================ #
 ## JSON Business Meta
 schema_type: business
 
 ## Google META
-description: ตารางไซซ์เสื้อจาก AMATA Production สำหรับเสื้อกีฬา เสื้อพิมพ์ลาย เสื้อทีม เสื้อองค์กร เสื้อโปโล สั่งผลิต แขนสั้น แขนยาว และยูนิฟอร์ม เพื่อช่วยให้ลูกค้าเลือกไซซ์ที่ดีที่สุด พร้อมคำแนะนำการวัดตัวอย่างถูกต้อง
-keywords: ตารางไซซ์เสื้อ, ไซซ์เสื้อ, ไซซ์เสื้อกีฬา, ไซซ์ยูนิฟอร์ม, ไซซ์เสื้อพิมพ์ลาย, เลือกไซซ์เสื้อ, วัดตัว, เสื้อพอดีตัว, เสื้อทีม, ไซซ์เสื้อโปโล, เสื้อสั่งผลิต, AMATA Production
+description: AMATA Production's size chart for sportswear, printed shirts, teamwear, corporate uniforms, polo shirts, and custom-made apparel — available in short sleeves, long sleeves, and uniform styles. Includes measurement tips to help customers choose the perfect fit.
+keywords: shirt size chart, clothing sizes, sportswear sizing, uniform size guide, printed shirt sizes, choose shirt size, body measurement guide, fitted shirts, teamwear sizes, polo shirt sizing, custom shirt sizing, AMATA Production
 
 ## OG META
-og_title: ตารางไซซ์เสื้อ AMATA Production
-og_description: ดูรายละเอียดตารางไซซ์สำหรับเสื้อกีฬา เสื้อพิมพ์ลาย และเสื้อองค์กรจาก AMATA Production เพื่อให้คุณมั่นใจว่าเลือกไซซ์ได้พอดีกับคุณ
+og_title: AMATA Production Shirt Size Guide
+og_description: Explore detailed size charts for sportswear, printed apparel, and corporate uniforms from AMATA Production — helping you select the right size with confidence.
 og_image: /assets/img/Size/Sports-Size-Guide.jpg
 ---
 

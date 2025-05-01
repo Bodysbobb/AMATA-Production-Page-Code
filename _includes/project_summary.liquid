@@ -1,7 +1,7 @@
 <!-- All Projects Section -->
 <section class="all-projects-section">
   <h2 class="project-category-title" data-aos="fade" data-aos-once="false">
-    All Projects
+    {{ include.title | default: "All Projects" }}
   </h2>
   <hr class="section-divider">
 
@@ -11,7 +11,11 @@
       {% assign sorted_projects = "" | split: "" %}
 
       {% for category in sorted_categories %}
-        {% assign grouped = site.projects | where: "category", category | sort: "importance" %}
+        {% if page.lang == "en" %}
+          {% assign grouped = site.english | where: "category", category | sort: "importance" %}
+        {% else %}
+          {% assign grouped = site.projects | where: "category", category | sort: "importance" %}
+        {% endif %}
         {% assign sorted_projects = sorted_projects | concat: grouped %}
       {% endfor %}
 
