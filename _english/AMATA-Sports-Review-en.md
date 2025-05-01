@@ -1,6 +1,7 @@
 ---
 layout: page
 title: Cutomer Reviews
+title_en: true
 img: assets/img/project_covers/Customer_Review_AMATASport.jpg
 importance: 1
 category: Review
