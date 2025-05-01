@@ -360,10 +360,26 @@ body[data-switch-navbar="true"] #default-navbar.visible {
   }
 }
 
-// Fix for iPhone background color issue
+// Fix for iPhone - both background color and content spacing
 @media screen and (max-width: 480px) {
+  // Background color fix
   #navbarNav.show {
     background-color: var(--global-nav-color) !important;
+  }
+  
+  // Content spacing fixes
+  .navbar-collapse.show .navbar-nav {
+    padding: 10px 15px 20px !important;
+  }
+  
+  .navbar-collapse.show .nav-item {
+    padding: 8px 0 !important;
+    margin-right: 15px !important;
+  }
+  
+  .navbar-collapse.show .nav-link {
+    padding: 5px 15px 5px 0 !important;
+    text-align: left !important;
   }
 }
 

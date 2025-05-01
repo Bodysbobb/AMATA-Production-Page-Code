@@ -2,7 +2,7 @@
 layout: page
 title: Products
 title_en: true
-display_categories: [Sports, Polo, Review, Services]
+display_categories: [Sports, Polo, Services]
 horizontal: false
 
 # ================ TITLE & Description ================ #

@@ -5,7 +5,7 @@ title_en: Products
 permalink: /สินค้า/
 nav: true
 nav_order: 2
-display_categories: [กีฬา, โปโล, รีวิว, บริการ]
+display_categories: [กีฬา, โปโล, บริการ]
 horizontal: false
 
 # ================ TITLE & Description ================ #
