@@ -166,7 +166,8 @@ og_image: /assets/img/Size/Sports-Size-Guide.jpg
   redirect_link="size"
   show_top_filters=true
   show_dropdown_filters=false
-  show_copy_url=true
+  show_copy_url=false
+  allow_image_save=true
   images_per_row_max="1"
   images_per_row_min="1"
   image_aspect_ratio="1/1"
