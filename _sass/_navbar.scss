@@ -365,21 +365,11 @@ body[data-switch-navbar="true"] #default-navbar.visible {
   // Background color fix
   #navbarNav.show {
     background-color: var(--global-nav-color) !important;
+    margin-bottom: 10px;
   }
   
-  // Content spacing fixes
-  .navbar-collapse.show .navbar-nav {
-    padding: 10px 15px 20px !important;
-  }
-  
-  .navbar-collapse.show .nav-item {
-    padding: 8px 0 !important;
-    margin-right: 15px !important;
-  }
-  
-  .navbar-collapse.show .nav-link {
-    padding: 5px 15px 5px 0 !important;
-    text-align: left !important;
+  #navbarNav.show {
+    padding: 10px;
   }
 }
 
