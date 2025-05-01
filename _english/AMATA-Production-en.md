@@ -134,11 +134,11 @@ og_image: /assets/img/page_logo/amata_logo.png
 <h1 class="section-heading">
   Customizable Apparel <br>
   <span class="section-link-wrapper">
-    <a href="https://www.pattawee-pp.com/projects/AMATASportsCatalog/" target="_blank" class="section-link">
+    <a href="https://www.amataproduction.com/สินค้า/อมตะ-โปรดักชั่น-เสื้อกีฬา-เสื้อพิมพ์ลาย/" target="_blank" class="section-link">
       Sports Design
     </a>
     &nbsp;&nbsp;|&nbsp;&nbsp;
-    <a href="https://drive.google.com/drive/folders/1f9_gC5Vbi3ujoBlpF6W4Q85vYktzmIth" target="_blank" class="section-link">
+    <a href="https://www.amataproduction.com/สินค้า/อมตะ-โปรดักชั่น-เสื้อโปโล-เสื้อพิมพ์ลาย/" target="_blank" class="section-link">
       Polo Design
     </a>
   </span>

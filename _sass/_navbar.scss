@@ -328,6 +328,16 @@ body[data-switch-navbar="true"] #default-navbar.visible {
 }
 
 @media (max-width: 576px) {
+  #navbarNav.navbar-collapse.show,
+  #navbarNav.navbar-collapse.collapsing {
+    background-color: var(--global-nav-color) !important;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    width: 100%;
+  }
+  
   .navbar-nav .nav-item:last-child {
     align-self: flex-end;
     margin-left: auto;

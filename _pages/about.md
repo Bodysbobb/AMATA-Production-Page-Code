@@ -153,7 +153,7 @@ latest_posts:
       แบบเสื้อกีฬา
     </a>
     &nbsp;&nbsp;|&nbsp;&nbsp;
-    <a href="https://drive.google.com/drive/folders/1f9_gC5Vbi3ujoBlpF6W4Q85vYktzmIth" target="_blank" class="section-link">
+    <a href="https://www.amataproduction.com/สินค้า/อมตะ-โปรดักชั่น-เสื้อโปโล-เสื้อพิมพ์ลาย/" target="_blank" class="section-link">
       แบบเสื้อโปโล
     </a>
   </span>
