@@ -699,3 +699,76 @@ body[data-switch-navbar="true"] #default-navbar.visible {
     z-index: 1030;
   }
 }
+
+//================ Navbar Logo Badge ================//
+.navbar-logo-badge {
+  --logo-badge-color: var(--global-theme-color, #0076df);
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 12px;
+  height: 55px; // Fixed height to maintain navbar dimensions
+  margin-top: 0; // Connect directly to top
+  
+  // Main background shape
+  &::before {
+    content: '';
+    position: absolute;
+    top: -15px; // Extend slightly above navbar
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: var(--logo-badge-color);
+    border-radius: 0 0 18px 18px;
+    z-index: 1;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  // Logo must be in front of everything with larger size
+  img.navbar-logo {
+    position: relative;
+    z-index: 10; // Higher z-index to ensure it's on top
+    height: 48px; // Larger logo
+    width: auto;
+    transform: translateY(-2px); // Slight adjustment to center
+    filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.1)); // Subtle shadow for depth
+  }
+}
+
+// Fixed navbar height enforcement
+.navbar, #navbar {
+  height: 72px; // Fixed height
+  min-height: 72px;
+  max-height: 72px;
+  display: flex;
+  align-items: center;
+}
+
+.navbar-brand-container {
+  height: 72px;
+  display: flex;
+  align-items: center;
+}
+
+// Responsive adjustments
+@media (max-width: 768px) {
+  .navbar-logo-badge {
+    padding: 4px 10px;
+    height: 50px;
+    
+    img.navbar-logo {
+      height: 40px;
+    }
+  }
+  
+  .navbar, #navbar {
+    height: 65px;
+    min-height: 65px;
+    max-height: 65px;
+  }
+  
+  .navbar-brand-container {
+    height: 65px;
+  }
+}

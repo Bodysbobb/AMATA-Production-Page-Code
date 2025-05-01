@@ -8,9 +8,11 @@
     <!-- Center the navbar brand if needed -->
     <div class="navbar-brand-container mx-auto mx-md-0">
       {% if page.default_navbar_logo %}
-        <!-- Always show default_navbar_logo when defined (SIMPLIFIED) -->
+        <!-- Logo with hanging badge background -->
         <a class="navbar-brand title font-weight-lighter" href="{{ site.baseurl }}/">
-          <img src="{{ page.default_navbar_logo | relative_url }}" alt="{{ site.title }}" class="navbar-logo" height="36">
+          <div class="{% if page.navbar_default_logo_bg %}navbar-logo-badge{% endif %}" {% if page.navbar_default_logo_bg_color %}style="--logo-badge-color: {{ page.navbar_default_logo_bg_color }};"{% endif %}>
+            <img src="{{ page.default_navbar_logo | relative_url }}" alt="{{ site.title }}" class="navbar-logo" height="40">
+          </div>
         </a>
       {% elsif page.permalink != '/' %}
         <a class="navbar-brand title font-weight-lighter" href="{{ site.baseurl }}/">

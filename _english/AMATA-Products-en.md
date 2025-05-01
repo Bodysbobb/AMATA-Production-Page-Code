@@ -2,12 +2,31 @@
 layout: page
 title: Products
 title_en: true
-display_categories: [Sports, Review]
+display_categories: [Sports, Polo, Review, Services]
 horizontal: false
-default_navbar_logo: /assets/img/page_logo/amata_white.png
 
+# ================ TITLE & Description ================ #
+hide_title: true
 hide_description: true
 
+# ================ NAVBAR ================ #
+## Defailt Navbar
+default_navbar_logo: /assets/img/page_logo/amata_main_text.png
+navbar_default_logo_bg: true
+navbar_default_logo_bg_color: "#ffffff" 
+
+# ================ Contact Info Button Configuration ================ #
+contact_info: true
+contact_theme: "amata_en"
+
+# ================ Language Switch ================ #
+language_switch: true
+lang: "en"
+hreflang: "en"
+#permalink: /english/AMATA-Products-en/
+alternate_lang_url: "/สินค้า/"
+
+# ================ META ================ #
 # JSON Business Meta
 schema_type: business
 
@@ -18,42 +37,7 @@ keywords: custom sportswear, sublimation shirts, team uniforms, polo shirts, org
 # OG META
 og_title: AMATA Production Co., Ltd. – Custom Apparel & Printing Services
 og_description: AMATA Production provides one-stop manufacturing for custom-designed sportswear, team apparel, organization uniforms, advertising signs, campaign banners, and full-service print production — fast, professional, and affordable from factory to finish.
-
-
-# Contact Info Button Configuration
-contact_info: true
-main_animation: "true"
-wave_animation: "true"
-contact_line_url: "https://line.me/ti/p/@amatapr"
-contact_messenger: "amataproduction.sport"
-contact_call: "+66818888866"
-contact_email: "sales@amataproduction.com"
-contact_location_url: "https://maps.app.goo.gl/46SZnCwHuesWyBwm7"
-contact_digitalcard_url: "https://vcard-admin.pkp.homes/U0NtnOPAOx"
-contact_position: "right"
-
-# Custom button labels
-call_label: "Call Us"
-line_label: "Line Official"
-email_label: "Email Us"
-contact_title: "Get In Touch"
-smart_card_label: "Digital Card"
-location_label: "Visit Us"
-
-contact_order:
-  - email
-  - location
-  - call
-  - digitalcard
-  - messenger
-  - line
-
-# Language Switch
-language_switch: true
-lang: "en"
-hreflang: "en"
-#permalink: /english/AMATA-Products-en/
-alternate_lang_url: "/สินค้า/"
+og_image: /assets/img/project_covers/sports_product.png
 ---
 
 <!-- pages/projects.md -->

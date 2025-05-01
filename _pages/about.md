@@ -3,11 +3,34 @@ layout: page
 title: หน้าหลัก
 title_en: Home
 subtitle: บริษัท อมตะ โปรดักชั่น จำกัด
-img: https://lh3.googleusercontent.com/d/11AU3iNRRkApAnZlL3lTy5og8vaLMYtMQ
+img: assets/img/page_logo/amata_logo.png
 permalink: /
 class: about-page
-default_navbar_logo: /assets/img/page_logo/amata_white.png
 
+# ================ TITLE & Description ================ #
+hide_title: true
+hide_description: true
+
+# ================ NAVBAR ================ #
+## Defailt Navbar
+default_navbar_logo: /assets/img/page_logo/amata_main_text.png
+navbar_default_logo_bg: true
+navbar_default_logo_bg_color: "#ffffff" 
+
+# ================ Contact Info Button Configuration ================ #
+contact_info: true
+contact_theme: "amata_th"
+
+# ================ Language Switch ================ #
+language_switch: true
+lang: "th"
+hreflang: "th"
+alternate_lang_url: "/english/AMATA-Production-en/"
+
+# ================ HERO SECTION ================ #
+landing_hero: true     
+
+# ================ META ================ #
 # JSON Business Meta
 schema_type: business
 
@@ -18,9 +41,7 @@ keywords: เสื้อพิมพ์ลาย, รับผลิตเส�
 # OG META
 og_title: AMATA Production Co., Ltd. (บริษัท อมตะ โปรดักชั่น จำกัด)
 og_description: อมตะ โปรดักชั่น รับผลิตและออกแบบเสื้อและสื่อสิ่งพิมพ์ทุกชนิด เสื้อพิมพ์ลาย เสื้อกีฬา หน่วยงาน องค์กร มหาลัย กีฬาสี และงานป้ายโฆษณา ป้ายหาเสียง ราคาถูก ผลิตด่วน ส่งไว สร้างแบรนด์อย่างมืออาชีพ
-
-hide_title: true
-hide_description: true
+og_image: /assets/img/page_logo/amata_logo.png
 
 # Selected Paper
 selected_papers: FALSE # includes a list of papers marked as "selected={true}"
@@ -34,46 +55,15 @@ announcements:
 latest_posts:
   enabled: false
   scrollable: true # adds a vertical scroll bar if there are more than 3 new posts items
-  limit: 5 # leave blank to include all the blog posts
-
-# Contact Info Button Configuration
-contact_info: true
-main_animation: "true"
-wave_animation: "true"
-contact_messenger: "amataproduction.sport"
-contact_call: "+66818888866"
-contact_messenger: "amataproduction.sport"
-contact_line_url: "https://line.me/ti/p/@amatapr"
-contact_email: "sales@amataproduction.com"
-contact_location_url: "https://maps.app.goo.gl/46SZnCwHuesWyBwm7"
-contact_digitalcard_url: "https://vcard-admin.pkp.homes/U0NtnOPAOx"
-contact_position: "right"
-
-# Custom button labels
-call_label: "โทร"
-messenger_label: "Messenger"
-line_label: "ไลน์@"
-email_label: "อีเมล"
-contact_title: "ติดต่อเรา"
-smart_card_label: "Digital Card"
-location_label: "ที่อยู่"
-
-# Language Switch
-language_switch: true
-lang: "th"
-hreflang: "th"
-alternate_lang_url: "/english/AMATA-Production-en/"
-
-# Hero Section Configuration
-landing_hero: true             
+  limit: 5 # leave blank to include all the blog posts        
 ---
 
 <!-- Hero Section -->
 {% include landing-hero.liquid
-  title="AMATA Production Co., Ltd."
+  title="AMATA Production"
   subtext="ทุกลวดลายมีเรื่องราว คุณภาพงานพิมพ์จึงสำคัญ"
   signature="— อมตะ โปรดักชั่น —"
-  scroll_text="Get in Touch"
+  scroll_text="ติดต่อเรา"
   particle_mode="hero-only"
   letter_delay="0.05"
   initial_delay="300"
@@ -159,7 +149,7 @@ landing_hero: true
 <h1 class="section-heading">
   เสื้อผ้าสั่งผลิตตามสไตล์คุณ <br>
   <span class="section-link-wrapper">
-    <a href="https://www.pattawee-pp.com/projects/AMATASportsCatalog/" target="_blank" class="section-link">
+    <a href="https://www.amataproduction.com/สินค้า/อมตะ-โปรดักชั่น-เสื้อกีฬา-เสื้อพิมพ์ลาย/" target="_blank" class="section-link">
       แบบเสื้อกีฬา
     </a>
     &nbsp;&nbsp;|&nbsp;&nbsp;

@@ -1,58 +1,44 @@
 ---
 layout: page
-title: AMATA Production Co., Ltd., Thailand
+title: AMATA Production Co., Ltd. (Thailand)
 title_en: true
-img: assets/img/META_pic/sports_product.png
+img: assets/img/page_logo/amata_logo.png
 
+# ================ TITLE & Description ================ #
 hide_title: true
 hide_description: true
 
-# Navbar
-default_navbar_logo: /assets/img/page_logo/amata_white.png
+# ================ NAVBAR ================ #
+## Defailt Navbar
+default_navbar_logo: /assets/img/page_logo/amata_main_text.png
+navbar_default_logo_bg: true
+navbar_default_logo_bg_color: "#ffffff" 
 
-# OG Setup
-og_title: AMATA Production Co., Ltd. (Thailand)
-og_description: >
-  AMATA Production specializes in designing and manufacturing all types of custom apparel and printed media — including sublimation shirts, sportswear, uniforms for teams, organizations, universities, and school events, as well as advertising banners and campaign signs. Affordable, fast production with professional brand-building solutions.
-og_image: /assets/img/project_covers/AMATA_Meta.png
-
-# Contact Info Button Configuration
+# ================ Contact Info Button Configuration ================ #
 contact_info: true
-main_animation: "true"
-wave_animation: "true"
-contact_line_url: "https://line.me/ti/p/@amatapr"
-contact_messenger: "amataproduction.sport"
-contact_call: "+66818888866"
-contact_email: "sales@amataproduction.com"
-contact_location_url: "https://maps.app.goo.gl/46SZnCwHuesWyBwm7"
-contact_digitalcard_url: "https://vcard-admin.pkp.homes/U0NtnOPAOx"
-contact_position: "right"
+contact_theme: "amata_en"
 
-# Custom button labels
-call_label: "Call Us"
-line_label: "Line Official"
-email_label: "Email Us"
-contact_title: "Get In Touch"
-smart_card_label: "Digital Card"
-location_label: "Visit Us"
-
-contact_order:
-  - email
-  - location
-  - call
-  - digitalcard
-  - messenger
-  - line
-
-# Language Switch
+# ================ Language Switch ================ #
 language_switch: true
 lang: "en"
 hreflang: "en"
-#permalink: /english/AMATA-Production-en/
 alternate_lang_url: "/"
 
-# Hero Section Configuration
-landing_hero: true      
+# ================ HERO SECTION ================ #
+landing_hero: true     
+
+# ================ META ================ #
+# JSON Business Meta
+schema_type: business
+
+# Google META
+description: AMATA Production specializes in the design and manufacturing of custom-printed shirts, sportswear, corporate apparel, and advertising materials. We offer fast production, competitive prices, and professional brand-building services.
+keywords: custom printed shirts, sportswear manufacturing, team uniforms, corporate apparel, shirt design, apparel factory, advertising signage, printed media, polo shirts, sports shirts, shirt factory, print house, affordable shirt production
+
+# OG META
+og_title: AMATA Production Co., Ltd. (Thailand)
+og_description: AMATA Production offers full-service design and manufacturing for apparel and printed media — including custom-printed shirts, sportswear, corporate uniforms, university shirts, color day outfits, promotional signage, and campaign banners. Fast turnaround, factory pricing, and professional branding support.
+og_image: /assets/img/page_logo/amata_logo.png
 ---
 
 <!-- Hero Section -->

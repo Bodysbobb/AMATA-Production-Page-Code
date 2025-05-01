@@ -6,77 +6,53 @@ title_en: true
 category: Sports
 importance: 1
 
-# JSON Business Meta
-schema_type: product
-
-# Google META
-description: AMATA Production offers high-quality custom sportswear, sublimation jerseys, team uniforms, and printed signage at factory prices with fast delivery.
-keywords: custom sportswear, sublimation jersey, team uniforms, custom apparel, printing service, athletic wear, polo shirt, affordable sportswear, uniform manufacturer, fast production
-
-# OG META
-og_title: AMATA Production - Custom Sportswear & Printing Services
-og_description: AMATA Production specializes in custom-designed sportswear, sublimation printing, team uniforms, organization shirts, and advertising signage with affordable pricing and express delivery.
-
-
-# Display settings
+# ================ TITLE & Description ================ #
 hide_title: true
 hide_description: true
 
-# Navbar
+# ================ NAVBAR ================ #
+## Defailt Navbar
+default_navbar_logo: /assets/img/page_logo/amata_main_text.png
+navbar_default_logo_bg: true
+navbar_default_logo_bg_color: "#ffffff" 
+
+## Special Navbar
 special_navbar: true
+special_navbar_logo_one: /assets/img/page_logo/amata_sport.png
 special_navbar_title: AMATA Production Sports Designs
 special_navbar_color: "#58595A"
 switch_navbar: true
 toggle_down: true
 
-default_navbar_logo: /assets/img/page_logo/amata_white.png
-special_navbar_logo_one: /assets/img/page_logo/amata_sport.png
-
-# OG Setup
-og_title: AMATA Production – Custom Sportswear with Unique Designs
-og_description: >
-  AMATA Production specializes in designing and manufacturing custom sportswear, team shirts, university uniforms, corporate apparel, and sublimation print shirts. Unique styles, standout designs, and high-quality embroidery and screen printing – all in one place.
-og_image: /assets/img/META_pic/sports_product.png
-
-# Contact Info Button Configuration
+# ================ Contact Info Button Configuration ================ #
 contact_info: true
-main_animation: "true"
-wave_animation: "true"
-contact_line_url: "https://line.me/ti/p/@amatapr"
-contact_messenger: "amataproduction.sport"
-contact_call: "+66818888866"
-contact_email: "sales@amataproduction.com"
-contact_location_url: "https://maps.app.goo.gl/46SZnCwHuesWyBwm7"
-contact_digitalcard_url: "https://vcard-admin.pkp.homes/U0NtnOPAOx"
-contact_position: "right"
+contact_theme: "amata_en"
 
-# Custom button labels
-call_label: "Call Us"
-line_label: "Line Official"
-email_label: "Email Us"
-contact_title: "Get In Touch"
-smart_card_label: "Digital Card"
-location_label: "Visit Us"
-
-contact_order:
-  - email
-  - location
-  - call
-  - digitalcard
-  - messenger
-  - line
-
-# Language Switch
+# ================ Language Switch ================ #
 language_switch: true
 lang: "en"
 hreflang: "en"
-#permalink: /english/AMATA-Customizable-Sports-Wear-and-Sublimation-en/
 alternate_lang_url: "/สินค้า/อมตะ-โปรดักชั่น-เสื้อกีฬา-เสื้อพิมพ์ลาย"
 
-# Background
+# ================ Background ================ #
 background_logo: /assets/img/custom_logo/amata/AMATA_Logo_Hover.svg
 background_position: center
+
+# ================ META ================ #
+## JSON Business Meta
+schema_type: product
+
+## Google META
+description: AMATA Production offers high-quality custom sportswear, sublimation jerseys, team uniforms, and printed signage at factory prices with fast delivery.
+keywords: custom sportswear, sublimation jersey, team uniforms, custom apparel, printing service, athletic wear, polo shirt, affordable sportswear, uniform manufacturer, fast production
+
+## OG META
+og_title: AMATA Production – Custom Sportswear with Unique Designs
+og_description: >
+  AMATA Production specializes in designing and manufacturing custom sportswear, team shirts, university uniforms, corporate apparel, and sublimation print shirts. Unique styles, standout designs, and high-quality embroidery and screen printing – all in one place.
+og_image: /assets/img/META_pic/sports_product.jpg
 ---
+
 <style>
   .product-catalog.theme-product {
     .lightbox-close-product {

@@ -3,42 +3,85 @@
 {% assign current_lang = page.lang | default: site.lang | default: 'en' %}
 
 {% comment %}
+Theme selection - this is where the preset themes are defined
+{% endcomment %}
+{% if theme == "amata_th" %}
+  {% assign contact_title = "ติดต่อเรา" %}
+  {% assign call_label = "โทร" %}
+  {% assign line_label = "ไลน์@" %}
+  {% assign messenger_label = "Messenger" %}
+  {% assign smart_card_label = "Digital Card" %}
+  {% assign location_label = "ที่อยู่" %}
+  {% assign email_label = "อีเมล" %}
+  {% assign call = "+66818888866" %}
+  {% assign email = "sales@amataproduction.com" %}
+  {% assign location_url = "https://maps.app.goo.gl/46SZnCwHuesWyBwm7" %}
+  {% assign chat_url = "" %}
+  {% assign messenger = "amataproduction.sport" %}
+  {% assign whatsapp = "" %}
+  {% assign line_url = "https://line.me/ti/p/@amatapr" %}
+  {% assign digitalcard_url = "https://vcard-admin.pkp.homes/U0NtnOPAOx" %}
+  {% assign contact_order = "email,location,call,digitalcard,messenger,line" | split: "," %}
+{% elsif theme == "amata_en" %}
+  {% assign contact_title = "Get In Touch" %}
+  {% assign call_label = "Call Us" %}
+  {% assign line_label = "Line Official" %}
+  {% assign messenger_label = "Messenger" %}
+  {% assign smart_card_label = "Digital Card" %}
+  {% assign location_label = "Visit Us" %}
+  {% assign email_label = "Email Us" %}
+  {% assign call = "+66818888866" %}
+  {% assign email = "sales@amataproduction.com" %}
+  {% assign location_url = "https://maps.app.goo.gl/46SZnCwHuesWyBwm7" %}
+  {% assign chat_url = "" %}
+  {% assign messenger = "amataproduction.sport" %}
+  {% assign whatsapp = "" %}
+  {% assign line_url = "https://line.me/ti/p/@amatapr" %}
+  {% assign digitalcard_url = "https://vcard-admin.pkp.homes/U0NtnOPAOx" %}
+  {% assign contact_order = "email,location,call,digitalcard,messenger,line" | split: "," %}
+{% else %}
+  {% comment %}
+  Default behavior - use individual parameters as before
+  {% endcomment %}
+
+  {% if current_lang == "th" %}
+    {% assign contact_title = include.contact_title | default: page.contact_title | default: "ติดต่อเรา" %}
+    {% assign call_label = include.call_label | default: page.call_label | default: "โทร" %}
+    {% assign line_label = include.line_label | default: page.line_label | default: "ไลน์" %}
+    {% assign messenger_label = include.messenger_label | default: page.messenger_label | default: "Messenger" %}
+    {% assign smart_card_label = include.smart_card_label | default: page.smart_card_label | default: "สมาร์ทการ์ด" %}
+    {% assign location_label = include.location_label | default: page.location_label | default: "ที่อยู่" %}
+    {% assign email_label = include.email_label | default: page.email_label | default: "อีเมล" %}
+  {% else %}
+    {% assign contact_title = include.contact_title | default: page.contact_title | default: "Contact Us" %}
+    {% assign call_label = include.call_label | default: page.call_label | default: "Call" %}
+    {% assign line_label = include.line_label | default: page.line_label | default: "Line" %}
+    {% assign messenger_label = include.messenger_label | default: page.messenger_label | default: "Messenger" %}
+    {% assign smart_card_label = include.smart_card_label | default: page.smart_card_label | default: "Smart Card" %}
+    {% assign location_label = include.location_label | default: page.location_label | default: "Location" %}
+    {% assign email_label = include.email_label | default: page.email_label | default: "Email" %}
+  {% endif %}
+
+  {% assign call = include.call | default: page.contact_call %}
+  {% assign email = include.email | default: page.contact_email %}
+  {% assign location_url = include.location_url | default: page.contact_location_url %}
+  {% assign chat_url = include.chat_url | default: page.contact_chat_url %}
+  {% assign messenger = include.messenger | default: page.contact_messenger %}
+  {% assign whatsapp = include.whatsapp | default: page.contact_whatsapp %}
+  {% assign line_url = include.line_url | default: page.contact_line_url %}
+  {% assign digitalcard_url = include.digitalcard_url | default: page.contact_digitalcard_url %}
+
+  {% assign contact_order = include.contact_order | default: page.contact_order %}
+  {% unless contact_order %}
+    {% assign contact_order = "email,location,messenger,line,call,digitalcard" | split: "," %}
+  {% endunless %}
+{% endif %}
+
+{% comment %}
 Animation settings - enable by default for attention-grabbing features
 {% endcomment %}
 {% assign main_animation = include.main_animation | default: page.main_animation | default: "true" %}
 {% assign wave_animation = include.wave_animation | default: page.wave_animation | default: "true" %}
-
-{%- assign call = include.call | default: page.contact_call -%}
-{%- assign email = include.email | default: page.contact_email -%}
-{%- assign location_url = include.location_url | default: page.contact_location_url -%}
-{%- assign chat_url = include.chat_url | default: page.contact_chat_url -%}
-{%- assign messenger = include.messenger | default: page.contact_messenger -%}
-{%- assign whatsapp = include.whatsapp | default: page.contact_whatsapp -%}
-{%- assign line_url = include.line_url | default: page.contact_line_url -%}
-{%- assign digitalcard_url = include.digitalcard_url | default: page.contact_digitalcard_url -%}
-
-{% if current_lang == "th" %}
-  {% assign contact_title = include.contact_title | default: page.contact_title | default: "ติดต่อเรา" %}
-  {% assign call_label = include.call_label | default: page.call_label | default: "โทร" %}
-  {% assign line_label = include.line_label | default: page.line_label | default: "ไลน์" %}
-  {% assign messenger_label = include.messenger_label | default: page.messenger_label | default: "Messenger" %}
-  {% assign smart_card_label = include.smart_card_label | default: page.smart_card_label | default: "สมาร์ทการ์ด" %}
-  {% assign location_label = include.location_label | default: page.location_label | default: "ที่อยู่" %}
-  {% assign email_label = include.email_label | default: page.email_label | default: "อีเมล" %}
-{% else %}
-  {% assign contact_title = include.contact_title | default: page.contact_title | default: "Contact Us" %}
-  {% assign call_label = include.call_label | default: page.call_label | default: "Call" %}
-  {% assign line_label = include.line_label | default: page.line_label | default: "Line" %}
-  {% assign messenger_label = include.messenger_label | default: page.messenger_label | default: "Messenger" %}
-  {% assign smart_card_label = include.smart_card_label | default: page.smart_card_label | default: "Smart Card" %}
-  {% assign location_label = include.location_label | default: page.location_label | default: "Location" %}
-  {% assign email_label = include.email_label | default: page.email_label | default: "Email" %}
-{% endif %}
-
-{%- assign contact_order = include.contact_order | default: page.contact_order -%}
-{% unless contact_order %}
-  {% assign contact_order = "email,location,messenger,line,call,digitalcard" | split: "," %}
-{% endunless %}
 
 <div class="floating-contact-container {{ theme }}" 
      data-position="{{ position }}"

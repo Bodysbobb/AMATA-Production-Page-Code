@@ -1,0 +1,53 @@
+{% comment %}
+  Single contact info template that supports both Thai and English
+  Usage:
+    - For Thai:  {% include amata_contact.liquid lang="th" %}
+    - For English: {% include amata_contact.liquid lang="en" %}
+    - Auto-detect: {% include amata_contact.liquid %}
+{% endcomment %}
+
+{% assign template_lang = include.lang | default: page.lang | default: site.lang | default: "en" %}
+
+{% if template_lang == "th" %}
+  {% include contact_info_button.liquid
+    contact_info=true
+    contact_position="right"
+    main_animation="true"
+    wave_animation="true"
+    call="+66818888866"
+    messenger="amataproduction.sport"
+    line_url="https://line.me/ti/p/@amatapr"
+    email="sales@amataproduction.com"
+    location_url="https://maps.app.goo.gl/46SZnCwHuesWyBwm7"
+    digitalcard_url="https://vcard-admin.pkp.homes/U0NtnOPAOx"
+    contact_order="email,location,call,digitalcard,messenger,line"
+    contact_title="ติดต่อเรา"
+    call_label="โทร"
+    messenger_label="Messenger"
+    line_label="ไลน์@"
+    email_label="อีเมล"
+    smart_card_label="Digital Card"
+    location_label="ที่อยู่"
+  %}
+{% else %}
+  {% include contact_info_button.liquid
+    contact_info=true
+    contact_position="right"
+    main_animation="true"
+    wave_animation="true"
+    call="+66818888866"
+    messenger="amataproduction.sport"
+    line_url="https://line.me/ti/p/@amatapr"
+    email="sales@amataproduction.com"
+    location_url="https://maps.app.goo.gl/46SZnCwHuesWyBwm7"
+    digitalcard_url="https://vcard-admin.pkp.homes/U0NtnOPAOx"
+    contact_order="email,location,call,digitalcard,messenger,line"
+    contact_title="Get In Touch"
+    call_label="Call Us"
+    messenger_label="Messenger"
+    line_label="Line Official"
+    email_label="Email Us"
+    smart_card_label="Digital Card"
+    location_label="Visit Us"
+  %}
+{% endif %}
