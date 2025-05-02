@@ -107,13 +107,13 @@ Animation settings - enable by default for attention-grabbing features
      data-wave-animation="{{ wave_animation }}"
      role="region"
      aria-label="{{ contact_title }}">
-  <div class="contact-options" id="contact-options" aria-hidden="true">
+  <div class="contact-options" id="contact-options">
     {% for item in contact_order %}
       {% case item %}
         
         {% when "email" %}
           {% if email %}
-          <a href="mailto:{{ email }}" class="contact-button email-button" aria-label="{{ email_label }}: {{ email }}">
+          <a href="mailto:{{ email }}" class="contact-button email-button" aria-label="{{ email_label }}: {{ email }}" tabindex="-1">
             {% if position == "right" %}
             <div class="contact-button-label">{{ email_label }}</div>
             <div class="contact-button-icon">
@@ -130,7 +130,7 @@ Animation settings - enable by default for attention-grabbing features
         
         {% when "location" %}
           {% if location_url %}
-          <a href="{{ location_url }}" class="contact-button location-button" target="_blank" rel="external nofollow noopener" aria-label="{{ location_label }}">
+          <a href="{{ location_url }}" class="contact-button location-button" target="_blank" rel="external nofollow noopener" aria-label="{{ location_label }}" tabindex="-1">
             {% if position == "right" %}
             <div class="contact-button-label">{{ location_label }}</div>
             <div class="contact-button-icon">
@@ -147,7 +147,7 @@ Animation settings - enable by default for attention-grabbing features
         
         {% when "messenger" %}
           {% if messenger %}
-          <a href="https://m.me/{{ messenger }}" class="contact-button messenger-button" target="_blank" rel="external nofollow noopener" aria-label="{{ messenger_label }}">
+          <a href="https://m.me/{{ messenger }}" class="contact-button messenger-button" target="_blank" rel="external nofollow noopener" aria-label="{{ messenger_label }}" tabindex="-1">
             {% if position == "right" %}
             <div class="contact-button-label">{{ messenger_label }}</div>
             <div class="contact-button-icon">
@@ -164,7 +164,7 @@ Animation settings - enable by default for attention-grabbing features
         
         {% when "line" %}
           {% if line_url %}
-          <a href="{{ line_url }}" class="contact-button line-account-button" target="_blank" rel="external nofollow noopener" aria-label="{{ line_label }}">
+          <a href="{{ line_url }}" class="contact-button line-account-button" target="_blank" rel="external nofollow noopener" aria-label="{{ line_label }}" tabindex="-1">
             {% if position == "right" %}
             <div class="contact-button-label">{{ line_label }}</div>
             <div class="contact-button-icon">
@@ -181,7 +181,7 @@ Animation settings - enable by default for attention-grabbing features
         
         {% when "call" %}
           {% if call %}
-          <a href="tel:{{ call | remove: ' ' | remove: '-' | remove: '(' | remove: ')' }}" class="contact-button call-button" aria-label="{{ call_label }}: {{ call }}">
+          <a href="tel:{{ call | remove: ' ' | remove: '-' | remove: '(' | remove: ')' }}" class="contact-button call-button" aria-label="{{ call_label }}: {{ call }}" tabindex="-1">
             {% if position == "right" %}
             <div class="contact-button-label">{{ call_label }}</div>
             <div class="contact-button-icon">
@@ -198,7 +198,7 @@ Animation settings - enable by default for attention-grabbing features
         
         {% when "digitalcard" %}
           {% if digitalcard_url %}
-          <a href="{{ digitalcard_url }}" class="contact-button digitalcard-button" target="_blank" rel="external nofollow noopener" aria-label="{{ smart_card_label }}">
+          <a href="{{ digitalcard_url }}" class="contact-button digitalcard-button" target="_blank" rel="external nofollow noopener" aria-label="{{ smart_card_label }}" tabindex="-1">
             {% if position == "right" %}
             <div class="contact-button-label">{{ smart_card_label }}</div>
             <div class="contact-button-icon">
@@ -245,9 +245,21 @@ Animation settings - enable by default for attention-grabbing features
   clip: rect(0, 0, 0, 0);
   border: 0;
 }
+
+/* Add CSS to hide the contact options when not expanded */
+.contact-options {
+  visibility: hidden;
+  opacity: 0;
+  transition: visibility 0.3s, opacity 0.3s;
+}
+
+.contact-options.visible {
+  visibility: visible;
+  opacity: 1;
+}
 </style>
 
-<!-- Add this JavaScript to your file -->
+<!-- Updated JavaScript to your file -->
 <script>
 document.addEventListener('DOMContentLoaded', function() {
   // Handle banner dots accessibility
@@ -275,12 +287,34 @@ document.addEventListener('DOMContentLoaded', function() {
   // Handle contact button accessibility
   const contactToggle = document.querySelector('.contact-toggle');
   const contactOptions = document.getElementById('contact-options');
+  const focusableElements = contactOptions ? contactOptions.querySelectorAll('a, button, input, select, textarea') : [];
   
   if (contactToggle && contactOptions) {
     contactToggle.addEventListener('click', function() {
       const expanded = contactToggle.getAttribute('aria-expanded') === 'true';
       contactToggle.setAttribute('aria-expanded', !expanded);
-      contactOptions.setAttribute('aria-hidden', expanded);
+      
+      if (expanded) {
+        // Closing the menu
+        contactOptions.classList.remove('visible');
+        // Set all interactive elements to non-focusable
+        focusableElements.forEach(el => {
+          el.setAttribute('tabindex', '-1');
+        });
+      } else {
+        // Opening the menu
+        contactOptions.classList.add('visible');
+        // Make interactive elements focusable
+        focusableElements.forEach(el => {
+          el.setAttribute('tabindex', '0');
+        });
+      }
+    });
+    
+    // Initialize with menu closed
+    contactOptions.classList.remove('visible');
+    focusableElements.forEach(el => {
+      el.setAttribute('tabindex', '-1');
     });
   }
 });

@@ -1,10 +1,33 @@
 {
   "devDependencies": {
+    "@fullhuman/postcss-purgecss": "^4.0.3",
     "@shopify/prettier-plugin-liquid": "1.4.0",
-    "prettier": "^3.1.1"
+    "postcss": "^8.5.3",
+    "postcss-cli": "^11.0.1",
+    "prettier": "^3.1.1",
+    "sass": "^1.87.0"
   },
   "dependencies": {
     "@fortawesome/fontawesome-free": "^6.7.2",
     "@tabler/icons": "^3.31.0"
-  }
+  },
+  "name": "amata-production-page-code",
+  "version": "1.0.0",
+  "description": "",
+  "main": "purgecss.config.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Bodysbobb/AMATA-Production-Page-Code.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/Bodysbobb/AMATA-Production-Page-Code/issues"
+  },
+  "homepage": "https://github.com/Bodysbobb/AMATA-Production-Page-Code#readme"
 }
