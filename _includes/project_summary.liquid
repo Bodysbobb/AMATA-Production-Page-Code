@@ -1,13 +1,16 @@
 <!-- All Projects Section -->
 <section class="all-projects-section">
-  <h2 class="project-category-title" data-aos="fade" data-aos-once="false">
+  <h2 class="project-category-title" data-aos="fade">
     {{ include.title | default: "All Projects" }}
   </h2>
   <hr class="section-divider">
 
   <div class="horizontal-scroll-container" data-aos="fade-up">
     <div class="horizontal-project-wrapper">
-      {% assign sorted_categories = page.display_categories %}
+      {% assign sorted_categories = include.categories | default: page.display_categories %}
+      {% if include.categories contains ' ' %}
+        {% assign sorted_categories = include.categories | split: ' ' %}
+      {% endif %}
       {% assign sorted_projects = "" | split: "" %}
 
       {% for category in sorted_categories %}
@@ -32,7 +35,9 @@
                 <img src="{{ project.img | relative_url | default: '/assets/img/default-thumbnail.jpg' }}" alt="{{ project.title }}">
                 <div class="mini-card-body">
                   <h3 class="mini-card-title">{{ project.title }}</h3>
-                  <p class="mini-card-text">{{ project.description | truncate: 75 }}</p>
+                  {% unless include.hide_description == true %}
+                    <p class="mini-card-text">{{ project.description | truncate: 75 }}</p>
+                  {% endunless %}
                   <div class="mini-category-tag">{{ project.category }}</div>
                 </div>
               </a>
@@ -133,5 +138,21 @@
   padding: 0.1rem 0.6rem;
   border-radius: 3px;
   margin-top: 0.5rem;
+}
+
+/* Fix for AOS compatibility */
+[data-aos] {
+  visibility: hidden;
+}
+
+[data-aos].aos-animate {
+  visibility: visible;
+}
+
+/* Prevent AOS conflict with scrollable containers */
+.horizontal-scroll-container[data-aos] {
+  pointer-events: auto !important;
+  will-change: transform;
+  transform: translateZ(0);
 }
 </style>

@@ -16,8 +16,7 @@
     {% include head.liquid %}
     
     {% if page.need_aos %}
-      <link href="https://unpkg.com/aos@next/dist/aos.css" rel="stylesheet" />
-      <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+      {% include aos-init.liquid need_aos=true duration=700 easing="ease-out-cubic" once=true delay=0 %}
     {% endif %}
   </head>
   

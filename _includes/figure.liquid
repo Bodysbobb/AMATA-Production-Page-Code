@@ -1,7 +1,6 @@
 {% assign img_path = include.path | remove: '.jpg' | remove: '.jpeg' | remove: '.png' | remove: '.tiff' | remove: '.gif' %}
 {% assign parts = include.path | split: '.' %}
 {% assign ext = parts.last %}
-{% assign is_google_drive = include.path | downcase | contains: 'drive.google.com' or include.path | downcase | contains: 'googleusercontent.com' %}
 
 <figure
   {% if include.slot %}
@@ -9,18 +8,12 @@
   {% endif %}
 >
   <picture>
-    {% if is_google_drive %}
-      <!-- Google Drive image optimization -->
-      <source 
-        media="(max-width: 480px)" 
-        srcset="{{ include.path }}&sz=w480">
-      <source 
-        media="(max-width: 768px)" 
-        srcset="{{ include.path }}&sz=w768">
-      <source 
-        media="(max-width: 1200px)" 
-        srcset="{{ include.path }}&sz=w1200">
-    {% elsif site.imagemagick.enabled %}
+    <!-- Auto scaling with imagemagick -->
+    <!--
+      See https://www.debugbear.com/blog/responsive-images#w-descriptors-and-the-sizes-attribute and
+      https://developer.mozilla.org/en-US/docs/Learn/HTML/Multimedia_and_embedding/Responsive_images for info on defining 'sizes' for responsive images
+    -->
+    {% if site.imagemagick.enabled %}
       {% unless include.avoid_scaling %}
         <source
           class="responsive-img-srcset"
@@ -33,7 +26,7 @@
           {% if include.sizes %}
             sizes="{{ include.sizes }}"
           {% else %}
-            sizes="(max-width: 480px) 95vw, (max-width: 768px) 85vw, 75vw"
+            sizes="95vw"
           {% endif %}
         >
       {% endunless %}
@@ -78,17 +71,12 @@
       {% if include.zoomable %}
         data-zoomable
       {% endif %}
-      {% if include.priority %}
-        loading="eager" 
-        fetchpriority="high"
-      {% elsif include.loading %}
+      {% if include.loading %}
         loading="{{ include.loading }}"
       {% elsif site.lazy_loading_images %}
         loading="lazy"
       {% endif %}
-      {% if is_google_drive == false %}
-        onerror="this.onerror=null; $('.responsive-img-srcset').remove();"
-      {% endif %}
+      onerror="this.onerror=null; $('.responsive-img-srcset').remove();"
     >
   </picture>
 

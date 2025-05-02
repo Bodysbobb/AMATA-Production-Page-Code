@@ -22,40 +22,29 @@ contact_theme: "amata_en"
 language_switch: true
 lang: "en"
 hreflang: "en"
-alternate_lang_url: "/"
+alternate_lang_url: "/เกี่ยวกับเรา"
 
-# ================ HERO SECTION ================ #
-landing_hero: true     
+# ================ Background & Effects ================ #
+need_aos: true
 
 # ================ META ================ #
 # JSON Business Meta
 schema_type: business
 
 # Google META
-description: AMATA Production specializes in the design and manufacturing of custom-printed shirts, sportswear, corporate apparel, and advertising materials. We offer fast production, competitive prices, and professional brand-building services.
-keywords: custom printed shirts, sportswear manufacturing, team uniforms, corporate apparel, shirt design, apparel factory, advertising signage, printed media, polo shirts, sports shirts, shirt factory, print house, affordable shirt production
+description: Learn more about AMATA Production — our mission, values, story, and the people behind the brand. We are passionate about quality, speed, and creative customization in apparel and media printing.
+keywords: about AMATA Production, shirt printing company Thailand, apparel manufacturer, team story, corporate identity, company vision, business values, factory shirts, founders of AMATA
 
 # OG META
-og_title: AMATA Production Co., Ltd. (Thailand)
-og_description: AMATA Production offers full-service design and manufacturing for apparel and printed media — including custom-printed shirts, sportswear, corporate uniforms, university shirts, color day outfits, promotional signage, and campaign banners. Fast turnaround, factory pricing, and professional branding support.
+og_title: About AMATA Production — Who We Are & What We Do
+og_description: Meet the team and learn the story behind AMATA Production — Thailand’s trusted custom apparel and printing partner with a focus on speed, quality, and creative design.
 og_image: /assets/img/page_logo/amata_logo.png
 ---
 
-<!-- Hero Section -->
-{% include landing-hero.liquid
-  title="AMATA Production Co., Ltd."
-  subtext="Every design has a story. Print quality brings it to life."
-  signature="— AMATA Production —"
-  scroll_text="Get in Touch"
-  particle_mode="hero-only"
-  letter_delay="0.05"
-  initial_delay="300"
-  data-final-class="animation-complete"
-  has_navbar=true 
-%}
-<a id="projects-start"></a>
+<h1 class="page-heading">
+ AMATA Production Co., Ltd. (Thailand)
+</h1>
 
-<hr class="section-divider">
 
 <div class="page-content">
 <section>
@@ -94,7 +83,20 @@ og_image: /assets/img/page_logo/amata_logo.png
     Ready to make your mark? Join hundreds of successful brands that trust AMATA for apparel, printing, and branding that delivers results.
     Your brand has a story — let us help you print it, wear it, and share it.
   </p>
+</section>
+</div>
 
+{% include project_summary.liquid title="Our Products" categories="Sports Polo" hide_description=true %}
+
+<hr class="section-divider">
+
+<h1 class="section-heading">
+  Contact Us
+</h1>
+{% include amata-footer.liquid lang="en" %}
+
+<div class="page-content">
+<section>
   <h2 class="section-title">Explore Our Company Profile</h2>
   <p class="section-text">
     Dive deeper into our solutions, technology, and project portfolio:
@@ -105,13 +107,11 @@ og_image: /assets/img/page_logo/amata_logo.png
 </section>
 </div>
 
-<hr class="section-divider">
-
 <div class="row">
   <div class="col-sm mt-3 mt-md-0">
     {% include figure.liquid 
       loading="eager"
-      path="https://lh3.googleusercontent.com/d/1LyxgHf-tXOFv1E8GTB6IarKddrd_g2ym"
+      path="https://lh3.googleusercontent.com/d/1FIWn1w_EZTGmf2Kzw5ZxNTG3Ebi7ckJZ"
       class="img-fluid rounded z-depth-1"
       alt="Comprehensive services offered by AMATA Production"
     %}
@@ -121,8 +121,8 @@ og_image: /assets/img/page_logo/amata_logo.png
 <div class="row">
   <div class="col-sm mt-3 mt-md-0">
     {% include figure.liquid 
-      loading="eager"
-      path="https://lh3.googleusercontent.com/d/1eFLn9UzV2FuAtxYW_UGzfXX0pro_xKft"
+      loading="lazy"
+      path="https://lh3.googleusercontent.com/d/1l4O6KeW1eS1jAIDP9TuA7BUoiFIkFNDK"
       class="img-fluid rounded z-depth-1"
       alt="Advanced printing technology used by AMATA Production"
     %}
@@ -147,26 +147,26 @@ og_image: /assets/img/page_logo/amata_logo.png
 <div class="row">
   <div class="col-sm mt-3 mt-md-0">
     {% include figure.liquid 
-      loading="eager" 
-      path="https://lh3.googleusercontent.com/d/13u84eRsj7Vc8XKyT2L4iqyeb9kI3q9KE" 
+      loading="lazy" 
+      path="https://lh3.googleusercontent.com/d/136dvpbTaIZrM8psS6ythLM2AxiXw11SC" 
       class="img-fluid rounded z-depth-1"
       alt="Custom printed T-shirts (3-day fast service)"
     %}
   </div>
   <div class="col-sm mt-3 mt-md-0">
     {% include figure.liquid 
-      loading="eager" 
-      path="https://lh3.googleusercontent.com/d/1oagQAybtRbWepcYPhx16NgJZbkxCdvum" 
+      loading="lazy" 
+      path="https://lh3.googleusercontent.com/d/1yJEsWkGfDP4rSrYUdr4tFs20g00CO9Ne" 
       class="img-fluid rounded z-depth-1"
       alt="Soccer jerseys and sportswear by AMATA Production"
     %}
   </div>
   <div class="col-sm mt-3 mt-md-0">
     {% include figure.liquid 
-      loading="eager" 
-      path="https://lh3.googleusercontent.com/d/1tREv4U7oDFI5oSyIvb4yXqSwbLgQLfI-" 
+      loading="lazy" 
+      path="https://lh3.googleusercontent.com/d/1s7wnwFi6MqsYDhhID09kFmusVFfH7BeG" 
       class="img-fluid rounded z-depth-1"
-      alt="Polo shirts with customizable sublimation print"
+      alt="T-shirts, v-neck, shirts, printed shirts with customizable sublimation print"
     %}
   </div>
 </div>
@@ -174,24 +174,24 @@ og_image: /assets/img/page_logo/amata_logo.png
 <div class="row">
   <div class="col-sm mt-3 mt-md-0">
     {% include figure.liquid 
-      loading="eager" 
-      path="https://lh3.googleusercontent.com/d/1zGbHJzIuaca1v8UlKxyv_5l3xDqOZTYI" 
+      loading="lazy" 
+      path="https://lh3.googleusercontent.com/d/1U-UrVUPq59GJSQLHBLKPIM6zEMYqZbYT" 
       class="img-fluid rounded z-depth-1"
-      alt="Custom uniform shirts for organizations"
+      alt="Custom uniform shirts, polo, sublimations for organizations"
     %}
   </div>
   <div class="col-sm mt-3 mt-md-0">
     {% include figure.liquid 
-      loading="eager" 
-      path="https://lh3.googleusercontent.com/d/1fF4ylpOgSJbsDF-t5gQtPDp90gbqLG1p" 
+      loading="lazy" 
+      path="https://lh3.googleusercontent.com/d/1RZM0aHtDjZWiKHP7E5uDGIp6wYNehPUH" 
       class="img-fluid rounded z-depth-1"
       alt="Custom-cut polo shirts for branding"
     %}
   </div>
   <div class="col-sm mt-3 mt-md-0">
     {% include figure.liquid 
-      loading="eager" 
-      path="https://lh3.googleusercontent.com/d/1Ffwqy0xxw1nFVrv64n4E_ZTz0jIcRtoS" 
+      loading="lazy" 
+      path="https://lh3.googleusercontent.com/d/1vkhyfKeEcI8IoBvSy3bmYdA5BhKNwjh5" 
       class="img-fluid rounded z-depth-1"
       alt="Uniform jackets and workwear designs"
     %}
@@ -207,24 +207,24 @@ og_image: /assets/img/page_logo/amata_logo.png
 <div class="row">
   <div class="col-sm mt-3 mt-md-0">
     {% include figure.liquid 
-      loading="eager"
-      path="https://lh3.googleusercontent.com/d/1vinVJhcDAkukh2bYPPFA86DGQfHnAiF4"
+      loading="lazy"
+      path="https://lh3.googleusercontent.com/d/1PZM8ZzYrsnDxbTpcmMJbqAZ1BGJ59IcL"
       class="img-fluid rounded z-depth-1"
       alt="Customizable premium gift products with logo printing by AMATA Production"
     %}
   </div>
   <div class="col-sm mt-3 mt-md-0">
     {% include figure.liquid 
-      loading="eager"
-      path="https://lh3.googleusercontent.com/d/1bs5DY2YOOp0JSDvjVXOEd6WQx5-e-GIh"
+      loading="lazy"
+      path="https://lh3.googleusercontent.com/d/1RMYHCyyNpR8HDDTGRFM10ZtAW5dCti8P"
       class="img-fluid rounded z-depth-1"
       alt="Professional signage printing and installation services"
     %}
   </div>
   <div class="col-sm mt-3 mt-md-0">
     {% include figure.liquid 
-      loading="eager"
-      path="https://lh3.googleusercontent.com/d/1jPFn8WiMZNtEUv6MoTziwxXuW22SwuUe"
+      loading="lazy"
+      path="https://lh3.googleusercontent.com/d/165aQvFBMin9Rgbwq1vjNoJxFdtP9fAoy"
       class="img-fluid rounded z-depth-1"
       alt="Other professional printing services for marketing materials and promotions"
     %}
@@ -245,8 +245,8 @@ og_image: /assets/img/page_logo/amata_logo.png
 <div class="row">
   <div class="col-sm mt-3 mt-md-0">
     {% include figure.liquid 
-      loading="eager"
-      path="https://lh3.googleusercontent.com/d/1IEy_uYsm0hvN4L04MkDdETBw3MJ78xUe"
+      loading="lazy"
+      path="https://lh3.googleusercontent.com/d/1ia6gZfckVbbMIzxrCXVFHzK5aH6YAWHV"
       class="img-fluid rounded z-depth-1"
       alt="Smart Business Card (NFC) by AMATA Production"
     %}
@@ -262,8 +262,8 @@ og_image: /assets/img/page_logo/amata_logo.png
 <div class="row">
   <div class="col-sm mt-3 mt-md-0">
     {% include figure.liquid 
-      loading="eager"
-      path="https://lh3.googleusercontent.com/d/1hItWkbPoX2ckt2UXVYD62ax-xS_HL0-p"
+      loading="lazy"
+      path="https://lh3.googleusercontent.com/d/1fgPxZSeK5N8Tz2XAwHYVmGC26S5UtOKs"
       class="img-fluid rounded z-depth-1"
       alt="Graphic design and advertising material examples by AMATA Production"
     %}
@@ -274,29 +274,37 @@ og_image: /assets/img/page_logo/amata_logo.png
 
 <h1 class="section-heading">
   Our Clients & Customer Testimonials
+  <span class="section-link-wrapper">
+    <a href="https://www.amataproduction.com/ความประทับใจจากลูกค้า/" target="_blank" class="section-link">
+      <i class="fa-solid fa-comments"></i>Customer Reviews!
+    </a>
+  </span>
 </h1>
 
 <div class="row">
   <div class="col-sm mt-3 mt-md-0">
     {% include figure.liquid 
-      loading="eager"
-      path="https://lh3.googleusercontent.com/d/1VQkTcKnw9ILZ280ZgORYVf3rXvYwV9pv"
+      loading="lazy"
+      path="https://lh3.googleusercontent.com/d/1PD1ddQXcS8rrZ8EHUTyHPdWUYXAOOUJH"
       class="img-fluid rounded z-depth-1"
       alt="Corporate clients and institutional partners working with AMATA Production"
     %}
   </div>
-  <div class="col-sm mt-3 mt-md-0">
+</div>
+
+<div class="row">
+  <div class="col-sm mt-2 mt-md-0">
     {% include figure.liquid 
-      loading="eager"
-      path="https://lh3.googleusercontent.com/d/1QZvf3c9YOQSfr2xUzWWRqx_Gj0JMHBg4"
+      loading="lazy"
+      path="https://lh3.googleusercontent.com/d/1YqvC1_Kbg6YJPY8SlGxMjs7Xb6ZyQDtq"
       class="img-fluid rounded z-depth-1"
       alt="Customer testimonials and team photo reviews for AMATA Production"
     %}
   </div>
-  <div class="col-sm mt-3 mt-md-0">
+  <div class="col-sm mt-2 mt-md-0">
     {% include figure.liquid 
-      loading="eager"
-      path="https://lh3.googleusercontent.com/d/14HCC4k10R0L-LZLEvSwkeQJFR0CMK-dW"
+      loading="lazy"
+      path="https://lh3.googleusercontent.com/d/1olKMehnr1h7s0SBQmEb19vaufkQkPDbt"
       class="img-fluid rounded z-depth-1"
       alt="Completed signage and printing projects for AMATA Production customers"
     %}

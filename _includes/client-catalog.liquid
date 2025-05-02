@@ -1,0 +1,170 @@
+{% comment %}
+  Continuous Clients Slider
+  Automatically slides without stopping, pauses on hover
+  
+  Parameters:
+  - paths: Comma-separated list of client logo image paths
+  - links: Comma-separated list of client website links (optional)
+  - alts: Comma-separated list of alt texts
+  - titles: Comma-separated list of titles (optional)
+  
+  Options:
+  - container_width: Width of the clients slider (default: "100%")
+  - container_height: Height of the clients slider (default: "150px")
+  - slide_speed: Speed of the continuous sliding in ms (default: 30)
+  - items_to_show: Number of client logos to show at once (default: 5)
+  - items_to_show_mobile: Number of client logos on mobile (default: 2)
+  - pause_on_hover: Pause sliding on hover (default: true)
+{% endcomment %}
+
+{% assign items_to_show = include.items_to_show | default: 5 | plus: 0 %}
+{% assign items_to_show_mobile = include.items_to_show_mobile | default: 2 | plus: 0 %}
+{% assign slide_speed = include.slide_speed | default: 30 | plus: 0 %}
+{% assign pause_on_hover = include.pause_on_hover | default: true %}
+
+<div class="clients-slider-container" style="width: {{ include.container_width | default: '100%' }}; max-width: {{ include.container_width | default: '100%' }};">
+  <div class="clients-slider" 
+       style="height: {{ include.container_height | default: '150px' }};"
+       data-speed="{{ slide_speed }}"
+       data-items="{{ items_to_show }}"
+       data-items-mobile="{{ items_to_show_mobile }}"
+       data-pause="{{ pause_on_hover }}">
+
+    {% if include.paths %}
+      {% assign image_paths = include.paths | split: "," %}
+      {% assign image_links = include.links | split: "," %}
+      {% assign image_alts = include.alts | split: "," %}
+      {% assign image_titles = include.titles | split: "," %}
+      
+      <div class="clients-track">
+        <!-- First set of images -->
+        {% for path in image_paths %}
+          {% assign path = path | strip %}
+          {% if path != "" %}
+            {% assign index = forloop.index0 %}
+            {% assign alt = image_alts[index] | default: "Client logo" | strip %}
+            {% assign title = image_titles[index] | default: "" | strip %}
+            {% assign link = image_links[index] | default: "" | strip %}
+            
+            <div class="client-item">
+              {% if link != "" %}<a href="{{ link }}" class="client-link" target="_blank">{% endif %}
+                <img src="{{ path }}" alt="{{ alt }}" {% if title != "" %}title="{{ title }}"{% endif %} class="client-image">
+              {% if link != "" %}</a>{% endif %}
+            </div>
+          {% endif %}
+        {% endfor %}
+        
+        <!-- Duplicate set of images for seamless scrolling -->
+        {% for path in image_paths %}
+          {% assign path = path | strip %}
+          {% if path != "" %}
+            {% assign index = forloop.index0 %}
+            {% assign alt = image_alts[index] | default: "Client logo" | strip %}
+            {% assign title = image_titles[index] | default: "" | strip %}
+            {% assign link = image_links[index] | default: "" | strip %}
+            
+            <div class="client-item">
+              {% if link != "" %}<a href="{{ link }}" class="client-link" target="_blank">{% endif %}
+                <img src="{{ path }}" alt="{{ alt }}" {% if title != "" %}title="{{ title }}"{% endif %} class="client-image">
+              {% if link != "" %}</a>{% endif %}
+            </div>
+          {% endif %}
+        {% endfor %}
+      </div>
+    {% endif %}
+  </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const clientSliders = document.querySelectorAll('.clients-slider');
+  
+  clientSliders.forEach(function(slider) {
+    // Get slider parameters
+    const speed = parseInt(slider.dataset.speed) || 30;
+    const items = parseInt(slider.dataset.items) || 5;
+    const itemsMobile = parseInt(slider.dataset.itemsMobile) || 2;
+    const pauseOnHover = slider.dataset.pause !== 'false';
+    
+    // Set CSS variables
+    slider.style.setProperty('--items-to-show', items);
+    slider.style.setProperty('--items-to-show-mobile', itemsMobile);
+    
+    const track = slider.querySelector('.clients-track');
+    if (!track) return;
+    
+    const clientItems = track.querySelectorAll('.client-item');
+    const totalItems = clientItems.length / 2; // We duplicated items, so divide by 2
+    
+    // Initialize
+    let position = 0;
+    let animationId = null;
+    let isPaused = false;
+    
+    // Set initial item widths
+    updateItemWidths();
+    
+    // Start animation
+    startAnimation();
+    
+    // Handle window resize
+    window.addEventListener('resize', updateItemWidths);
+    
+    // Pause on hover if enabled
+    if (pauseOnHover) {
+      slider.addEventListener('mouseenter', function() {
+        isPaused = true;
+      });
+      
+      slider.addEventListener('mouseleave', function() {
+        isPaused = false;
+      });
+    }
+    
+    // Function to update item widths based on screen size
+    function updateItemWidths() {
+      let currentItems = items;
+      
+      if (window.innerWidth <= 576) {
+        currentItems = itemsMobile;
+      }
+      
+      const itemWidth = 100 / currentItems;
+      
+      clientItems.forEach(item => {
+        item.style.width = `${itemWidth}%`;
+      });
+    }
+    
+    // Animation function
+    function animate() {
+      if (!isPaused) {
+        position -= 0.05;
+        
+        // Reset position when a full item has scrolled
+        if (position <= -100 / items) {
+          position = 0;
+          // Move first item to the end
+          track.appendChild(track.firstElementChild);
+        }
+        
+        track.style.transform = `translateX(${position}%)`;
+      }
+      
+      animationId = requestAnimationFrame(animate);
+    }
+    
+    function startAnimation() {
+      if (animationId) cancelAnimationFrame(animationId);
+      animationId = requestAnimationFrame(animate);
+    }
+    
+    // Clean up on page changes
+    window.addEventListener('beforeunload', function() {
+      if (animationId) {
+        cancelAnimationFrame(animationId);
+      }
+    });
+  });
+});
+</script>

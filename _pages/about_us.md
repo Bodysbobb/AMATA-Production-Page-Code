@@ -1,11 +1,12 @@
 ---
 layout: page
-title: หน้าหลัก
-title_en: Home
+title: เกี่ยวกับเรา
+title_en: About Us
 subtitle: บริษัท อมตะ โปรดักชั่น จำกัด
 img: assets/img/page_logo/amata_logo.png
-permalink: /
-class: about-page
+permalink: /เกี่ยวกับเรา/
+nav: true
+nav_order: 4
 
 # ================ TITLE & Description ================ #
 hide_title: true
@@ -25,55 +26,29 @@ contact_theme: "amata_th"
 language_switch: true
 lang: "th"
 hreflang: "th"
-alternate_lang_url: "/english/AMATA-Production-en/"
+alternate_lang_url: "/english/AMATA-About-Us-en/"
 
-# ================ HERO SECTION ================ #
-landing_hero: true     
+# ================ Background & Effects ================ #
+need_aos: true
 
 # ================ META ================ #
 # JSON Business Meta
 schema_type: business
 
 # Google META
-description: อมตะ โปรดักชั่น รับผลิตและออกแบบเสื้อพิมพ์ลาย เสื้อกีฬา เสื้อหน่วยงาน ป้ายโฆษณา ราคาถูก ผลิตด่วน ส่งไว สร้างแบรนด์อย่างมืออาชีพ
-keywords: เสื้อพิมพ์ลาย, รับผลิตเสื้อกีฬา, เสื้อทีม, เสื้อหน่วยงาน, เสื้อองค์กร, ออกแบบเสื้อกีฬา, โรงงานเสื้อ, ป้ายโฆษณา, ผลิตสื่อพิมพ์, เสื้อโปโล, เสื้อกีฬา, โรงงานผลิตเสื้อ, โรงพิมพ์, ผลิตเสื้อราคาถูก
+description: รู้จัก AMATA Production ให้ลึกยิ่งขึ้น — พันธกิจ วิสัยทัศน์ เรื่องราวความเป็นมา และทีมงานเบื้องหลังแบรนด์ที่มุ่งมั่นสร้างสรรค์งานเสื้อพิมพ์ลายและงานพิมพ์สื่ออย่างมืออาชีพ
+keywords: เกี่ยวกับอมตะโปรดักชั่น, บริษัทรับผลิตเสื้อ, เสื้อพิมพ์ลายคุณภาพ, เสื้อองค์กร, เสื้อกีฬา, เสื้อยูนิฟอร์ม, พันธกิจองค์กร, ทีมงาน AMATA, วิสัยทัศน์ธุรกิจ, จุดเริ่มต้นแบรนด์
 
 # OG META
-og_title: AMATA Production Co., Ltd. (บริษัท อมตะ โปรดักชั่น จำกัด)
-og_description: อมตะ โปรดักชั่น รับผลิตและออกแบบเสื้อและสื่อสิ่งพิมพ์ทุกชนิด เสื้อพิมพ์ลาย เสื้อกีฬา หน่วยงาน องค์กร มหาลัย กีฬาสี และงานป้ายโฆษณา ป้ายหาเสียง ราคาถูก ผลิตด่วน ส่งไว สร้างแบรนด์อย่างมืออาชีพ
+og_title: รู้จัก AMATA Production — ตัวตนของเรา วิสัยทัศน์ และทีมงานมืออาชีพ
+og_description: ทำความรู้จักทีมงานและเบื้องหลังความสำเร็จของ AMATA Production — พาร์ตเนอร์ด้านเสื้อพิมพ์ลายและงานพิมพ์สื่อโฆษณาที่ลูกค้าไว้วางใจ ด้วยคุณภาพ ความเร็ว และดีไซน์ที่โดดเด่น
 og_image: /assets/img/page_logo/amata_logo.png
 
-# Selected Paper
-selected_papers: FALSE # includes a list of papers marked as "selected={true}"
-social: FALSE # includes social icons at the bottom of the page
-
-announcements:
-  enabled: false # includes a list of news items
-  scrollable: true # adds a vertical scroll bar if there are more than 3 news items
-  limit: 5 # leave blank to include all the news in the `_news` folder
-
-latest_posts:
-  enabled: false
-  scrollable: true # adds a vertical scroll bar if there are more than 3 new posts items
-  limit: 5 # leave blank to include all the blog posts        
 ---
 
-<!-- Hero Section -->
-{% include landing-hero.liquid
-  title="AMATA Production"
-  subtext="ทุกลวดลายมีเรื่องราว คุณภาพงานพิมพ์จึงสำคัญ"
-  signature="— อมตะ โปรดักชั่น —"
-  scroll_text="ติดต่อเรา"
-  particle_mode="hero-only"
-  letter_delay="0.05"
-  initial_delay="300"
-  data-final-class="animation-complete"
-  animation_type="thai"
-  has_navbar=true 
-%}
-<a id="projects-start"></a>
-
-<hr class="section-divider">
+<h1 class="page-heading">
+ บริษัท อมตะ โปรดักชั่น จำกัด
+</h1>
 
 <div class="page-content">
 <section>
@@ -110,7 +85,20 @@ latest_posts:
   <p class="section-text">
     ถึงเวลายกระดับแบรนด์ให้แตกต่างด้วยงานที่ “ใช่” และ “ปัง” แบรนด์ชั้นนำหลายรายเลือกเราเพราะเห็นผลจริง ทั้งยอดขายและภาพลักษณ์ <strong>คุณพร้อมหรือยังที่จะเล่าเรื่องแบรนด์ผ่านงานออกแบบ เสื้อผ้า และสื่อพิมพ์?</strong> ติดต่อเราเลย — ทีมเราพร้อมลุย!
   </p>
+</section>
+</div>
 
+{% include project_summary.liquid title="สินค้าทั้งหมด" categories="กีฬา โปโล" hide_description=true %}
+
+<hr class="section-divider">
+
+<h1 class="section-heading">
+  ติดต่อเรา
+</h1>
+{% include amata-footer.liquid lang="th" %}
+
+<div class="page-content">
+<section>
   <h2 class="section-title">โปรไฟล์บริษัท</h2>
   <p class="section-text">
     ดูรายละเอียดบริการ เทคโนโลยีที่ใช้ และผลงานจริงของ AMATA ได้ครบในไฟล์เดียว: 
@@ -118,15 +106,12 @@ latest_posts:
     </a>
   </p>
 </section>
-</div>
-
-<hr class="section-divider">
 
 <div class="row">
   <div class="col-sm mt-3 mt-md-0">
     {% include figure.liquid 
       loading="eager"
-      path="https://lh3.googleusercontent.com/d/1LyxgHf-tXOFv1E8GTB6IarKddrd_g2ym"
+      path="https://lh3.googleusercontent.com/d/1FIWn1w_EZTGmf2Kzw5ZxNTG3Ebi7ckJZ"
       class="img-fluid rounded z-depth-1"
       alt="บริการของ AMATA Production ครอบคลุมทุกความต้องการด้านงานพิมพ์"
     %}
@@ -136,8 +121,8 @@ latest_posts:
 <div class="row">
   <div class="col-sm mt-3 mt-md-0">
     {% include figure.liquid 
-      loading="eager"
-      path="https://lh3.googleusercontent.com/d/1eFLn9UzV2FuAtxYW_UGzfXX0pro_xKft"
+      loading="lazy"
+      path="https://lh3.googleusercontent.com/d/1l4O6KeW1eS1jAIDP9TuA7BUoiFIkFNDK"
       class="img-fluid rounded z-depth-1"
       alt="เทคโนโลยีการพิมพ์ล้ำสมัยที่ใช้โดย AMATA Production"
     %}
@@ -162,26 +147,26 @@ latest_posts:
 <div class="row">
   <div class="col-sm mt-3 mt-md-0">
     {% include figure.liquid 
-      loading="eager"
-      path="https://lh3.googleusercontent.com/d/13u84eRsj7Vc8XKyT2L4iqyeb9kI3q9KE"
+      loading="lazy"
+      path="https://lh3.googleusercontent.com/d/136dvpbTaIZrM8psS6ythLM2AxiXw11SC"
       class="img-fluid rounded z-depth-1"
-      alt="เสื้อยืดพิมพ์ลาย คอกลม คอวี สกรีนดิจิทัล AMATA Production"
+      alt="เสื้อยืดพิมพ์ลาย คอกลม คอวี สกรีนดิจิทัล ออกแบบเอง AMATA Production"
     %}
   </div>
   <div class="col-sm mt-3 mt-md-0">
     {% include figure.liquid 
-      loading="eager"
-      path="https://lh3.googleusercontent.com/d/1oagQAybtRbWepcYPhx16NgJZbkxCdvum"
+      loading="lazy"
+      path="https://lh3.googleusercontent.com/d/1yJEsWkGfDP4rSrYUdr4tFs20g00CO9Ne"
       class="img-fluid rounded z-depth-1"
-      alt="เสื้อฟุตบอล เสื้อกีฬา เสื้อวิ่ง ผลิตตามแบบลูกค้า"
+      alt="เสื้อฟุตบอล เสื้อกีฬา เสื้อวิ่ง เสื้อทีม เสื้อพิมพ์ลาย สั่งผลิตตามแบบลูกค้า ออกแบบเอง"
     %}
   </div>
   <div class="col-sm mt-3 mt-md-0">
     {% include figure.liquid 
-      loading="eager"
-      path="https://lh3.googleusercontent.com/d/1tREv4U7oDFI5oSyIvb4yXqSwbLgQLfI-"
+      loading="lazy"
+      path="https://lh3.googleusercontent.com/d/1s7wnwFi6MqsYDhhID09kFmusVFfH7BeG"
       class="img-fluid rounded z-depth-1"
-      alt="เสื้อโปโลพิมพ์ลาย สีสด คมชัด ไม่จำกัดสีสัน"
+      alt="เสื้อพิมพ์ลาย เสื้อยืด เสื้อคอกลม เสื้อคอวี เสื้อทีม พิมพ์ลายสีสด คมชัด ไม่จำกัดสีสัน ราคาถูก"
     %}
   </div>
 </div>
@@ -189,24 +174,24 @@ latest_posts:
 <div class="row">
   <div class="col-sm mt-3 mt-md-0">
     {% include figure.liquid 
-      loading="eager"
-      path="https://lh3.googleusercontent.com/d/1zGbHJzIuaca1v8UlKxyv_5l3xDqOZTYI"
+      loading="lazy"
+      path="https://lh3.googleusercontent.com/d/1U-UrVUPq59GJSQLHBLKPIM6zEMYqZbYT"
       class="img-fluid rounded z-depth-1"
-      alt="เสื้อหน่วยงาน เสื้อองค์กร พิมพ์ลาย ดีไซน์ทันสมัย ไม่จำเจ"
+      alt="เสื้อหน่วยงาน เสื้อองค์กร พิมพ์ลาย เสื้อโปโล เสื้อพิมพ์ลาย ดีไซน์ทันสมัย ไม่จำเจ"
     %}
   </div>
   <div class="col-sm mt-3 mt-md-0">
     {% include figure.liquid 
-      loading="eager"
-      path="https://lh3.googleusercontent.com/d/1fF4ylpOgSJbsDF-t5gQtPDp90gbqLG1p"
+      loading="lazy"
+      path="https://lh3.googleusercontent.com/d/1RZM0aHtDjZWiKHP7E5uDGIp6wYNehPUH"
       class="img-fluid rounded z-depth-1"
       alt="เสื้อโปโลสั่งทำ สกรีน ปัก พิมพ์ลาย เพิ่มภาพลักษณ์องค์กร"
     %}
   </div>
   <div class="col-sm mt-3 mt-md-0">
     {% include figure.liquid 
-      loading="eager"
-      path="https://lh3.googleusercontent.com/d/1Ffwqy0xxw1nFVrv64n4E_ZTz0jIcRtoS"
+      loading="lazy"
+      path="https://lh3.googleusercontent.com/d/1vkhyfKeEcI8IoBvSy3bmYdA5BhKNwjh5"
       class="img-fluid rounded z-depth-1"
       alt="เสื้อยูนิฟอร์ม เสื้อแจ็กเก็ต งานตัดเย็บพรีเมียม"
     %}
@@ -223,24 +208,24 @@ latest_posts:
 <div class="row">
   <div class="col-sm mt-3 mt-md-0">
     {% include figure.liquid 
-      loading="eager"
-      path="https://lh3.googleusercontent.com/d/1vinVJhcDAkukh2bYPPFA86DGQfHnAiF4"
+      loading="lazy"
+      path="https://lh3.googleusercontent.com/d/1PZM8ZzYrsnDxbTpcmMJbqAZ1BGJ59IcL"
       class="img-fluid rounded z-depth-1"
       alt="ของพรีเมี่ยมสั่งทำพร้อมพิมพ์โลโก้ โดย AMATA Production"
     %}
   </div>
   <div class="col-sm mt-3 mt-md-0">
     {% include figure.liquid 
-      loading="eager"
-      path="https://lh3.googleusercontent.com/d/1bs5DY2YOOp0JSDvjVXOEd6WQx5-e-GIh"
+      loading="lazy"
+      path="https://lh3.googleusercontent.com/d/1RMYHCyyNpR8HDDTGRFM10ZtAW5dCti8P"
       class="img-fluid rounded z-depth-1"
       alt="ตัวอย่างงานพิมพ์ป้ายโฆษณาและบริการติดตั้งครบวงจร"
     %}
   </div>
   <div class="col-sm mt-3 mt-md-0">
     {% include figure.liquid 
-      loading="eager"
-      path="https://lh3.googleusercontent.com/d/1jPFn8WiMZNtEUv6MoTziwxXuW22SwuUe"
+      loading="lazy"
+      path="https://lh3.googleusercontent.com/d/165aQvFBMin9Rgbwq1vjNoJxFdtP9fAoy"
       class="img-fluid rounded z-depth-1"
       alt="งานพิมพ์อื่นๆ เช่น แผ่นพับ นามบัตร และสื่อส่งเสริมการขาย"
     %}
@@ -261,8 +246,8 @@ latest_posts:
 <div class="row">
   <div class="col-sm mt-3 mt-md-0">
     {% include figure.liquid 
-      loading="eager"
-      path="https://lh3.googleusercontent.com/d/1IEy_uYsm0hvN4L04MkDdETBw3MJ78xUe"
+      loading="lazy"
+      path="https://lh3.googleusercontent.com/d/1ia6gZfckVbbMIzxrCXVFHzK5aH6YAWHV"
       class="img-fluid rounded z-depth-1"
       alt="ตัวอย่างนามบัตรอัจฉริยะ NFC จาก AMATA Production"
     %}
@@ -278,8 +263,8 @@ latest_posts:
 <div class="row">
   <div class="col-sm mt-3 mt-md-0">
     {% include figure.liquid 
-      loading="eager"
-      path="https://lh3.googleusercontent.com/d/1hItWkbPoX2ckt2UXVYD62ax-xS_HL0-p"
+      loading="lazy"
+      path="https://lh3.googleusercontent.com/d/1fgPxZSeK5N8Tz2XAwHYVmGC26S5UtOKs"
       class="img-fluid rounded z-depth-1"
       alt="ตัวอย่างงานออกแบบกราฟิกและสื่อโฆษณาโดย AMATA Production"
     %}
@@ -290,29 +275,38 @@ latest_posts:
 
 <h1 class="section-heading">
   ลูกค้าของเรา และ ความประทับใจจากผู้ใช้จริง
+  <span class="section-link-wrapper">
+    <a href="https://www.amataproduction.com/ความประทับใจจากลูกค้า/" target="_blank" class="section-link">
+      <i class="fa-solid fa-comments"></i>คลิกเพื่อดูรีวิว!
+    </a>
+  </span>
 </h1>
 
 <div class="row">
   <div class="col-sm mt-3 mt-md-0">
     {% include figure.liquid 
-      loading="eager"
-      path="https://lh3.googleusercontent.com/d/1VQkTcKnw9ILZ280ZgORYVf3rXvYwV9pv"
+      loading="lazy"
+      path="https://lh3.googleusercontent.com/d/1PD1ddQXcS8rrZ8EHUTyHPdWUYXAOOUJH"
       class="img-fluid rounded z-depth-1"
       alt="ตัวอย่างองค์กรและลูกค้าที่ไว้วางใจใช้บริการ AMATA Production"
     %}
   </div>
-  <div class="col-sm mt-3 mt-md-0">
+</div>
+
+
+<div class="row">
+  <div class="col-sm mt-2 mt-md-0">
     {% include figure.liquid 
-      loading="eager"
-      path="https://lh3.googleusercontent.com/d/1QZvf3c9YOQSfr2xUzWWRqx_Gj0JMHBg4"
+      loading="lazy"
+      path="https://lh3.googleusercontent.com/d/1YqvC1_Kbg6YJPY8SlGxMjs7Xb6ZyQDtq"
       class="img-fluid rounded z-depth-1"
       alt="รีวิวจากลูกค้าจริงและภาพกิจกรรมทีมลูกค้า AMATA Production"
     %}
   </div>
-  <div class="col-sm mt-3 mt-md-0">
+  <div class="col-sm mt-2 mt-md-0">
     {% include figure.liquid 
-      loading="eager"
-      path="https://lh3.googleusercontent.com/d/14HCC4k10R0L-LZLEvSwkeQJFR0CMK-dW"
+      loading="lazy"
+      path="https://lh3.googleusercontent.com/d/1olKMehnr1h7s0SBQmEb19vaufkQkPDbt"
       class="img-fluid rounded z-depth-1"
       alt="ผลงานป้ายโฆษณาและสื่อพิมพ์ที่ส่งมอบให้ลูกค้าโดย AMATA Production"
     %}
@@ -321,20 +315,6 @@ latest_posts:
 
 <!-- PAGE STYLE -->
 <style>
-  #projects-start {
-	  scroll-margin-top: 0px !important;
-  }
-
-  /* === HERO SECTION === */
-  .landing-signature {
-    will-change: transform, opacity;
-  }
-
-  .landing-signature {
-    color: var(--global-text-secondary-color) !important;
-    animation-delay: 3.4s !important;
-  }
-
   /* Apply Prompt Thai font globally but exclude icons */
   .post, .post *:not(i[class^="fa-"]):not(i[class*=" fa-"]) {
     font-family: 'Prompt', sans-serif !important;
@@ -467,3 +447,4 @@ latest_posts:
   }
 </style>
 <!-- END STYLE -->
+
