@@ -25,7 +25,7 @@ contact_theme: "amata_th"
 language_switch: true
 lang: "th"
 hreflang: "th"
-alternate_lang_url: "/english/AMATA-Homepage-en/"
+alternate_lang_url: "/english/AMATA-HomePage-en/"
 
 # ================ HERO SECTION ================ #
 landing_hero: true     
@@ -111,7 +111,7 @@ latest_posts:
   ทำไมต้อง AMATA?
 </h1>
 <div class="page-content">
-  <p class="section-text" data-aos="fade" data-aos-once="false">
+  <p class="section-text">
     AMATA Production ไม่ใช่แค่โรงพิมพ์ทั่วไป — เราคือ <strong>พาร์ตเนอร์ด้านแบรนด์ดิ้งที่เข้าใจลูกค้า</strong> ตั้งแต่การวางคอนเซ็ปต์ ออกแบบดีไซน์ ปรับลุคแบรนด์ สร้างชิ้นงานตัวอย่าง ไปจนถึงควบคุมคุณภาพและส่งมอบ — เราพร้อมอยู่เคียงข้างคุณทุกขั้นตอน <strong>ใส่ใจทุกรายละเอียด ดูแลเหมือนทีมเดียวกัน</strong>
   </p>
 </div>
@@ -170,40 +170,41 @@ latest_posts:
 <section class="how-it-works">
   <div class="hiw-step-group">
 
-    <div class="hiw-branch" data-aos="fade-up" data-aos-once="false">
+    <!-- Step 1 -->
+    <div class="hiw-branch" data-aos="fade-up" data-aos-once="true">
       <a href="https://www.amataproduction.com/สินค้า/" class="hiw-step">
         <i class="fa-solid fa-shirt hiw-icon"></i>
         <h4 class="hiw-title">เลือกดีไซน์ที่ใช่</h4>
         <p class="hiw-desc">มากกว่า 750+ สไตล์พร้อมให้คุณเลือกที่ AMATA</p>
       </a>
       <div class="hiw-connector-merge">หรือ</div>
-      <a href="https://www.amataproduction.com/สินค้า/บริการออกแบบ-เสื้อพิมพ์ลาย/" class="hiw-step">
+      <div class="hiw-step" data-aos="fade-up" data-aos-once="true">
         <i class="fa-solid fa-lightbulb hiw-icon"></i>
         <h4 class="hiw-title">ออกแบบใหม่ ตามสไตล์คุณ (ฟรี!)</h4>
         <p class="hiw-desc">เราจะเนรมิตไอเดียของคุณออกมาเป็น ดีไซน์เฉพาะคุณ โดยทีมงานกราฟิกมืออาชีพ</p>
-      </a>
+      </div>
     </div>
 
     <!-- Step 2 -->
-    <a href="https://www.amataproduction.com/contact/" class="hiw-step hiw-with-line" data-aos="fade-up" data-aos-once="false">
+    <a href="https://www.amataproduction.com/เกี่ยวกับเรา/" class="hiw-step hiw-with-line" data-aos="fade-up" data-aos-once="true">
       <i class="fa-solid fa-comments hiw-icon"></i>
       <h4 class="hiw-title">ติดต่อเรา</h4>
       <p class="hiw-desc">ยืนยันแบบ เนื้อผ้า ไซซ์ และรายละเอียดต่างๆ เพื่อสั่งผลิต</p>
     </a>
 
     <!-- Step 3 -->
-    <a href="https://www.amataproduction.com/how-we-work/" class="hiw-step hiw-with-line" data-aos="fade-up" data-aos-once="false">
+    <div class="hiw-step hiw-with-line" data-aos="fade-up" data-aos-once="true">
       <i class="fa-solid fa-industry hiw-icon"></i>
       <h4 class="hiw-title">เริ่มการผลิต</h4>
       <p class="hiw-desc">ผลิตโดยทีมงานมืออาชีพ มั่นใจคุณภาพทุกขั้นตอน</p>
-    </a>
+    </div>
 
     <!-- Step 4 -->
-    <a href="https://www.amataproduction.com/delivery-information/" class="hiw-step" data-aos="fade-up" data-aos-once="false">
+    <div class="hiw-step hiw-with-line" data-aos="fade-up" data-aos-once="true">
       <i class="fa-solid fa-truck-fast hiw-icon"></i>
       <h4 class="hiw-title">จัดส่งทั่วไทย</h4>
       <p class="hiw-desc">รอรับของหน้าประตู สวมใส่ได้ทันทีอย่างมั่นใจ</p>
-    </a>
+    </div>
 
   </div>
 </section>

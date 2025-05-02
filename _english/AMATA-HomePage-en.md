@@ -170,7 +170,7 @@ latest_posts:
 <section class="how-it-works">
   <div class="hiw-step-group">
 
-    <div class="hiw-branch" data-aos="fade-up" data-aos-once="false">
+    <div class="hiw-branch" data-aos="fade-up" data-aos-once="true">
       <a href="https://www.amataproduction.com/สินค้า/อมตะ-โปรดักชั่น-เสื้อกีฬา-เสื้อพิมพ์ลาย/" class="hiw-step">
         <i class="fa-solid fa-shirt hiw-icon"></i>
         <h4 class="hiw-title">Choose a Design</h4>
@@ -185,25 +185,25 @@ latest_posts:
     </div>
 
     <!-- Step 2 -->
-    <a href="https://www.amataproduction.com/contact/" class="hiw-step hiw-with-line" data-aos="fade-up" data-aos-once="false">
+    <a href="https://www.amataproduction.com/เกี่ยวกับเรา/" class="hiw-step hiw-with-line" data-aos="fade-up" data-aos-once="true">
       <i class="fa-solid fa-comments hiw-icon"></i>
       <h4 class="hiw-title">Talk to Us</h4>
       <p class="hiw-desc">Confirm design, size, fabric, and final details.</p>
     </a>
 
     <!-- Step 3 -->
-    <a href="https://www.amataproduction.com/how-we-work/" class="hiw-step hiw-with-line" data-aos="fade-up" data-aos-once="false">
+    <div class="hiw-step hiw-with-line" data-aos="fade-up" data-aos-once="true">
       <i class="fa-solid fa-industry hiw-icon"></i>
       <h4 class="hiw-title">We Produce</h4>
       <p class="hiw-desc">High-quality production by our professional team.</p>
-    </a>
+    </div>
 
     <!-- Step 4 -->
-    <a href="https://www.amataproduction.com/delivery-information/" class="hiw-step" data-aos="fade-up" data-aos-once="false">
+    <div class="hiw-step hiw-with-line" data-aos="fade-up" data-aos-once="true">
       <i class="fa-solid fa-truck-fast hiw-icon"></i>
       <h4 class="hiw-title">Free Delivery</h4>
       <p class="hiw-desc">Delivered to your door – just wear and enjoy!</p>
-    </a>
+    </div>
 
   </div>
 </section>
