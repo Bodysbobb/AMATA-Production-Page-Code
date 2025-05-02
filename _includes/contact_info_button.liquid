@@ -1,3 +1,21 @@
+<!-- Banner Dots Fix -->
+<div class="banner-ui-container">
+  <div class="banner-dots-container">
+    <div class="banner-dots">
+      <button class="banner-dot" data-index="0" aria-label="Go to slide 1">
+        <span class="visually-hidden">Go to slide 1</span>
+      </button>
+      <button class="banner-dot active" data-index="1" aria-label="Go to slide 2 (current slide)">
+        <span class="visually-hidden">Go to slide 2 (current slide)</span>
+      </button>
+      <button class="banner-dot" data-index="2" aria-label="Go to slide 3">
+        <span class="visually-hidden">Go to slide 3</span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Contact Info Button Fix -->
 {% assign position = include.position | default: page.contact_position | default: "right" %}
 {% assign theme = include.theme | default: page.contact_theme | default: "default-theme" %}
 {% assign current_lang = page.lang | default: site.lang | default: 'en' %}
@@ -215,17 +233,55 @@ Animation settings - enable by default for attention-grabbing features
   </div>
 </div>
 
+<!-- Add this CSS to your stylesheet -->
+<style>
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}
+</style>
+
+<!-- Add this JavaScript to your file -->
 <script>
-  document.addEventListener('DOMContentLoaded', function() {
-    const contactToggle = document.querySelector('.contact-toggle');
-    const contactOptions = document.getElementById('contact-options');
-    
-    if (contactToggle && contactOptions) {
-      contactToggle.addEventListener('click', function() {
-        const expanded = contactToggle.getAttribute('aria-expanded') === 'true';
-        contactToggle.setAttribute('aria-expanded', !expanded);
-        contactOptions.setAttribute('aria-hidden', expanded);
+document.addEventListener('DOMContentLoaded', function() {
+  // Handle banner dots accessibility
+  const dots = document.querySelectorAll('.banner-dot');
+  
+  dots.forEach((dot, index) => {
+    dot.addEventListener('click', function() {
+      // Update active state
+      dots.forEach(d => {
+        d.classList.remove('active');
+        d.setAttribute('aria-label', `Go to slide ${d.getAttribute('data-index')*1 + 1}`);
+        if (d.querySelector('.visually-hidden')) {
+          d.querySelector('.visually-hidden').textContent = `Go to slide ${d.getAttribute('data-index')*1 + 1}`;
+        }
       });
-    }
+      
+      dot.classList.add('active');
+      dot.setAttribute('aria-label', `Go to slide ${index + 1} (current slide)`);
+      if (dot.querySelector('.visually-hidden')) {
+        dot.querySelector('.visually-hidden').textContent = `Go to slide ${index + 1} (current slide)`;
+      }
+    });
   });
+  
+  // Handle contact button accessibility
+  const contactToggle = document.querySelector('.contact-toggle');
+  const contactOptions = document.getElementById('contact-options');
+  
+  if (contactToggle && contactOptions) {
+    contactToggle.addEventListener('click', function() {
+      const expanded = contactToggle.getAttribute('aria-expanded') === 'true';
+      contactToggle.setAttribute('aria-expanded', !expanded);
+      contactOptions.setAttribute('aria-hidden', expanded);
+    });
+  }
+});
 </script>

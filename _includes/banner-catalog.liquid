@@ -30,7 +30,9 @@
        data-speed="{{ include.transition_speed | default: '500' }}"
        data-display="{{ display_count }}"
        data-display-max="{{ display_max }}"
-       data-display-min="{{ display_min }}">
+       data-display-min="{{ display_min }}"
+       role="region"
+       aria-label="Image Slider">
     
     <!-- MAIN WRAPPER FOR ALL CONTENT -->
     <div class="banner-wrapper">  
@@ -65,10 +67,16 @@
                     <!-- UI Container -->
                     <div class="banner-ui-container">
                       <div class="banner-dots-container">
-                        <div class="banner-dots">
+                        <div class="banner-dots" role="tablist" aria-label="Slide navigation">
                           {% for dot_path in image_paths %}
                             {% if dot_path != "" %}
-                              <button class="banner-dot{% if forloop.index0 == index %} active{% endif %}" data-index="{{ forloop.index0 }}"></button>
+                              <button class="banner-dot{% if forloop.index0 == index %} active{% endif %}" 
+                                      data-index="{{ forloop.index0 }}" 
+                                      aria-label="Go to slide {{ forloop.index }}" 
+                                      aria-selected="{% if forloop.index0 == index %}true{% else %}false{% endif %}"
+                                      role="tab">
+                                <span class="visually-hidden">Slide {{ forloop.index }}</span>
+                              </button>
                             {% endif %}
                           {% endfor %}
                         </div>
@@ -118,11 +126,17 @@
             <!-- Controls for multi-mode outside slides track -->
             <div class="banner-ui-container">
               <div class="banner-dots-container">
-                <div class="banner-dots">
+                <div class="banner-dots" role="tablist" aria-label="Slide navigation">
                   {% assign total_slides = image_paths | size %}
                   {% assign num_dots = total_slides | minus: display_count | plus: 1 %}
                   {% for i in (1..num_dots) %}
-                    <button class="banner-dot{% if forloop.first %} active{% endif %}" data-index="{{ forloop.index0 }}"></button>
+                    <button class="banner-dot{% if forloop.first %} active{% endif %}" 
+                            data-index="{{ forloop.index0 }}" 
+                            aria-label="Go to slide group {{ forloop.index }}" 
+                            aria-selected="{% if forloop.first %}true{% else %}false{% endif %}"
+                            role="tab">
+                      <span class="visually-hidden">Slide group {{ forloop.index }}</span>
+                    </button>
                   {% endfor %}
                 </div>
               </div>
@@ -130,12 +144,26 @@
           </div>
         {% endif %}
         
-        <button class="banner-nav banner-prev">&#10094;</button>
-        <button class="banner-nav banner-next">&#10095;</button>
+        <button class="banner-nav banner-prev" aria-label="Previous slide">&#10094;</button>
+        <button class="banner-nav banner-next" aria-label="Next slide">&#10095;</button>
       {% endif %}
     </div>
   </div>
 </div>
+
+<!-- Add this CSS for accessibility -->
+<style>
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}
+</style>
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
@@ -221,6 +249,7 @@ document.addEventListener('DOMContentLoaded', function() {
           const dotIndex = parseInt(dot.getAttribute('data-index'));
           if (!isNaN(dotIndex)) {
             dot.classList.toggle('active', dotIndex === index);
+            dot.setAttribute('aria-selected', dotIndex === index ? 'true' : 'false');
           }
         });
         
@@ -361,6 +390,7 @@ document.addEventListener('DOMContentLoaded', function() {
       function updateActiveDot() {
         dots.forEach((dot, i) => {
           dot.classList.toggle('active', i === currentIndex);
+          dot.setAttribute('aria-selected', i === currentIndex ? 'true' : 'false');
           // Only show dots that correspond to visible positions
           dot.style.display = i < numVisiblePositions ? '' : 'none';
         });

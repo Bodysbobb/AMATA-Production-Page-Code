@@ -41,7 +41,7 @@
           </div>
           <div class="content-container">
             {% if title != "" %}
-              <h3 class="content-title">{{ title }}</h3>
+              <h2 class="content-title">{{ title }}</h2>
             {% endif %}
             {% if description != "" %}
               <div class="content-description">{{ description }}</div>
@@ -116,10 +116,10 @@
     flex: 1;
   }
   
-  .content-container h3.content-title {
+  .content-container h2.content-title {
     margin: 0 0 6px 0;
     color: var(--global-text-color, #333333);
-    font-size: 1.2rem;
+    font-size: clamp(1rem, 2.25vw, 1.5rem) !important;
     line-height: 1.3;
   }
 
