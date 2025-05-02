@@ -87,13 +87,6 @@ latest_posts:
   <p class="section-text">
     พวกเราพร้อมดูแลแบรนด์ของลูกค้า ตั้งแต่เริ่มออกแบบ จนกระทั่งผลิตผลงานด้วยเทคโนโลยีสิ่งพิมพ์สมัยใหม่ ไม่ว่าจะงานเสื้อหน่วยงาน เสื้อกีฬา งานป้าย งานไวนิล งานพิมพ์ขนาดเล็กหรืองานพิมพ์ขนาดใหญ่ <strong>รวมครบในที่เดียว อมตะ โปรดักชั่น</strong>
   </p>
-
-  <ul class="section-text tick-list">
-    <li><strong>เสื้อผ้าดีไซน์เฉพาะคุณ</strong> – เสื้อพิมพ์ลาย เสื้อกีฬา เสื้อโปโล เสื้อหน่วยงาน เสื้อทีม เสื้อกีฬาสี เสื้อยืด ยูนิฟอร์ม และอีกมากมาย ทุกดีไซน์สั่งได้ตามที่คุณต้องการ <strong>ออกแบบฟรี!</strong></li>
-    <li><strong>งานพิมพ์คุณภาพสูง</strong> – เต็มเปี่ยมด้วยเทคโนโลยีทันสมัย ทั้ง Sublimation, DTG, สกรีน, ไวนิล และปักโลโก้ พร้อมสีคมชัด ทนทาน</li>
-    <li><strong>นามบัตรอัจฉริยะ</strong> – นามบัตรดิจิทัล (NFC) ทันสมัย-ใส่ใจสิ่งแวดล้อม <strong>นามบัตรใบเดียว ที่คุณต้องมี</strong></li>
-    <li><strong>งานสิ่งพิมพ์ และสินค้าพรีเมี่ยม</strong> – ป้าย ไวนิล แบนเนอร์ หรือ สินค้าพรีเมี่ยมเพื่อสร้างเอกลักษณ์ให้กับแบรนด์</li>
-  </ul>
 </section>
 </div>
 
@@ -114,7 +107,7 @@ latest_posts:
 
 <hr class="section-divider">
 
-<h1 class="section-heading" data-aos="fade" data-aos-once="false">
+<h1 class="section-heading">
   ทำไมต้อง AMATA?
 </h1>
 <div class="page-content">
@@ -132,7 +125,7 @@ latest_posts:
     </div>
     <div class="stat-item">
       <i class="fa-solid fa-users stat-icon"></i>
-      <div class="stat-number">3,500+</div>
+      <div class="stat-number">2,500+</div>
       <div class="stat-label">ลูกค้าทั่วประเทศ</div>
     </div>
     <div class="stat-item">

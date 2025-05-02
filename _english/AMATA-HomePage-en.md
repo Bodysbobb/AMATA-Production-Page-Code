@@ -85,14 +85,6 @@ latest_posts:
     AMATA Production Co., Ltd. is Thailand’s next-generation powerhouse in printing and apparel branding. Founded by a bold team of creatives and strategists,
     we specialize in transforming ideas into tactile experiences that elevate brand identity. From corporate uniforms to full-scale event materials, every product we create merges design vision with production excellence — helping brands leave a lasting impression.
   </p>
-
-  <ul class="section-text tick-list">
-    <li><strong>Premium Custom Apparel</strong> – Branded T-shirts, polos, uniforms, and sportswear tailored for impact and performance.</li>
-    <li><strong>High-Precision Printing</strong> – Expertise in Sublimation, DTG, Screen, Vinyl, and Embroidery — engineered for color accuracy, durability, and detail.</li>
-    <li><strong>Smart Business Tools</strong> – NFC-enabled digital cards and modern kits that elevate your networking presence in one tap.</li>
-    <li><strong>Event & Corporate Branding</strong> – Banners, signage, labels, giveaways, and packaging crafted to stand out on any stage or shelf.</li>
-    <li><strong>One-Stop Branding Partner</strong> – Trusted by leading institutions, startups, and corporates nationwide for full-spectrum branding solutions.</li>
-  </ul>
 </section>
 </div>
 
@@ -114,7 +106,7 @@ latest_posts:
 
 <hr class="section-divider">
 
-<h1 class="section-heading" data-aos="fade" data-aos-once="false">
+<h1 class="section-heading">
   Why AMATA?
 </h1>
 <div class="page-content">
@@ -133,7 +125,7 @@ latest_posts:
     </div>
     <div class="stat-item">
       <i class="fa-solid fa-users stat-icon"></i>
-      <div class="stat-number">3,500+</div>
+      <div class="stat-number">2,500+</div>
       <div class="stat-label">Customers Nationwide</div>
     </div>
     <div class="stat-item">
