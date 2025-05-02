@@ -1,20 +1,3 @@
-<!-- Banner Dots Fix -->
-<div class="banner-ui-container">
-  <div class="banner-dots-container">
-    <div class="banner-dots">
-      <button class="banner-dot" data-index="0" aria-label="Go to slide 1">
-        <span class="visually-hidden">Go to slide 1</span>
-      </button>
-      <button class="banner-dot active" data-index="1" aria-label="Go to slide 2 (current slide)">
-        <span class="visually-hidden">Go to slide 2 (current slide)</span>
-      </button>
-      <button class="banner-dot" data-index="2" aria-label="Go to slide 3">
-        <span class="visually-hidden">Go to slide 3</span>
-      </button>
-    </div>
-  </div>
-</div>
-
 <!-- Contact Info Button Fix -->
 {% assign position = include.position | default: page.contact_position | default: "right" %}
 {% assign theme = include.theme | default: page.contact_theme | default: "default-theme" %}
@@ -217,7 +200,7 @@ Animation settings - enable by default for attention-grabbing features
     {% endfor %}
   </div>
 
-  <div class="contact-toggle-wrapper">
+<div class="contact-toggle-wrapper">
     <div class="contact-toggle-bubble" aria-hidden="true">{{ contact_title }}</div>
       <button class="contact-toggle" 
               aria-controls="contact-options" 
@@ -259,7 +242,7 @@ Animation settings - enable by default for attention-grabbing features
 }
 </style>
 
-<!-- Updated JavaScript to your file -->
+<!-- Updated JavaScript to ensure contact options are properly accessible -->
 <script>
 document.addEventListener('DOMContentLoaded', function() {
   // Handle banner dots accessibility

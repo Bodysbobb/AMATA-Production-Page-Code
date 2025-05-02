@@ -28,7 +28,7 @@ hreflang: "th"
 alternate_lang_url: "/english/AMATA-HomePage-en/"
 
 # ================ HERO SECTION ================ #
-landing_hero: true     
+landing_hero: false     
 
 # ================ Background & Effects ================ #
 need_aos: true
@@ -67,7 +67,7 @@ latest_posts:
   subtext="ทุกลวดลายมีเรื่องราว คุณภาพงานพิมพ์จึงสำคัญ"
   signature="— อมตะ โปรดักชั่น —"
   scroll_text="ติดต่อเรา"
-  particle_mode="hero-only"
+  particle_mode="heo-only"
   letter_delay="0.05"
   initial_delay="300"
   data-final-class="animation-complete"
