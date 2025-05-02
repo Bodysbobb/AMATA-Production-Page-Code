@@ -186,7 +186,7 @@ latest_posts:
     </div>
 
     <!-- Step 2 -->
-    <a href="https://www.amataproduction.com/เกี่ยวกับเรา/" class="hiw-step hiw-with-line" data-aos="fade-up" data-aos-once="true">
+    <a href="https://vcard-admin.pkp.homes/U0NtnOPAOx" class="hiw-step hiw-with-line" data-aos="fade-up" data-aos-once="true">
       <i class="fa-solid fa-comments hiw-icon"></i>
       <h4 class="hiw-title">ติดต่อเรา</h4>
       <p class="hiw-desc">ยืนยันแบบ เนื้อผ้า ไซซ์ และรายละเอียดต่างๆ เพื่อสั่งผลิต</p>
@@ -208,6 +208,23 @@ latest_posts:
 
   </div>
 </section>
+
+<hr class="section-divider">
+
+<h1 class="section-heading">
+  สินค้า และ บริการของเรา
+</h1>
+
+{% include image-content-row.liquid 
+  paths="/assets/img/Product/sublimation.webp, /assets/img/Product/polo.webp, /assets/img/Product/smart_business_card.webp, /assets/img/Product/printing.webp, /assets/img/Product/customizable_gift.webp, /assets/img/Product/graphic_design.webp"
+  alts="เสื้อพิมพ์ลายกีฬา สีชัด ติดทน, เสื้อโปโลองค์กร เสื้อยูนิฟอร์มพิมพ์ลาย, นามบัตรดิจิทัล NFC แชร์ข้อมูลทันสมัย, พิมพ์ป้ายโฆษณา ฉลากสินค้า สติ๊กเกอร์, ของพรีเมี่ยมสั่งผลิต เพิ่มยอดขาย, ออกแบบโลโก้ แบรนด์สินค้า ดีไซน์ครบ"
+  titles="เสื้อกีฬา / พิมพ์ลาย, เสื้อโปโล / ยูนิฟอร์ม, นามบัตรอัจฉริยะ, งานพิมพ์โฆษณา, ของพรีเมี่ยมแบรนด์, ออกแบบโลโก้/ดีไซน์"
+  descriptions="เสื้อพิมพ์ลาย เสื้อยืด เสื้อทีม เสื้อกีฬา สีชัด ติดทน ออกแบบฟรี, เสื้อโปโลพิมพ์ลาย พร้อมดีไซน์เฉพาะแบรนด์ ราคาถูก, นามบัตร NFC แชร์เบอร์ แชร์ไลน์ ด้วยดีไซน์ทันสมัย, พิมพ์ป้าย ฉลากสินค้า โลโก้ สติ๊กเกอร์ครบวงจร, สินค้าพรีเมี่ยมแบรนด์ ผลิตเพื่อแจกหรือขาย เพิ่มความน่าเชื่อถือ, รับออกแบบโลโก้ กราฟิก แพ็กเกจ และดีไซน์งานพิมพ์ทุกประเภท"
+  urls="https://www.amataproduction.com/สินค้า/อมตะ-โปรดักชั่น-เสื้อกีฬา-เสื้อพิมพ์ลาย/,https://www.amataproduction.com/สินค้า/อมตะ-โปรดักชั่น-เสื้อโปโล-เสื้อพิมพ์ลาย/,,,,"
+  images_per_row_max="3"
+  images_per_row_min="1"
+%}
+
 
 <hr class="section-divider">
 

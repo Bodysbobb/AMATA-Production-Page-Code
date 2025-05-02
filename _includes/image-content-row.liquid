@@ -1,0 +1,170 @@
+{% comment %}
+  Simple Image Content Row
+  
+  Parameters:
+  - paths: Comma-separated list of image paths
+  - alts: Comma-separated list of alt texts
+  - titles: Comma-separated list of titles
+  - descriptions: Comma-separated list of descriptions
+  - urls: Comma-separated list of URLs for linking (optional)
+  - images_per_row_max: Maximum images per row on large screens (default: 1)
+  - images_per_row_min: Minimum images per row on small screens (default: 1)
+{% endcomment %}
+
+{% assign paths = include.paths | split: "," %}
+{% assign alts = include.alts | split: "," %}
+{% assign titles = include.titles | split: "," %}
+{% assign descriptions = include.descriptions | split: "," %}
+{% assign urls = include.urls | split: "," %}
+{% assign images_per_row_max = include.images_per_row_max | default: 1 | plus: 0 %}
+{% assign images_per_row_min = include.images_per_row_min | default: 1 | plus: 0 %}
+
+<div class="image-content-rows" data-max="{{ images_per_row_max }}" data-min="{{ images_per_row_min }}">
+  {% for path in paths %}
+    {% assign index = forloop.index0 %}
+    {% assign path = path | strip %}
+    {% if path != "" %}
+      {% assign alt = alts[index] | default: "Image" | strip %}
+      {% assign title = titles[index] | default: "" | strip %}
+      {% assign description = descriptions[index] | default: "" | strip %}
+      {% assign url = urls[index] | default: "" | strip %}
+      
+      <div class="image-item{% if url != "" %} has-link{% endif %}">
+        {% if url != "" %}<a href="{{ url }}" class="item-link">{% endif %}
+          <div class="image-container">
+            <img 
+              src="{{ path }}" 
+              alt="{{ alt }}" 
+              title="{{ title }}"
+              loading="lazy"
+            />
+          </div>
+          <div class="content-container">
+            {% if title != "" %}
+              <h3 class="content-title">{{ title }}</h3>
+            {% endif %}
+            {% if description != "" %}
+              <div class="content-description">{{ description }}</div>
+            {% endif %}
+          </div>
+        {% if url != "" %}</a>{% endif %}
+      </div>
+    {% endif %}
+  {% endfor %}
+</div>
+
+<style>
+  .image-content-rows {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0;
+    display: grid;
+    grid-gap: 16px;
+  }
+  
+  /* Desktop layout with configurable columns */
+  .image-content-rows[data-max="1"] { grid-template-columns: 1fr; }
+  .image-content-rows[data-max="2"] { grid-template-columns: repeat(2, 1fr); }
+  .image-content-rows[data-max="3"] { grid-template-columns: repeat(3, 1fr); }
+  .image-content-rows[data-max="4"] { grid-template-columns: repeat(4, 1fr); }
+  
+  .image-item {
+    background-color: var(--global-bg-color, #ffffff);
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    overflow: hidden;
+    transition: transform 0.2s ease;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .image-item:hover {
+    transform: translateY(-2px);
+  }
+  
+  /* Link styling */
+  .image-item.has-link {
+    cursor: pointer;
+  }
+  
+  .image-item .item-link {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    color: inherit;
+    text-decoration: none;
+  }
+  
+  .image-container {
+    position: relative;
+    padding-bottom: 75%;
+    background-color: var(--global-theme-color, #0056b3);
+    overflow: hidden;
+  }
+  
+  .image-container img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+  
+  .content-container {
+    padding: 12px;
+    flex: 1;
+  }
+  
+  .content-container h3.content-title {
+    margin: 0 0 6px 0;
+    color: var(--global-text-color, #333333);
+    font-size: 1.2rem;
+    line-height: 1.3;
+  }
+
+  .content-description {
+    color: var(--global-text-color-light, #666666);
+    line-height: 1.4;
+    font-size: 1rem;
+    margin: 0;
+  }
+  
+  /* Tablet layout */
+  @media (max-width: 992px) {
+    .image-content-rows {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  
+  /* Mobile layout with configurable columns */
+  @media (max-width: 768px) {
+    .image-content-rows {
+      display: block;
+    }
+    
+    .image-item {
+      display: flex;
+      flex-direction: row;
+      margin-bottom: 16px;
+    }
+    
+    .image-item .item-link {
+      flex-direction: row;
+    }
+    
+    .image-container {
+      flex: 0 0 120px;
+      min-width: 120px;
+      height: 120px;
+      padding-bottom: 0;
+    }
+    
+    .content-container {
+      padding: 10px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+    }
+  }
+</style>

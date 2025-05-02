@@ -6,7 +6,7 @@ permalink: /สินค้า/
 nav: true
 nav_order: 2
 display_categories: [กีฬา, โปโล, บริการ]
-horizontal: false
+horizontal: true
 
 # ================ TITLE & Description ================ #
 hide_title: true

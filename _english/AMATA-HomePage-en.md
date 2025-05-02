@@ -185,7 +185,7 @@ latest_posts:
     </div>
 
     <!-- Step 2 -->
-    <a href="https://www.amataproduction.com/เกี่ยวกับเรา/" class="hiw-step hiw-with-line" data-aos="fade-up" data-aos-once="true">
+    <a href="https://vcard-admin.pkp.homes/U0NtnOPAOx" class="hiw-step hiw-with-line" data-aos="fade-up" data-aos-once="true">
       <i class="fa-solid fa-comments hiw-icon"></i>
       <h4 class="hiw-title">Talk to Us</h4>
       <p class="hiw-desc">Confirm design, size, fabric, and final details.</p>
@@ -209,6 +209,21 @@ latest_posts:
 </section>
 
 <hr class="section-divider">
+
+<h1 class="section-heading">
+  Our Products & Serives
+</h1>
+
+{% include image-content-row.liquid 
+  paths="/assets/img/Product/sublimation.webp, /assets/img/Product/polo.webp, /assets/img/Product/smart_business_card.webp, /assets/img/Product/printing.webp, /assets/img/Product/customizable_gift.webp, /assets/img/Product/graphic_design.webp"
+  alts="Vibrant custom sports jerseys with durable printing, Corporate polo shirts with custom logo printing, Smart NFC digital business cards for modern networking, Professional printing services for banners and labels, Custom promotional products for brand recognition, Logo and graphic design services for all needs"
+  titles="Sports Jerseys & Custom Printing, Corporate Polos & Uniforms, Smart NFC Business Cards, Advertising Print Services, Custom Promotional Products, Logo & Graphic Design"
+  descriptions="Custom printed jerseys, t-shirts and sports uniforms with vibrant colors and free design service, Corporate polo shirts with custom branding for professional teams at competitive prices, NFC digital business cards with modern design for instant contact sharing, Professional printing of banners, product labels, stickers and marketing materials, Premium branded promotional products to increase sales and build brand trust, Professional logo design, graphics, packaging and print design services for all business needs"
+  urls="https://www.amataproduction.com/products/sports-jerseys-custom-printing/,https://www.amataproduction.com/products/corporate-polos-uniforms/,,,,"
+  images_per_row_max="3"
+  images_per_row_min="1"
+%}
+
 
 <h1 class="section-heading">
   Our Clients & Customer Testimonials
