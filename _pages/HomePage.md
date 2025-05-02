@@ -163,7 +163,7 @@ latest_posts:
 
 <hr class="section-divider">
 
-<h1 class="section-heading" data-aos="fade" data-aos-once="false">
+<h1 class="section-heading">
   สั่งง่าย รับเสื้อไว ใน 4 ขั้นตอน<br>
 </h1>
 
@@ -210,7 +210,7 @@ latest_posts:
 
 <hr class="section-divider">
 
-<h1 class="section-heading" data-aos="fade" data-aos-once="false">
+<h1 class="section-heading">
   ลูกค้าที่ไว้วางใจ AMATA Production
 </h1>
 

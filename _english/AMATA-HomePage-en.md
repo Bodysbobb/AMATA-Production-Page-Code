@@ -110,7 +110,7 @@ latest_posts:
   Why AMATA?
 </h1>
 <div class="page-content">
-  <p class="section-text" data-aos="fade" data-aos-once="false">
+  <p class="section-text">
     At AMATA, we do more than print — we co-create. Whether you’re launching a brand, scaling your image, or reimagining your identity, we become part of your vision.
     With in-house designers, cutting-edge machines, and an end-to-end workflow, we bring speed, precision, and creativity to every order.
   </p>
@@ -163,7 +163,7 @@ latest_posts:
 
 <hr class="section-divider">
 
-<h1 class="section-heading" data-aos="fade" data-aos-once="false">
+<h1 class="section-heading">
   Your Custom Shirt in Just 4 Simple Steps" 
 </h1>
 
@@ -210,7 +210,7 @@ latest_posts:
 
 <hr class="section-divider">
 
-<h1 class="section-heading" data-aos="fade" data-aos-once="false">
+<h1 class="section-heading">
   Our Clients & Customer Testimonials
 </h1>
 
