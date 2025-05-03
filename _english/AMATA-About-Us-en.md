@@ -1,7 +1,7 @@
 ---
 layout: page
 title: AMATA Production Co., Ltd. (Thailand)
-title_en: true
+lang: true
 img: assets/img/page_logo/amata_logo.png
 
 # ================ TITLE & Description ================ #
@@ -21,7 +21,6 @@ contact_theme: "amata_en"
 # ================ Language Switch ================ #
 language_switch: true
 lang: "en"
-hreflang: "en"
 alternate_lang_url: "/เกี่ยวกับเรา"
 
 # ================ Background & Effects ================ #

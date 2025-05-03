@@ -23,11 +23,13 @@
     <!-- Title Container (Center) -->
     <div class="navbar-title-container text-center {% if page.toggle_down %}toggle-down-title{% endif %}">
       <h1 class="navbar-title font-weight-bold">
-        {% if page.title_en == true and page.special_navbar_title_en != nil and page.special_navbar_title_en != false %}
-          {{ page.special_navbar_title_en }}
-        {% elsif page.special_navbar_title %}
-          {{ page.special_navbar_title }}
-        {% elsif page.title_en == true and page.title_en != nil and page.title_en != false %}
+        {% if page.special_navbar_title %}
+          {% if page.lang == "en" and page.special_navbar_title_en != nil %}
+            {{ page.special_navbar_title_en }}
+          {% else %}
+            {{ page.special_navbar_title }}
+          {% endif %}
+        {% elsif page.lang == "en" and page.title_en != nil %}
           {{ page.title_en }}
         {% else %}
           {{ page.title }}
@@ -61,13 +63,17 @@
           <!-- About -->
           {% assign home_page = site.pages | where: "permalink", "/" | first %}
           {% if home_page %}
-            {% if page.title_en == true and home_page.title_en %}
+            {% if page.lang == "en" and home_page.title_en != nil %}
               {% assign about_title = home_page.title_en %}
             {% else %}
               {% assign about_title = home_page.title %}
             {% endif %}
           {% else %}
-            {% assign about_title = "Home" %}
+            {% if page.lang == "en" %}
+              {% assign about_title = "Home" %}
+            {% else %}
+              {% assign about_title = "หน้าหลัก" %}
+            {% endif %}
           {% endif %}
           
           <li class="nav-item {% if page.permalink == '/' %}active{% endif %}">
@@ -91,7 +97,7 @@
                   {% endif %}
                 {% endfor %}
                 <li class="nav-item dropdown {% if page.title == p.title or has_active_child %}active{% endif %}">
-                  <a
+                  
                     class="nav-link dropdown-toggle"
                     href="#"
                     id="navbarDropdown"
@@ -100,10 +106,10 @@
                     aria-haspopup="true"
                     aria-expanded="false"
                   >
-                    {% if page.title_en == true and p.title_en != nil and p.title_en != false %}
-                      {{- p.title_en }}
+                    {% if page.lang == "en" and p.title_en != nil %}
+                      {{ p.title_en }}
                     {% else %}
-                      {{- p.title }}
+                      {{ p.title }}
                     {% endif %}
                     {% if page.title == p.title or has_active_child %}
                       <span class="sr-only">(current)</span>
@@ -114,14 +120,14 @@
                       {% if child.title == 'divider' %}
                         <div class="dropdown-divider"></div>
                       {% else %}
-                        <a
+                        
                           class="dropdown-item {% if page.title == child.title %}active{% endif %}"
                           href="{% if child.permalink contains '://' %}{{ child.permalink }}{% else %}{{ child.permalink | relative_url }}{% endif %}"
                         >
-                          {% if page.title_en == true and child.title_en != nil and child.title_en != false %}
-                            {{- child.title_en -}}
+                          {% if page.lang == "en" and child.title_en != nil %}
+                            {{ child.title_en }}
                           {% else %}
-                            {{- child.title -}}
+                            {{ child.title }}
                           {% endif %}
                         </a>
                       {% endif %}
@@ -139,10 +145,10 @@
                     {%- assign url = p.url -%}
                   {%- endif %}
                   <a class="nav-link" href="{{ url | relative_url }}">
-                    {% if page.title_en == true and p.title_en != nil and p.title_en != false %}
-                      {{- p.title_en }}
+                    {% if page.lang == "en" and p.title_en != nil %}
+                      {{ p.title_en }}
                     {% else %}
-                      {{- p.title }}
+                      {{ p.title }}
                     {% endif %}
                     {% if page.url contains p.url %}
                       <span class="sr-only">(current)</span>

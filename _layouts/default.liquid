@@ -1,6 +1,6 @@
 {% unless page.url == "/sitemap.xml" %}
 <!doctype html>
-<html lang="{{ site.lang }}">
+<html lang="{{ page.lang | default: site.lang | default: 'th' }}">
   <!-- Head -->
   <head>
     {% if page.redirect %}
@@ -13,6 +13,7 @@
       {% endif %}
       <meta http-equiv="refresh" content="3; url={{ redirect }}">
     {% endif %}
+    
     {% include head.liquid %}
     
     {% if page.need_aos %}
@@ -21,19 +22,10 @@
   </head>
   
   <!-- Body -->
-  <body class="{% if site.navbar_fixed %}fixed-top-nav{% endif %} {% if page.navbar_auto_hide %}navbar-auto-hide{% endif %} {% unless site.footer_fixed %}sticky-bottom-footer{% endunless %}">
-    <!-- Background -->
-    {% include background_logo.liquid %}
-      
-    <!-- Regular pages get normal header -->
-    {% unless page.landing_hero %}
-      {% include header.liquid %}
-    {% else %}
-    <!-- Landing hero pages get the specially controlled header container -->
-    <div id="header-container">
-      {% include header.liquid %}
-    </div>
-    {% endunless %}
+  <body class="{% if site.navbar_fixed %}fixed-top-nav{% endif %} {% if page.navbar_auto_hide %}navbar-auto-hide{% endif %} {% unless site.footer_fixed %}sticky-bottom-footer{% endunless %}" 
+        {% if page.lang %}data-lang="{{ page.lang }}"{% endif %}>
+        
+    {% include header.liquid %}
 
     {% if page.contact_info %}
       {% include contact_info_button.liquid %}
@@ -41,33 +33,21 @@
 
     <!-- Content -->
     <div class="container mt-5 landing-page-content" role="main">
-      {% if page.toc and page.toc.sidebar %}
-        {% if page.toc.sidebar == 'right' %}
-          <div class="row">
-            <div class="col-sm-9">{{ content }}</div>
-            <div class="col-sm-3"><nav id="toc-sidebar" class="sticky-top"></nav></div>
-          </div>
-        {% else %}
-          <div class="row">
-            <div class="col-sm-3"><nav id="toc-sidebar" class="sticky-top"></nav></div>
-            <div class="col-sm-9">{{ content }}</div>
-          </div>
-        {% endif %}
-      {% else %}
-        {{ content }}
-      {% endif %}
+      {{ content }}
     </div>
 
     <!-- Footer -->
-    {% include footer.liquid %}
+    {% if page.use_custom_footer %}
+      {% include amata-footer.liquid 
+         language=page.lang 
+         aos="fade" 
+         aos_once="true" %}
+    {% else %}
+      {% include footer.liquid %}
+    {% endif %}
 
     <!-- JavaScripts -->
     {% include scripts.liquid %}
-    <script src="{{ '/assets/js/toc-fix.js' | relative_url }}"></script>
-
-    {% if page.quote %}
-    <script src="{{ '/assets/js/quote.js' | relative_url }}"></script>
-    {% endif %}
   </body>
 </html>
 {% endunless %}

@@ -2,7 +2,6 @@
 layout: page
 title: AMATA Production Sports Designs
 img: assets/img/META_pic/sports_product.jpg
-title_en: true
 category: Sports
 importance: 1
 
@@ -31,7 +30,6 @@ contact_theme: "amata_en"
 # ================ Language Switch ================ #
 language_switch: true
 lang: "en"
-hreflang: "en"
 alternate_lang_url: "/สินค้า/อมตะ-โปรดักชั่น-เสื้อกีฬา-เสื้อพิมพ์ลาย"
 
 # ================ Background ================ #

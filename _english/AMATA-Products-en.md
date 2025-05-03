@@ -1,7 +1,6 @@
 ---
 layout: page
 title: Products
-title_en: true
 display_categories: [Sports, Polo, Services]
 horizontal: false
 
@@ -22,8 +21,6 @@ contact_theme: "amata_en"
 # ================ Language Switch ================ #
 language_switch: true
 lang: "en"
-hreflang: "en"
-#permalink: /english/AMATA-Products-en/
 alternate_lang_url: "/สินค้า/"
 
 # ================ META ================ #

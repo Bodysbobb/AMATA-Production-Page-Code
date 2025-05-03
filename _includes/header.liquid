@@ -1,54 +1,19 @@
 <header>
-  {% comment %}
-  Simplified header that handles:
-  1. Hero section detection
-  2. Special navbar configuration
-  3. Auto-hide functionality
-  {% endcomment %}
-  
-  {% assign has_hero = page.landing_hero %}
-  {% assign has_special_navbar = page.special_navbar %}
-  {% assign has_auto_hide = page.navbar_auto_hide %}
-  {% assign has_switch_navbar = page.switch_navbar %}
-  
-  {% if has_hero or has_auto_hide %}
-    <script>
-      document.body.setAttribute('data-navbar-mode', '{{ has_hero | default: "false" }}');
-      {% if has_auto_hide %}
-        document.body.classList.add('navbar-auto-hide');
-      {% endif %}
-    </script>
-  {% endif %}
-  
-  {% if has_special_navbar %}
-    <script>
-      document.body.setAttribute('data-special-navbar', 'true');
-      {% if has_switch_navbar %}
-        document.body.setAttribute('data-switch-navbar', 'true');
-      {% endif %}
-    </script>
-    
-    {% comment %} Container for both navbar types {% endcomment %}
-    <div id="default-navbar" style="{% if has_hero %}display: none;{% else %}display: block;{% endif %}">
-      {% include default_navbar.liquid %}
-    </div>
-    
-    <div id="special-navbar" style="{% if has_hero or has_switch_navbar %}display: block;{% else %}display: none;{% endif %}">
-      {% include special_navbar.liquid %}
-    </div>
-  {% else %}
-    {% comment %} Only include default navbar {% endcomment %}
-    <div id="default-navbar">
-      {% include default_navbar.liquid %}
-    </div>
-  {% endif %}
+  {% comment %} Single consolidated navbar {% endcomment %}
+  <div id="navbar-container">
+    {% include navbar.liquid %}
+  </div>
   
   {% comment %} Only include progress bar if auto-hide is disabled {% endcomment %}
-  {% if site.enable_progressbar and has_auto_hide != true %}
+  {% if site.enable_progressbar and page.navbar_auto_hide != true %}
     <progress id="progress" value="0">
       <div class="progress-container">
         <span class="progress-bar"></span>
       </div>
     </progress>
+  {% endif %}
+  
+  {% if page.navbar_scroll_effect %}
+    <script src="{{ '/assets/js/navbar-controller.js' | relative_url }}"></script>
   {% endif %}
 </header>

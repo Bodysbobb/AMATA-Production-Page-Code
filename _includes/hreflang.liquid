@@ -1,6 +1,6 @@
-{% if page.language_switch and page.hreflang %}
-<link rel="alternate" hreflang="{{ page.hreflang }}" href="{{ site.url }}{{ page.url }}" />
+{% if page.language_switch %}
+<link rel="alternate" hreflang="{{ page.lang | default: 'th' }}" href="{{ site.url }}{{ page.url }}" />
 {% if page.alternate_lang_url %}
-<link rel="alternate" hreflang="{{ page.hreflang == 'en' ? 'th' : 'en' }}" href="{{ site.url }}{{ page.alternate_lang_url }}" />
+<link rel="alternate" hreflang="{{ page.lang == 'en' ? 'th' : 'en' }}" href="{{ site.url }}{{ page.alternate_lang_url }}" />
 {% endif %}
 {% endif %}

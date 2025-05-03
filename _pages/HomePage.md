@@ -12,10 +12,8 @@ hide_title: true
 hide_description: true
 
 # ================ NAVBAR ================ #
-## Defailt Navbar
-default_navbar_logo: /assets/img/page_logo/amata_main_text.png
-navbar_default_logo_bg: true
-navbar_default_logo_bg_color: "#ffffff" 
+navbar_logo_one: /assets/img/page_logo/amata_main_text.png
+navbar_logo_one_badge_color: "#ffffff" 
 
 # ================ Contact Info Button Configuration ================ #
 contact_info: true
@@ -24,7 +22,6 @@ contact_theme: "amata_th"
 # ================ Language Switch ================ #
 language_switch: true
 lang: "th"
-hreflang: "th"
 alternate_lang_url: "/english/AMATA-HomePage-en/"
 
 # ================ HERO SECTION ================ #

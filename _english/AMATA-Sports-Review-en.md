@@ -1,7 +1,6 @@
 ---
 layout: page
 title: Cutomer Reviews
-title_en: true
 img: assets/img/project_covers/Customer_Review_AMATASport.jpg
 importance: 1
 category: Review
@@ -23,7 +22,6 @@ contact_theme: "amata_en"
 # ================ Language Switch ================ #
 language_switch: true
 lang: "en"
-hreflang: "en"
 alternate_lang_url: "/อมตะ-โปดักชั่น-เสื้อกีฬา-รีวิว"
 
 # ================ Background ================ #

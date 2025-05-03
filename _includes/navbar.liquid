@@ -1,0 +1,97 @@
+<nav id="navbar" class="navbar">
+  <div class="container">
+    <!-- Brand Section -->
+    <div class="navbar-brand-container">
+      <a class="navbar-brand" href="{{ site.baseurl }}/">
+        <img src="{{ '/assets/img/page_logo/amata_logo_blue.png' | relative_url }}" 
+             alt="{{ site.title }}" 
+             class="navbar-logo">
+      </a>
+      
+      {% if page.navbar_scroll_title %}
+      <div class="navbar-title-container" style="display: none;">
+        <span class="navbar-title">{{ page.navbar_scroll_title }}</span>
+      </div>
+      {% endif %}
+    </div>
+    
+    <!-- Mobile Toggle -->
+    <button class="navbar-toggler collapsed" type="button" aria-label="Toggle navigation">
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </button>
+    
+    <!-- Navigation Section -->
+    <div class="navbar-collapse">
+      <ul class="navbar-nav">
+        <!-- Home -->
+        <li class="nav-item">
+          <a class="nav-link {% if page.permalink == '/' %}active{% endif %}" 
+             href="{{ '/' | relative_url }}">
+            {% if page.lang == "en" %}Home{% else %}หน้าหลัก{% endif %}
+          </a>
+        </li>
+        
+        <!-- Other Pages -->
+        {% assign sorted_pages = site.pages | sort: 'nav_order' %}
+        {% for p in sorted_pages %}
+          {% if p.nav and p.autogen == null %}
+            {% if p.dropdown %}
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#">
+                {% if page.lang == "en" and p.title_en %}{{ p.title_en }}{% else %}{{ p.title }}{% endif %}
+              </a>
+              <div class="dropdown-menu">
+                {% for child in p.children %}
+                  {% if child.title == 'divider' %}
+                    <div class="dropdown-divider"></div>
+                  {% else %}
+                    <a class="dropdown-item" href="{{ child.permalink | relative_url }}">
+                      {% if page.lang == "en" and child.title_en %}{{ child.title_en }}{% else %}{{ child.title }}{% endif %}
+                    </a>
+                  {% endif %}
+                {% endfor %}
+              </div>
+            </li>
+            {% else %}
+            <li class="nav-item">
+              <a class="nav-link {% if page.url contains p.url %}active{% endif %}" 
+                 href="{{ p.url | relative_url }}">
+                {% if page.lang == "en" and p.title_en %}{{ p.title_en }}{% else %}{{ p.title }}{% endif %}
+              </a>
+            </li>
+            {% endif %}
+          {% endif %}
+        {% endfor %}
+      </ul>
+      
+      <!-- Controls -->
+      <div class="navbar-controls">
+        {% if site.enable_darkmode %}
+        <button id="light-toggle" title="Toggle theme">
+          <i class="ti ti-sun-moon"></i>
+        </button>
+        {% endif %}
+        
+        {% if page.language_switch %}
+        <button class="language-btn-navbar {% if page.lang == 'en' %}en{% else %}alt-lang{% endif %}"
+                onclick="window.location.href='{{ page.alternate_lang_url | relative_url }}'">
+          <div class="toggle-indicator">
+            <div class="navbar-lang-icon">
+              {% if page.lang == 'en' %}
+                <img src="{{ '/assets/img/icon/thailand.png' | relative_url }}" alt="TH" class="circle-flag">
+              {% else %}
+                <i class="ti ti-world"></i>
+              {% endif %}
+            </div>
+          </div>
+          <span class="lang-label">
+            {% if page.lang == 'en' %}TH{% else %}EN{% endif %}
+          </span>
+        </button>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</nav>

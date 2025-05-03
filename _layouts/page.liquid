@@ -8,7 +8,7 @@ layout: default
   </style>
 {% endif %}
 
-<div class="post {% if page.category == 'Business' %}business-project{% endif %}">
+<div class="post">
   {% unless page.hide_title and page.hide_description %}
     <header class="post-header">
       {% unless page.hide_title %}
@@ -20,19 +20,7 @@ layout: default
     </header>
   {% endunless %}
 
-
   <article>
     {{ content }}
   </article>
-
-  {% if page.related_publications %}
-    <h2>References</h2>
-    <div class="publications">
-      {% bibliography --cited_in_order %}
-    </div>
-  {% endif %}
-
-  {% if site.giscus and page.giscus_comments %}
-    {% include giscus.liquid %}
-  {% endif %}
 </div>

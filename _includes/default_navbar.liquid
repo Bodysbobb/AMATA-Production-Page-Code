@@ -77,8 +77,16 @@
       <ul class="navbar-nav ml-auto flex-nowrap">
         {% assign home_page = site.pages | where: "permalink", "/" | first %}
         {% if home_page %}
-          {% if page.title_en == true and home_page.title_en %}
-            {% assign about_title = home_page.title_en %}
+          {% if page.title_en != nil and page.title_en != false %}
+            {% if home_page.title_en != nil and home_page.title_en != false %}
+              {% if home_page.title_en == true %}
+                {% assign about_title = home_page.title %}
+              {% else %}
+                {% assign about_title = home_page.title_en %}
+              {% endif %}
+            {% else %}
+              {% assign about_title = home_page.title %}
+            {% endif %}
           {% else %}
             {% assign about_title = home_page.title %}
           {% endif %}
@@ -108,7 +116,7 @@
                 {% endif %}
               {% endfor %}
               <li class="nav-item dropdown {% if page.title == p.title or has_active_child %}active{% endif %}">
-                <a
+                
                   class="nav-link dropdown-toggle"
                   href="#"
                   id="navbarDropdown"
@@ -117,10 +125,14 @@
                   aria-haspopup="true"
                   aria-expanded="false"
                 >
-                  {% if page.title_en == true and p.title_en != nil and p.title_en != false %}
-                    {{- p.title_en }}
+                  {% if page.title_en != nil and page.title_en != false and p.title_en != nil and p.title_en != false %}
+                    {% if p.title_en == true %}
+                      {{- p.title -}}
+                    {% else %}
+                      {{- p.title_en -}}
+                    {% endif %}
                   {% else %}
-                    {{- p.title }}
+                    {{- p.title -}}
                   {% endif %}
                   {% if page.title == p.title or has_active_child %}
                     <span class="sr-only">(current)</span>
@@ -131,12 +143,16 @@
                     {% if child.title == 'divider' %}
                       <div class="dropdown-divider"></div>
                     {% else %}
-                      <a
+                      
                         class="dropdown-item {% if page.title == child.title %}active{% endif %}"
                         href="{% if child.permalink contains '://' %}{{ child.permalink }}{% else %}{{ child.permalink | relative_url }}{% endif %}"
                       >
-                        {% if page.title_en == true and child.title_en != nil and child.title_en != false %}
-                          {{- child.title_en -}}
+                        {% if page.title_en != nil and page.title_en != false and child.title_en != nil and child.title_en != false %}
+                          {% if child.title_en == true %}
+                            {{- child.title -}}
+                          {% else %}
+                            {{- child.title_en -}}
+                          {% endif %}
                         {% else %}
                           {{- child.title -}}
                         {% endif %}
@@ -156,10 +172,14 @@
                   {%- assign url = p.url -%}
                 {%- endif %}
                 <a class="nav-link" href="{{ url | relative_url }}">
-                  {% if page.title_en == true and p.title_en != nil and p.title_en != false %}
-                    {{- p.title_en }}
+                  {% if page.title_en != nil and page.title_en != false and p.title_en != nil and p.title_en != false %}
+                    {% if p.title_en == true %}
+                      {{- p.title -}}
+                    {% else %}
+                      {{- p.title_en -}}
+                    {% endif %}
                   {% else %}
-                    {{- p.title }}
+                    {{- p.title -}}
                   {% endif %}
                   {% if page.url contains p.url %}
                     <span class="sr-only">(current)</span>

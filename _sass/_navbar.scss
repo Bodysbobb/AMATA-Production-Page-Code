@@ -1,797 +1,408 @@
-//============= Navbar Default Template Setup ===============//
-.navbar, 
-#navbar, 
-#navbar-special {
-  min-height: 65px;
-  will-change: transform, opacity;
-  transition: transform 0.4s cubic-bezier(0.215, 0.61, 0.355, 1),
-              opacity 0.4s cubic-bezier(0.215, 0.61, 0.355, 1);
+/*******************************************************************************
+ * AMATA Production Navbar Styles
+ * Clean, Modern, Minimal Dependencies
+ ******************************************************************************/
+
+// Variables
+:root {
+  --navbar-height: 72px;
+  --navbar-padding: 1rem;
+  --logo-height: 40px;
+  --navbar-transition: all 0.3s ease;
 }
 
-body[data-special-navbar="true"] {
-  padding-top: 65px !important;
-}
-
-// Base navbar styles
+// Base Navbar Container
 .navbar {
-  box-shadow: none;
-  border-bottom: 1px solid var(--global-divider-color);
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: var(--navbar-height);
   background-color: var(--global-nav-color);
-  opacity: 0.95;
-}
-
-// Enhanced transition states
-#default-navbar, #special-navbar {
-  position: relative;
+  color: var(--global-text-nav-color);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   z-index: 1030;
-  transform-origin: top center;
+  transition: var(--navbar-transition);
+  
+  .container {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 var(--navbar-padding);
+  }
 }
 
-body[data-switch-navbar="true"] #default-navbar {
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.4s ease;
-}
-body[data-switch-navbar="true"] #default-navbar.visible {
-  opacity: 1;
-  pointer-events: auto;
+// Brand Section (Left)
+.navbar-brand-container {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  height: 100%;
 }
 
-// Transition animations
-@keyframes slideInDown {
-  from {
-    transform: translateY(-100%);
+.navbar-brand {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  color: var(--global-text-nav-color);
+  transition: transform 0.3s ease;
+  
+  &:hover {
+    transform: scale(1.05);
+  }
+  
+  img.navbar-logo {
+    height: var(--logo-height);
+    width: auto;
+    object-fit: contain;
+  }
+}
+
+.navbar-title-container {
+  display: none;
+  
+  .navbar-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--global-text-nav-color);
+    margin: 0;
+  }
+}
+
+// Navigation Links (Center)
+.navbar-nav {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  
+  .nav-item {
+    .nav-link {
+      text-decoration: none;
+      color: var(--global-text-nav-color);
+      font-weight: 500;
+      padding: 0.5rem 0;
+      transition: color 0.3s ease;
+      
+      &:hover {
+        color: var(--global-hover-nav-color);
+      }
+      
+      &.active {
+        color: var(--global-theme-color);
+        font-weight: 600;
+      }
+    }
+  }
+}
+
+// Dropdown Support (Minimal)
+.dropdown {
+  position: relative;
+  
+  .dropdown-toggle {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    
+    &::after {
+      content: "▼";
+      font-size: 0.8rem;
+      transition: transform 0.3s ease;
+    }
+  }
+  
+  .dropdown-menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    min-width: 200px;
+    background: var(--global-card-bg-color);
+    border: 1px solid var(--global-divider-color);
+    border-radius: 4px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    padding: 0.5rem 0;
     opacity: 0;
+    visibility: hidden;
+    transform: translateY(10px);
+    transition: all 0.3s ease;
+    z-index: 1040;
   }
-  to {
-    transform: translateY(0);
+  
+  &:hover .dropdown-menu {
     opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+  }
+  
+  .dropdown-item {
+    display: block;
+    padding: 0.5rem 1rem;
+    color: var(--global-text-color);
+    text-decoration: none;
+    transition: background 0.3s ease;
+    
+    &:hover {
+      background: var(--global-hover-color);
+      color: var(--global-hover-text-color);
+    }
   }
 }
 
-@keyframes slideOutUp {
-  from {
-    transform: translateY(0);
-    opacity: 1;
+// Controls Section (Right)
+.navbar-controls {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+// Language Toggle
+.language-btn-navbar {
+  display: flex;
+  align-items: center;
+  background: #d6d6d6;
+  border-radius: 30px;
+  padding: 3px;
+  position: relative;
+  width: 68px;
+  height: 28px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: none;
+  
+  .toggle-indicator {
+    position: absolute;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: white;
+    transition: transform 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
   }
-  to {
-    transform: translateY(-100%);
-    opacity: 0;
+  
+  &.en .toggle-indicator {
+    transform: translateX(3px);
+  }
+  
+  &.alt-lang .toggle-indicator {
+    transform: translateX(43px);
+  }
+  
+  .lang-label {
+    position: absolute;
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: #0d3b67;
+  }
+  
+  &.en .lang-label {
+    right: 10px;
+  }
+  
+  &.alt-lang .lang-label {
+    left: 10px;
+  }
+  
+  .navbar-lang-icon {
+    img.circle-flag {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+    
+    i {
+      font-size: 1.2rem;
+      color: #0d3b67;
+    }
   }
 }
 
+// Theme Toggle
+#light-toggle {
+  background: none;
+  border: none;
+  color: var(--global-text-nav-color);
+  font-size: 1.25rem;
+  cursor: pointer;
+  padding: 0.5rem;
+  transition: color 0.3s ease;
+  
+  &:hover {
+    color: var(--global-hover-nav-color);
+  }
+}
+
+// Mobile Menu Button
+.navbar-toggler {
+  display: none;
+  background: none;
+  border: none;
+  padding: 0.5rem;
+  cursor: pointer;
+  
+  .icon-bar {
+    display: block;
+    width: 25px;
+    height: 2px;
+    background: var(--global-text-nav-color);
+    margin: 5px 0;
+    transition: all 0.3s ease;
+  }
+  
+  &.collapsed {
+    .icon-bar:nth-child(1) {
+      transform: none;
+    }
+    
+    .icon-bar:nth-child(2) {
+      opacity: 1;
+    }
+    
+    .icon-bar:nth-child(3) {
+      transform: none;
+    }
+  }
+  
+  &:not(.collapsed) {
+    .icon-bar:nth-child(1) {
+      transform: rotate(45deg) translate(5px, 5px);
+    }
+    
+    .icon-bar:nth-child(2) {
+      opacity: 0;
+    }
+    
+    .icon-bar:nth-child(3) {
+      transform: rotate(-45deg) translate(5px, -5px);
+    }
+  }
+}
+
+// Collapsed Mobile Menu
+.navbar-collapse {
+  display: flex;
+  align-items: center;
+  
+  @media (max-width: 991px) {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: var(--global-nav-color);
+    border-top: 1px solid var(--global-divider-color);
+    padding: 1rem 0;
+    
+    &.show {
+      display: block;
+    }
+    
+    .navbar-nav {
+      flex-direction: column;
+      padding: 0 var(--navbar-padding);
+      
+      .nav-item {
+        width: 100%;
+        
+        .nav-link {
+          display: block;
+          padding: 0.75rem 0;
+        }
+      }
+    }
+    
+    .navbar-controls {
+      padding: 1rem var(--navbar-padding);
+      border-top: 1px solid var(--global-divider-color);
+    }
+  }
+}
+
+// Scrolled State
+.navbar.scrolled {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  background-color: rgba(0, 51, 102, 0.95);
+  
+  .navbar-title-container {
+    display: flex;
+  }
+}
+
+// Responsive Breakpoints
+@media (max-width: 991px) {
+  .navbar-brand-container {
+    flex: 1;
+  }
+  
+  .navbar-toggler {
+    display: block;
+  }
+  
+  .navbar-nav {
+    display: none;
+  }
+}
+
+@media (max-width: 576px) {
+  :root {
+    --navbar-height: 64px;
+    --logo-height: 36px;
+    --navbar-padding: 0.75rem;
+  }
+  
+  .navbar-title {
+    font-size: 1.1rem !important;
+  }
+}
+
+// Animation Utilities
 @keyframes fadeIn {
   from { opacity: 0; }
   to { opacity: 1; }
 }
 
-@keyframes fadeOut {
-  from { opacity: 1; }
-  to { opacity: 0; }
+.animate-fade-in {
+  animation: fadeIn 0.3s ease-in;
 }
 
-// Animated navbar states
-.navbar-appearing {
-  animation: slideInDown 0.5s forwards;
-}
-
-.navbar-disappearing {
-  animation: slideOutUp 0.4s forwards;
-}
-
-.navbar-fade-in {
-  animation: fadeIn 0.4s forwards;
-}
-
-.navbar-fade-out {
-  animation: fadeOut 0.3s forwards;
-}
-
-// Dropdown menu styling
-.navbar .dropdown-menu {
-  background-color: var(--global-text-nav-color) !important;
-  border: 1px solid var(--global-divider-color);
-  transition: opacity 0.3s ease, transform 0.3s ease;
-  transform-origin: top center;
-
-  a:not(.active) {
-    color: var(--global-text-nav-color);
-  }
-
-  a:hover {
-    color: var(--global-hover-nav-color);
-  }
-
-  .dropdown-divider {
-    border-top: 1px solid var(--global-divider-color) !important;
-  }
-}
-
-.dropdown-item {
-  color: var(--global-text-nav-color);
-
-  &:hover {
-    color: var(--global-hover-nav-color);
-    background-color: var(--global-text-nav-color);
-  }
-}
-
-.navbar.navbar-light {
-  a {
-    &:hover {
-      text-decoration: none;
-    }
-  }
-
-  .navbar-brand {
-    color: var(--global-text-nav-color);
-    font-weight: normal; 
-    transition: color 0.3s ease, transform 0.3s ease;
-    
-    &:hover {
-      color: var(--global-hover-nav-color);
-      transform: scale(1.02);
-    }
-  }
-
-  .navbar-nav .nav-item .nav-link {
-    color: var(--global-text-nav-color);
-    font-weight: normal;
-    transition: color 0.3s ease, transform 0.3s ease;
-
-    &:hover {
-      color: var(--global-hover-nav-color);
-    }
-  }
-
-  .navbar-nav .nav-item.active > .nav-link {
-    background-color: inherit;
-    font-weight: bolder;
-    color: var(--global-hover-nav-color);
-    font-weight: bold;
-
-    &:hover {
-      color: var(--global-hover-nav-color);
-    }
-  }
-
-  .navbar-brand.social {
-    padding-bottom: 0;
-    padding-top: 0;
-    font-size: 1.7rem;
-
-    a {
-      img {
-        width: 1.7rem;
-        height: 1.7rem;
-        margin-bottom: 0.5rem;
-        transition: transform 0.3s ease;
-      }
-
-      svg {
-        width: 1.7rem;
-        height: 1.7rem;
-        margin-bottom: 0.5rem;
-        transition: transform 0.3s ease;
-
-        image {
-          width: 1.7rem;
-          height: 1.7rem;
-        }
-      }
-
-      i::before {
-        color: var(--global-text-nav-color);
-        transition: color 0.2s ease-in-out, transform 0.2s ease-in-out;
-      }
-
-      &:hover {
-        i::before {
-          color: var(--global-hover-nav-color);
-          transform: scale(1.1);
-        }
-        
-        img, svg {
-          transform: scale(1.1);
-        }
-      }
-    }
-  }
-}
-
-// Hamburger menu animation
-.navbar-toggler {
-  transition: transform 0.3s ease;
-  
-  &:hover {
-    transform: scale(1.05);
-  }
-  
-  .icon-bar {
-    display: block;
-    width: 22px;
-    height: 2px;
-    background-color: var(--global-text-nav-color) !important;
-    border-radius: 1px;
-    margin-bottom: 4px;
-    transition: all 0.3s;
-  }
-
-  .top-bar {
-    transform: rotate(45deg);
-    transform-origin: 10% 10%;
-  }
-
-  .middle-bar {
-    opacity: 0;
-  }
-
-  .bottom-bar {
-    transform: rotate(-45deg);
-    transform-origin: 10% 90%;
-  }
-}
-
-.navbar-toggler.collapsed {
-  .top-bar {
-    transform: rotate(0);
-  }
-
-  .middle-bar {
-    opacity: 1;
-  }
-
-  .bottom-bar {
-    transform: rotate(0);
-  }
-}
-
-// Control buttons styling
-#light-toggle,
-#search-toggle,
-#navbar-language-toggle {
-  padding: 0;
-  border: 0;
-  background-color: inherit;
-  color: var(--global-text-nav-color);
-  transition: color 0.3s ease, transform 0.3s ease;
-
-  &:hover {
-    color: var(--global-hover-nav-color);
-    transform: scale(1.1);
-  }
-}
-
-//=================== Navbar auto-hide styles =========================//
-.navbar-autohide-enabled {
-  transition: transform 0.4s cubic-bezier(0.215, 0.61, 0.355, 1),
-              opacity 0.4s cubic-bezier(0.215, 0.61, 0.355, 1);
-  will-change: transform, opacity;
-}
-
-.navbar-hidden {
-  transform: translateY(-100%) !important;
-  opacity: 0 !important;
-  pointer-events: none;
-}
-
-/* Target both navbars with the hidden class */
-.navbar-hidden, 
-#navbar.navbar-hidden,
-#navbar-special.navbar-hidden {
-  transform: translateY(-100%) !important;
-  opacity: 0 !important;
-  pointer-events: none;
-}
-
-/* Ensure the navbar-autohide-enabled class is properly recognized for all navbar types */
-.navbar-autohide-enabled, 
-#navbar.navbar-autohide-enabled,
-#navbar-special.navbar-autohide-enabled {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: 1030;
-}
-
-//=================== Button Space (Icons) =========================//
-.toggle-container + .nav-item {
-  margin-left: 14px !important;
-}
-
-// Ensure proper alignment of controls
-@media (min-width: 576px) {
-  #navbar-special .toggle-container {
-    margin-left: auto !important;
-    margin-right: 0 !important;
-  }
-
-  .navbar-collapse {
-    flex-grow: 0;
-    display: flex;
-    align-items: center;
-  }
-
-  .navbar-brand-container {
-    margin-left: 0 !important;
-    margin-right: auto !important;
-    display: flex;
-    justify-content: flex-start;
-  }
-
-  .navbar-brand-container a.navbar-brand {
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-  }
-}
-
-@media (max-width: 576px) {
-  #navbarNav.navbar-collapse.show,
-  #navbarNav.navbar-collapse.collapsing {
-    background-color: var(--global-nav-color) !important;
-    position: absolute;
-    top: 100%;
-    left: 0;
-    right: 0;
-    width: 100%;
-  }
-  
-  .navbar-nav .nav-item:last-child {
-    align-self: flex-end;
-    margin-left: auto;
-  }
-
-  .language-btn-navbar {
-    margin-right: 0 !important;
-  }
-}
-
-@media (max-width: 575.98px) {
-  .navbar-brand-container {
-    margin-left: 0 !important;
-    margin-right: auto !important;
-  }
-
-  .navbar-brand-container a.navbar-brand {
-    display: flex;
-    justify-content: flex-start;
-  }
-}
-
-// Fix for iPhone - both background color and content spacing
-@media screen and (max-width: 480px) {
-  // Background color fix
-  #navbarNav.show {
-    background-color: var(--global-nav-color) !important;
-    margin-bottom: 10px;
-  }
-  
-  #navbarNav.show {
-    padding: 1.5px;
-  }
-}
-
-//===================== Language Button ===========================//
-.language-btn-navbar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  background-color: #d6d6d6 !important; /* Toggle track color */
-  border-radius: 30px;
-  padding: 3px !important;
+// Clean, minimal dropdown without Bootstrap dependency
+.simple-dropdown {
   position: relative;
-  width: 68px;
-  height: 28px;
-  transition: all 0.3s ease;
-  cursor: pointer;
-  margin-top: 8px !important;
-  border: none;
-  box-shadow:
-    inset 0 1px 3px rgba(0, 0, 0, 0.1),
-    0 1px 3px rgba(0, 0, 0, 0.15);
-    
-  &:hover {
-    transform: scale(1.05);
-    box-shadow:
-      inset 0 1px 3px rgba(0, 0, 0, 0.15),
-      0 2px 5px rgba(0, 0, 0, 0.2);
-  }
-}
-
-/* Toggle indicator (circle) */
-.language-btn-navbar .toggle-indicator {
-  position: absolute;
-  width: 22px;
-  height: 22px;
-  border-radius: 50%;
-  background-color: #ffffff;
-  box-shadow:
-    0 2px 5px rgba(0, 0, 0, 0.15),
-    inset 0 -1px 1px rgba(0, 0, 0, 0.05);
-  z-index: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  will-change: transform;
-}
-
-/* Position based on language */
-.language-btn-navbar.en .toggle-indicator {
-  transform: translateX(3px);
-}
-.language-btn-navbar.alt-lang .toggle-indicator {
-  transform: translateX(43px);
-}
-
-/* Animation classes for toggle indicator */
-.language-btn-navbar.en.animating-to-alt .toggle-indicator {
-  transform: translateX(43px);
-}
-.language-btn-navbar.alt-lang.animating-to-en .toggle-indicator {
-  transform: translateX(3px);
-}
-
-/* Inner icon wrapper */
-.language-btn-navbar .navbar-lang-icon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-  width: 100%;
-  height: 100%;
-  transition: transform 0.3s ease;
-}
-
-/* TH flag image */
-.language-btn-navbar .navbar-lang-icon img.circle-flag {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  border-radius: 50%;
-  border: 1px solid white;
-  transform: scale(1.13) translateX(-1.23px);
-  transform-origin: center;
-  pointer-events: none;
-  transition: transform 0.3s ease;
-}
-
-/* Globe icon (non-TH) */
-.language-btn-navbar .navbar-lang-icon i.ti-world {
-  font-size: 1.75rem !important; /* slightly bigger */
-  color: #0d3b67;
-  transition: color 0.3s ease, transform 0.3s ease;
-  transform: translateX(-1.8px) !important; /* nudge left */
-}
-
-/* Text label */
-.language-btn-navbar .lang-label {
-  font-weight: 600;
-  font-size: 0.9rem;
-  position: absolute;
-  color: #0d3b67 !important;
-  text-shadow: 0 1px 1px rgba(255, 255, 255, 0.6);
-  transition: opacity 0.3s ease;
-}
-
-.language-btn-navbar.en .lang-label {
-  right: 10px;
-}
-.language-btn-navbar.alt-lang .lang-label {
-  left: 10px;
-}
-
-//================ Special navbar-specific styles ================//
-#navbar-special {
-  // Center title container
-  .navbar-title-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-grow: 1;
-    transition: transform 0.3s ease, opacity 0.3s ease;
-  }
-
-  // Title styling with responsive size
-  .navbar-title {
-    font-size: clamp(0.75rem, 3vw, 2rem); // Responsive scaling
-    color: var(--global-text-nav-color); // Use global color
-    margin: 0;
-    padding: 0;
-    text-align: center;
-    font-weight: bold;
-    transition: transform 0.3s ease, opacity 0.3s ease;
-    
-    &:hover {
-      transform: scale(1.02);
-    }
-  }
-
-  // Logo container
-  .navbar-brand-container {
-    display: flex;
-    align-items: center;
-    transition: transform 0.3s ease;
-    
-    .navbar-brand.logo {
-      transition: transform 0.3s ease, opacity 0.3s ease;
-      
-      img {
-        transition: transform 0.3s ease, opacity 0.3s ease;
-      }
-      
-      &:hover img {
-        transform: scale(1.05);
-      }
-    }
-  }
-}
-
-//================ Toggle Down Mode Styles ================//
-// Special navbar with toggle_down enabled
-.navbar-toggle-always {
-  // Always display the toggle button regardless of screen size
-  .navbar-toggler {
-    display: block !important;
-  }
-
-  .navbar-collapse {
-    transition: none !important;
-    animation-duration: 0.05s !important;
-    animation-timing-function: ease-in-out !important;
-  }
-  
-  // Title container adjustments
-  .navbar-title-container.toggle-down-title {
-    text-align: center;
-    margin: 0 auto;
-  }
-  
-  // Force collapse to be hidden on all screen sizes when toggle_down is true
-  &.navbar-expand-sm {
-    @media (min-width: 576px) {
-      .navbar-toggler {
-        display: block !important; // Always show toggle
-      }
-      
-      .navbar-collapse {
-        display: none !important; // Always collapsed by default
-        
-        &.show {
-          display: block !important; // Only show when toggled
-          animation: fadeIn 0.1s forwards;
-        }
-      }
-    }
-  }
-  
-  // Styling for the collapsed menu when toggled
-  .navbar-collapse {
-    position: absolute;
-    top: 100%;
-    left: 0;
-    right: 0;
-    width: 100%;
-    z-index: 1029;
-    padding: 0.5rem 0;
-    border-top: 1px solid var(--global-divider-color);
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    text-align: right; // Right-align text
-    
-    // Set the correct flex direction for navbar items
-    .navbar-nav {
-      flex-direction: column;
-      align-items: flex-end; // Align items to the right
-      width: 100%;
-      max-width: 1400px;
-      margin: 0 auto;
-      padding: 0 15px;
-      
-      .nav-item {
-        margin: 0.5rem 0;
-        transition: transform 0.3s ease, opacity 0.3s ease;
-        
-        .nav-link {
-          display: block; 
-          text-align: right;
-          padding-right: 0;
-          transition: transform 0.3s ease, color 0.3s ease;
-          
-          &:hover {
-            transform: translateX(-3px);
-          }
-        }
-      }
-      
-      // Staggered animation for menu items
-      @for $i from 1 through 10 {
-        .nav-item:nth-child(#{$i}) {
-          animation: fadeIn 0.3s forwards;
-          animation-delay: 0.05s * $i;
-          opacity: 0;
-        }
-      }
-      
-      // Properly handle dropdowns within the collapsed navbar
-      .dropdown-menu {
-        position: static !important;
-        float: none;
-        width: auto;
-        margin-top: 0.5rem;
-        padding-right: 1rem;
-        border: none;
-        box-shadow: none;
-        background-color: transparent !important;
-        text-align: right;
-        right: 0;
-        left: auto;
-        animation: fadeIn 0.3s forwards;
-      }
-    }
-  }
-}
-
-// Ensure dropdown toggle caret appears correctly
-.navbar-toggle-always .dropdown-toggle::after {
   display: inline-block;
-  margin-left: 0.255em;
-  vertical-align: 0.255em;
-  content: "";
-  border-top: 0.3em solid;
-  border-right: 0.3em solid transparent;
-  border-bottom: 0;
-  border-left: 0.3em solid transparent;
-  transition: transform 0.3s ease;
-}
-
-// Ensure the navbar maintains proper height
-#navbar-special.navbar-toggle-always {
-  min-height: 65px !important;
-}
-
-//================ HERO-SECTION navbar-specific styles ================//
-// Landing Hero Header Container Styles
-#header-container {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: 1030;
-  transform: translateY(-100%);
-  opacity: 0;
-  transition: transform 0.5s cubic-bezier(0.215, 0.61, 0.355, 1), 
-              opacity 0.5s cubic-bezier(0.215, 0.61, 0.355, 1);
-  pointer-events: none;
-  will-change: transform, opacity;
-}
-
-// When header container is visible
-#header-container.visible {
-  transform: translateY(0);
-  opacity: 1;
-  pointer-events: auto;
-}
-
-// Prevent content jump when navbar appears
-.landing-page-content {
-  padding-top: 0;
-}
-
-// Override hidden class on landing hero pages to ensure it works properly
-#header-container.visible .navbar-hidden,
-#header-container.visible #navbar.navbar-hidden,
-#header-container.visible #navbar-special.navbar-hidden {
-  transform: translateY(0) !important;
-  opacity: 1 !important;
-}
-
-// Ensure auto-hide kicks in only after hero section
-.navbar-auto-hide .navbar-hidden {
-  transform: translateY(-100%) !important;
-  opacity: 0 !important;
-  transition: transform 0.3s cubic-bezier(0.215, 0.61, 0.355, 1), 
-              opacity 0.3s cubic-bezier(0.215, 0.61, 0.355, 1) !important;
-}
-
-// Navbar switch transition styles
-.navbar-switch-container {
-  position: relative;
-  width: 100%;
-  overflow: hidden;
-}
-
-// Smooth transition between navbar types
-.navbar-switch-animation {
-  .navbar-entering {
-    animation: slideInDown 0.5s forwards;
-    z-index: 1031;
-    position: relative;
-  }
   
-  .navbar-exiting {
-    animation: fadeOut 0.3s forwards;
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    z-index: 1030;
+  &:hover .dropdown-content {
+    display: block;
   }
 }
 
-//================ Navbar Logo Badge ================//
-.navbar-logo-badge {
-  --logo-badge-color: var(--global-theme-color, #0076df);
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 6px 12px;
-  height: 55px; // Fixed height to maintain navbar dimensions
-  margin-top: 0; // Connect directly to top
-  
-  // Main background shape
-  &::before {
-    content: '';
-    position: absolute;
-    top: -15px; // Extend slightly above navbar
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: var(--logo-badge-color);
-    border-radius: 0 0 18px 18px;
-    z-index: 1;
-    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
-  }
-  
-  // Logo must be in front of everything with larger size
-  img.navbar-logo {
-    position: relative;
-    z-index: 10; // Higher z-index to ensure it's on top
-    height: 48px; // Larger logo
-    width: auto;
-    transform: translateY(-2px); // Slight adjustment to center
-    filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.1)); // Subtle shadow for depth
-  }
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: var(--global-card-bg-color);
+  min-width: 160px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+  z-index: 1;
+  border-radius: 4px;
+  padding: 0.5rem 0;
 }
 
-// Fixed navbar height enforcement
-.navbar, #navbar {
-  height: 72px; // Fixed height
-  min-height: 72px;
-  max-height: 72px;
-  display: flex;
-  align-items: center;
+.dropdown-content a {
+  color: var(--global-text-color);
+  padding: 0.5rem 1rem;
+  text-decoration: none;
+  display: block;
+  transition: background 0.3s ease;
 }
 
-.navbar-brand-container {
-  height: 72px;
-  display: flex;
-  align-items: center;
-}
-
-// Responsive adjustments
-@media (max-width: 768px) {
-  .navbar-logo-badge {
-    padding: 4px 10px;
-    height: 50px;
-    
-    img.navbar-logo {
-      height: 40px;
-    }
-  }
-  
-  .navbar, #navbar {
-    height: 65px;
-    min-height: 65px;
-    max-height: 65px;
-  }
-  
-  .navbar-brand-container {
-    height: 65px;
-  }
+.dropdown-content a:hover {
+  background-color: var(--global-hover-color);
+  color: var(--global-hover-text-color);
 }

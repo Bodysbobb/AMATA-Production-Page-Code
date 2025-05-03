@@ -1,177 +1,101 @@
+// AMATA Production Navbar Control Script
+// Minimal JavaScript for navbar functionality
+
 document.addEventListener('DOMContentLoaded', function() {
-  // ===== Configuration Detection =====
-  const hasHeroSection = document.querySelector('.landing-hero') !== null;
-  const hasAutoHide = document.body.classList.contains('navbar-auto-hide');
-  const hasSpecialNavbar = document.body.getAttribute('data-special-navbar') === 'true';
-  const hasBothNavbars = hasSpecialNavbar && document.body.getAttribute('data-switch-navbar') === 'true';
+  // Elements
+  const navbar = document.getElementById('navbar');
+  const navbarToggler = document.querySelector('.navbar-toggler');
+  const navbarCollapse = document.querySelector('.navbar-collapse');
+  const navbarBrand = document.querySelector('.navbar-brand');
+  const navbarTitle = document.querySelector('.navbar-title-container');
   
-  // Get navbar elements
-  const defaultNavbar = document.getElementById('default-navbar');
-  const specialNavbar = document.getElementById('special-navbar');
-  const headerContainer = document.getElementById('header-container');
-  
-  // Track scroll position
-  let lastScrollTop = 0;
-  let ticking = false;
-  
-  // ===== Add minimal transition styles =====
-  const addTransitionStyles = () => {
-    const style = document.createElement('style');
-    style.textContent = `
-      /* Navbar transition styles */
-      #default-navbar, #special-navbar, .navbar {
-        transition: transform 0.4s ease, opacity 0.4s ease;
-      }
-      
-      /* Auto-hide transitions */
-      .navbar-hidden {
-        transform: translateY(-100%) !important;
-        opacity: 0 !important;
-      }
-      
-      /* Hero section container */
-      #header-container {
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        z-index: 1030;
-        transform: translateY(-100%);
-        opacity: 0;
-        transition: transform 0.5s ease, opacity 0.5s ease;
-        pointer-events: none;
-      }
-      
-      #header-container.visible {
-        transform: translateY(0);
-        opacity: 1;
-        pointer-events: auto;
-      }
-    `;
-    document.head.appendChild(style);
-  };
-  
-  // ===== Hero Section Handler =====
-  const handleHeroSectionNavbar = () => {
-    if (!hasHeroSection || !headerContainer) return;
-    
-    const heroSection = document.querySelector('.landing-hero');
-    const handleScrollForHero = () => {
-      const scrollPosition = window.scrollY;
-      const heroHeight = heroSection.offsetHeight;
-      
-      // Show navbar when scrolled past 70% of hero height
-      if (scrollPosition > heroHeight * 0.7) {
-        headerContainer.classList.add('visible');
-      } else {
-        headerContainer.classList.remove('visible');
-      }
-    };
-    
-    // Listen for scroll events
-    window.addEventListener('scroll', function() {
-      if (!ticking) {
-        window.requestAnimationFrame(function() {
-          handleScrollForHero();
-          ticking = false;
-        });
-        ticking = true;
-      }
+  // Mobile menu toggle
+  if (navbarToggler && navbarCollapse) {
+    navbarToggler.addEventListener('click', function() {
+      navbarCollapse.classList.toggle('show');
+      navbarToggler.classList.toggle('collapsed');
     });
     
-    // Initialize on load
-    handleScrollForHero();
-  };
+    // Close menu when clicking outside
+    document.addEventListener('click', function(event) {
+      const isClickInside = navbar.contains(event.target);
+      if (!isClickInside && navbarCollapse.classList.contains('show')) {
+        navbarCollapse.classList.remove('show');
+        navbarToggler.classList.add('collapsed');
+      }
+    });
+  }
   
-  // ===== Auto-Hide Functionality =====
-  const setupAutoHide = (navbar) => {
-    if (!navbar || !hasAutoHide) return;
+  // Scroll behavior for navbar
+  let lastScroll = 0;
+  let isScrolling = false;
+  
+  function handleScroll() {
+    const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
     
-    const handleAutoHideScroll = () => {
-      const currentScrollTop = window.scrollY || document.documentElement.scrollTop;
+    // Add/remove scrolled class
+    if (scrollTop > 50) {
+      navbar.classList.add('scrolled');
+      if (navbarTitle) {
+        navbarTitle.style.display = 'flex';
+      }
+    } else {
+      navbar.classList.remove('scrolled');
+      if (navbarTitle) {
+        navbarTitle.style.display = 'none';
+      }
+    }
+    
+    lastScroll = scrollTop;
+    isScrolling = false;
+  }
+  
+  // Optimized scroll listener
+  window.addEventListener('scroll', function() {
+    if (!isScrolling) {
+      window.requestAnimationFrame(handleScroll);
+      isScrolling = true;
+    }
+  });
+  
+  // Language toggle functionality
+  const langToggle = document.querySelector('.language-btn-navbar');
+  if (langToggle) {
+    langToggle.addEventListener('click', function() {
+      // This will trigger the actual page language switch
+      // You may need to implement the actual language switching logic
+      console.log('Language toggle clicked');
+    });
+  }
+  
+  // Active nav link highlighting
+  const navLinks = document.querySelectorAll('.nav-link');
+  const currentPath = window.location.pathname;
+  
+  navLinks.forEach(link => {
+    if (link.getAttribute('href') === currentPath) {
+      link.classList.add('active');
+    }
+  });
+  
+  // Simple dropdown functionality (if not using Bootstrap)
+  const dropdowns = document.querySelectorAll('.simple-dropdown');
+  dropdowns.forEach(dropdown => {
+    const toggle = dropdown.querySelector('.dropdown-toggle');
+    const menu = dropdown.querySelector('.dropdown-content');
+    
+    if (toggle && menu) {
+      toggle.addEventListener('click', function(e) {
+        e.preventDefault();
+        menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+      });
       
-      // Only apply logic if we've scrolled enough (10px threshold)
-      if (Math.abs(lastScrollTop - currentScrollTop) > 10) {
-        // Down scroll and past navbar height - hide navbar
-        if (currentScrollTop > lastScrollTop && currentScrollTop > navbar.offsetHeight) {
-          navbar.classList.add('navbar-hidden');
-        } 
-        // Up scroll or at the top - show navbar
-        else if (currentScrollTop < lastScrollTop || currentScrollTop < navbar.offsetHeight) {
-          navbar.classList.remove('navbar-hidden');
+      // Close dropdown when clicking outside
+      document.addEventListener('click', function(e) {
+        if (!dropdown.contains(e.target)) {
+          menu.style.display = 'none';
         }
-        
-        lastScrollTop = currentScrollTop;
-      }
-    };
-    
-    // Listen for scroll events
-    window.addEventListener('scroll', function() {
-      if (!ticking) {
-        window.requestAnimationFrame(function() {
-          handleAutoHideScroll();
-          ticking = false;
-        });
-        ticking = true;
-      }
-    });
-    
-    // Initialize
-    navbar.classList.remove('navbar-hidden');
-  };
-  
-  // ===== Navbar Switch =====
-  const setupNavbarToggle = () => {
-    if (!hasBothNavbars || !defaultNavbar || !specialNavbar) return;
-    
-    // Function to switch between navbars based on scroll direction
-    const switchNavbarsOnScroll = () => {
-      const currentScrollTop = window.scrollY || document.documentElement.scrollTop;
-      
-      // Scrolling down - show special navbar
-      if (currentScrollTop > lastScrollTop && Math.abs(lastScrollTop - currentScrollTop) > 20) {
-        defaultNavbar.style.display = 'none';
-        specialNavbar.style.display = 'block';
-      }
-      // Scrolling up - show default navbar
-      else if (currentScrollTop < lastScrollTop && Math.abs(lastScrollTop - currentScrollTop) > 20) {
-        specialNavbar.style.display = 'none';
-        defaultNavbar.style.display = 'block';
-        defaultNavbar.classList.add('visible'); 
-      }
-      
-      lastScrollTop = currentScrollTop;
-    };
-    
-    // Listen for scroll events
-    window.addEventListener('scroll', function() {
-      if (!ticking) {
-        window.requestAnimationFrame(function() {
-          switchNavbarsOnScroll();
-          ticking = false;
-        });
-        ticking = true;
-      }
-    });
-  };
-  
-  // ===== Initialize all components =====
-  addTransitionStyles();
-  handleHeroSectionNavbar();
-  
-  // Setup auto-hide for relevant navbars
-  if (defaultNavbar) {
-    const defaultInnerNav = defaultNavbar.querySelector('#navbar');
-    setupAutoHide(defaultInnerNav || defaultNavbar);
-  }
-  
-  if (specialNavbar) {
-    const specialInnerNav = specialNavbar.querySelector('#navbar-special');
-    setupAutoHide(specialInnerNav || specialNavbar);
-  }
-  
-  // Setup navbar toggle if both navbars are available
-  if (hasBothNavbars) {
-    setupNavbarToggle();
-  }
+      });
+    }
+  });
 });
