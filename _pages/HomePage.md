@@ -17,7 +17,6 @@ navbar_logo_one_badge_color: "#ffffff"
 
 # ================ Contact Info Button Configuration ================ #
 contact_info: true
-contact_theme: "amata_th"
 
 # ================ Language Switch ================ #
 language_switch: true
@@ -25,10 +24,10 @@ lang: "th"
 alternate_lang_url: "/english/AMATA-HomePage-en/"
 
 # ================ HERO SECTION ================ #
-landing_hero: false     
+raw_fullscreen_hero: false
 
 # ================ Background & Effects ================ #
-need_aos: true
+need_aos: false
 
 # ================ META ================ #
 # JSON Business Meta
@@ -57,20 +56,22 @@ latest_posts:
   scrollable: true # adds a vertical scroll bar if there are more than 3 new posts items
   limit: 5 # leave blank to include all the blog posts        
 ---
+<!-- Load separate CSS file for better caching -->
+<link rel="stylesheet" href="{{ '/assets/css/homepage.css' | relative_url }}">
 
 <!-- Hero Section -->
-{% include landing-hero.liquid
-  title="AMATA Production"
-  subtext="ทุกลวดลายมีเรื่องราว คุณภาพงานพิมพ์จึงสำคัญ"
-  signature="— อมตะ โปรดักชั่น —"
-  scroll_text="ติดต่อเรา"
-  particle_mode="heo-only"
-  letter_delay="0.05"
-  initial_delay="300"
-  data-final-class="animation-complete"
-  animation_type="thai"
-  has_navbar=true 
-%}
+<section class="full-page-section">
+  <div class="full-page-inner">
+    <div class="full-page-left">
+      <img src="/assets/img/custom_logo/amata/AMATA_Logo.svg" alt="Logo" class="full-page-logo">
+    </div>
+    <div class="full-page-right">
+      <h1 class="full-page-title">Welcome to AMATA</h1>
+      <p class="full-page-subtitle">Your one-stop smart printing solution</p>
+    </div>
+  </div>
+</section>
+
 <a id="projects-start"></a>
 
 <hr class="section-divider">
@@ -113,45 +114,47 @@ latest_posts:
   </p>
 </div>
 
+
+<!-- Stats Section -->
 <section class="stats-section">
   <div class="stats-container">
     <div class="stat-item">
-      <i class="fa-solid fa-shirt stat-icon"></i>
+      {% include icons/shirt.liquid class="stat-icon" %}
       <div class="stat-number">100,000+</div>
       <div class="stat-label">เสื้อพิมพ์ลายที่จัดส่ง</div>
     </div>
     <div class="stat-item">
-      <i class="fa-solid fa-users stat-icon"></i>
+      {% include icons/users-solid.liquid class="stat-icon" %}
       <div class="stat-number">2,500+</div>
       <div class="stat-label">ลูกค้าทั่วประเทศ</div>
     </div>
     <div class="stat-item">
-      <i class="fa-solid fa-palette stat-icon"></i>
+      {% include icons/palette-solid.liquid class="stat-icon" %}
       <div class="stat-number">750+</div>
       <div class="stat-label">ดีไซน์ใหม่</div>
     </div>
     <div class="stat-item">
-      <i class="fa-solid fa-building stat-icon"></i>
+      {% include icons/building-solid.liquid class="stat-icon" %}
       <div class="stat-number">30+</div>
       <div class="stat-label">องค์กรชั้นนำเลือกใช้</div>
     </div>
     <div class="stat-item">
-      <i class="fa-solid fa-graduation-cap stat-icon"></i>
+      {% include icons/graduation-cap-solid.liquid class="stat-icon" %}
       <div class="stat-number">15+</div>
       <div class="stat-label">มหาวิทยาลัยชั้นนำไว้วางใจ</div>
     </div>
     <div class="stat-item">
-      <i class="fa-solid fa-calendar-check stat-icon"></i>
+      {% include icons/calendar-check-solid.liquid class="stat-icon" %}
       <div class="stat-number">5+</div>
       <div class="stat-label">ปี ประสบการณ์</div>
     </div>
     <div class="stat-item">
-      <i class="fa-solid fa-truck-fast stat-icon"></i>
+      {% include icons/truck-fast-solid.liquid class="stat-icon" %}
       <div class="stat-number">7–14 วัน</div>
       <div class="stat-label">จัดส่งรวดเร็ว</div>
     </div>
     <div class="stat-item">
-      <i class="fa-solid fa-face-smile-beam stat-icon"></i>
+      {% include icons/face-smile-beam-solid.liquid class="stat-icon" %}
       <div class="stat-number">100%</div>
       <div class="stat-label">ความพึงพอใจของลูกค้า</div>
     </div>
@@ -168,43 +171,44 @@ latest_posts:
   <div class="hiw-step-group">
 
     <!-- Step 1 -->
-    <div class="hiw-branch" data-aos="fade-up" data-aos-once="true">
+    <div class="hiw-branch">
       <a href="https://www.amataproduction.com/สินค้า/" class="hiw-step">
-        <i class="fa-solid fa-shirt hiw-icon"></i>
-        <h4 class="hiw-title">เลือกดีไซน์ที่ใช่</h4>
+        {% include icons/shirt.liquid class="hiw-icon" %}
+        <h2 class="hiw-title">เลือกดีไซน์ที่ใช่</h2>
         <p class="hiw-desc">มากกว่า 750+ สไตล์พร้อมให้คุณเลือกที่ AMATA</p>
       </a>
       <div class="hiw-connector-merge">หรือ</div>
-      <div class="hiw-step" data-aos="fade-up" data-aos-once="true">
-        <i class="fa-solid fa-lightbulb hiw-icon"></i>
-        <h4 class="hiw-title">ออกแบบใหม่ ตามสไตล์คุณ (ฟรี!)</h4>
+      <div class="hiw-step">
+        {% include icons/lightbulb-solid.liquid class="hiw-icon" %}
+        <h2 class="hiw-title">ออกแบบใหม่ ตามสไตล์คุณ (ฟรี!)</h2>
         <p class="hiw-desc">เราจะเนรมิตไอเดียของคุณออกมาเป็น ดีไซน์เฉพาะคุณ โดยทีมงานกราฟิกมืออาชีพ</p>
       </div>
     </div>
 
     <!-- Step 2 -->
-    <a href="https://vcard-admin.pkp.homes/U0NtnOPAOx" class="hiw-step hiw-with-line" data-aos="fade-up" data-aos-once="true">
-      <i class="fa-solid fa-comments hiw-icon"></i>
-      <h4 class="hiw-title">ติดต่อเรา</h4>
+    <a href="https://vcard-admin.pkp.homes/U0NtnOPAOx" class="hiw-step hiw-with-line">
+      {% include icons/comment-solid.liquid class="hiw-icon" %}
+      <h2 class="hiw-title">ติดต่อเรา</h2>
       <p class="hiw-desc">ยืนยันแบบ เนื้อผ้า ไซซ์ และรายละเอียดต่างๆ เพื่อสั่งผลิต</p>
     </a>
 
     <!-- Step 3 -->
-    <div class="hiw-step hiw-with-line" data-aos="fade-up" data-aos-once="true">
-      <i class="fa-solid fa-industry hiw-icon"></i>
-      <h4 class="hiw-title">เริ่มการผลิต</h4>
+    <div class="hiw-step hiw-with-line">
+      {% include icons/needle-thread.liquid class="hiw-icon" %}
+      <h2 class="hiw-title">เริ่มการผลิต</h2>
       <p class="hiw-desc">ผลิตโดยทีมงานมืออาชีพ มั่นใจคุณภาพทุกขั้นตอน</p>
     </div>
 
     <!-- Step 4 -->
-    <div class="hiw-step hiw-with-line" data-aos="fade-up" data-aos-once="true">
-      <i class="fa-solid fa-truck-fast hiw-icon"></i>
-      <h4 class="hiw-title">จัดส่งทั่วไทย</h4>
+    <div class="hiw-step hiw-with-line">
+      {% include icons/truck-fast-solid.liquid class="hiw-icon" %}
+      <h2 class="hiw-title">จัดส่งทั่วไทย</h2>
       <p class="hiw-desc">รอรับของหน้าประตู สวมใส่ได้ทันทีอย่างมั่นใจ</p>
     </div>
 
   </div>
 </section>
+
 
 <hr class="section-divider">
 
@@ -222,7 +226,6 @@ latest_posts:
   images_per_row_min="1"
 %}
 
-
 <hr class="section-divider">
 
 <h1 class="section-heading">
@@ -231,7 +234,7 @@ latest_posts:
 
 <!-- Client Banners (TH) -->
 {% include client-catalog.liquid 
-  paths="/assets/img/Banner/clients/c1.png, /assets/img/Banner/clients/c2.png, /assets/img/Banner/clients/c3.png, /assets/img/Banner/clients/c4.png"
+  paths="/assets/img/Banner/clients/c1.webp, /assets/img/Banner/clients/c2.webp, /assets/img/Banner/clients/c3.webp, /assets/img/Banner/clients/c4.webp"
   alts="บริษัทและหน่วยงานชั้นนำที่ไว้วางใจ อมตะ โปรดักชั่น เช่น ปตท.สผ., มิตซูบิชิ อีเล็คทริค, ธรรมศาสตร์, มหาวิทยาลัยดัง และองค์กรรัฐ-เอกชนอีกมากมาย"
   titles="ลูกค้าที่ไว้วางใจอมตะ โปรดักชั่น - ปตท.สผ., มิตซูบิชิ, ธรรมศาสตร์, ม.มหิดล, ธนาคารกรุงศรี, สภากาชาดไทย, หน่วยงานราชการ ฯลฯ"
   links="https://www.amataproduction.com/เกี่ยวกับเรา/"
@@ -244,95 +247,72 @@ latest_posts:
 
 <hr class="section-divider">
 
-<h1 class="section-heading" data-aos="fade" data-aos-once="true">
+<h1 class="section-heading">
   แบรนด์ชั้นนำเลือกใช้แล้ว แล้วคุณหล่ะ?
 </h1>
 
 
-<h1 class="section-heading" data-aos="fade-up" data-aos-once="true">
+<h1 class="section-heading">
   ติดต่อเรา
 </h1>
-{% include amata-footer.liquid lang="th" aos="fade-up" aos_once="true" %}
+{% include amata-contact-section.liquid %}
 
-<!-- PAGE STYLE -->
-<style>
-  #projects-start {
-	  scroll-margin-top: 0px !important;
-  }
 
-  .section-heading {
-    text-align: center;
-    font-size: clamp(1.75rem, 4vw, 3rem);
-    font-weight: bold;
-    color: var(--global-text-color);
-    margin-top: 10vh;
-    margin-bottom: 3vh;
-  }
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  // =============================
+  // 1. Animate .hiw-step (Fade Up)
+  // =============================
+  const steps = document.querySelectorAll('.hiw-step');
+  const stepObserver = new IntersectionObserver((entries, obs) => {
+    entries.forEach((entry, index) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => {
+          entry.target.classList.add('fade-up-visible');
+        }, index * 150); // stagger effect
+        obs.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.2 });
 
-  /* === HERO SECTION === */
-  .landing-signature {
-    will-change: transform, opacity;
-  }
+  steps.forEach(step => {
+    step.classList.add('fade-up-init'); // default invisible style
+    stepObserver.observe(step);
+  });
 
-  .landing-signature {
-    color: var(--global-text-secondary-color) !important;
-    animation-delay: 3.4s !important;
-  }
+  // =============================
+  // 2. Animate Stats (.stat-number count up)
+  // =============================
+  const counters = document.querySelectorAll('.stat-number');
+  const counterObserver = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const el = entry.target;
+        const final = parseInt(el.textContent.replace(/[^\d]/g, ''));
+        if (isNaN(final)) return;
 
-  /* Apply Prompt Thai font globally but exclude icons */
-  .post, .post *:not(i[class^="fa-"]):not(i[class*=" fa-"]) {
-    font-family: 'Prompt', sans-serif !important;
-  }
+        let count = 0;
+        const step = Math.ceil(final / 50);
+        const animate = () => {
+          count += step;
+          if (count >= final) {
+            el.textContent = final.toLocaleString() + '+';
+            counterObserver.unobserve(el);
+            return;
+          }
+          el.textContent = count.toLocaleString() + '+';
+          requestAnimationFrame(animate);
+        };
+        animate();
 
-  /* Font Awesome: solid and regular icons */
-  .post i.fa-solid,
-  .post i.fa-regular {
-    font-family: "Font Awesome 6 Free" !important;
-    font-weight: 900 !important;
-  }
+        el.parentElement.classList.add('in-view'); // optional fade effect
+      }
+    });
+  }, { threshold: 0.5 });
 
-  /* Font Awesome: brand icons */
-  .post i.fa-brands {
-    font-family: "Font Awesome 6 Brands" !important;
-    font-weight: 400 !important;
-  }
+  counters.forEach(el => {
+    counterObserver.observe(el);
+  });
+});
+</script>
 
-  /* Optional: ensure headings also use Prompt */
-  .post h1, .post h2, .post h3, .post h4, .post h5, .post h6 {
-    font-family: 'Prompt', sans-serif !important;
-  }
-
-  .page-heading {
-    font-size: clamp(1.75rem, 4vw, 3rem);
-    font-weight: bold;
-    color: var(--global-text-color);
-    text-align: center;
-    margin-top: 0vh;
-  }
-
-  .section-heading {
-    font-size: clamp(1.5rem, 4vw, 2.5rem);
-    font-weight: bold;
-    color: var(--global-text-color);
-    text-align: center;
-    margin-top: 5vh;
-    margin-bottom: 2vh;
-  }
-
-  .section-text {
-    font-size: clamp(1rem, 2.2vw, 1.2rem) !important;
-    line-height: 1.8;
-  }
-
-  .section-divider {
-    border: none;
-    height: 1px;
-    background-color: var(--global-divider-color);
-    margin: 2rem 0;
-  }
-
-  .animate-thai {
-    font-weight: 200 !important;
-  }
-</style>
-<!-- END STYLE -->

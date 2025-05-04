@@ -1,7 +1,6 @@
 ---
 layout: page
 title: AMATA Production Co., Ltd. (Thailand)
-lang: true
 img: assets/img/page_logo/amata_logo.png
 
 # ================ TITLE & Description ================ #
@@ -92,7 +91,7 @@ og_image: /assets/img/page_logo/amata_logo.png
 <h1 class="section-heading">
   Contact Us
 </h1>
-{% include amata-footer.liquid lang="en" %}
+{% include amata-contact-section.liquid %}
 
 <div class="page-content">
 <section>

@@ -1,98 +1,69 @@
-// Toggle through light, dark, and system theme settings.
-let toggleThemeSetting = () => {
-  let themeSetting = determineThemeSetting();
-  if (themeSetting == "system") {
-    setThemeSetting("light");
-  } else if (themeSetting == "light") {
-    setThemeSetting("dark");
-  } else {
-    setThemeSetting("system");
+(() => {
+  const themeCycle = ["light", "dark", "system"];
+  const iconIds = {
+    light: "light-toggle-light",
+    dark: "light-toggle-dark",
+    system: "light-toggle-system"
+  };
+
+  function getThemeSetting() {
+    const stored = localStorage.getItem("theme");
+    return themeCycle.includes(stored) ? stored : "system";
   }
-};
 
-// Change the theme setting and apply the theme.
-let setThemeSetting = (themeSetting) => {
-  localStorage.setItem("theme", themeSetting);
-  document.documentElement.setAttribute("data-theme-setting", themeSetting);
-  applyTheme();
-};
+  function getComputedTheme() {
+    const setting = getThemeSetting();
+    return setting === "system"
+      ? window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"
+      : setting;
+  }
 
-// Apply the computed dark or light theme to the website.
-let applyTheme = () => {
-  let theme = determineComputedTheme();
-  transTheme();
-  document.documentElement.setAttribute("data-theme", theme);
+  function applyTheme() {
+    const setting = getThemeSetting();
+    const computed = getComputedTheme();
 
-  // Add class to tables.
-  let tables = document.getElementsByTagName("table");
-  for (let i = 0; i < tables.length; i++) {
-    if (theme == "dark") {
-      tables[i].classList.add("table-dark");
-    } else {
-      tables[i].classList.remove("table-dark");
+    document.documentElement.setAttribute("data-theme-setting", setting);
+    document.documentElement.setAttribute("data-theme", computed);
+
+    // Transition
+    document.documentElement.classList.add("transition");
+    setTimeout(() => document.documentElement.classList.remove("transition"), 300);
+
+    // Toggle dark table style
+    document.querySelectorAll("table").forEach((t) =>
+      t.classList.toggle("table-dark", computed === "dark")
+    );
+
+    // Optional: Update medium zoom
+    if (typeof medium_zoom !== "undefined") {
+      medium_zoom.update({
+        background: getComputedStyle(document.documentElement).getPropertyValue("--global-bg-color") + "ee"
+      });
+    }
+
+    // Optional: Reinit particles
+    if (typeof initParticles === "function") initParticles();
+
+    // === ICON TOGGLE ===
+    for (const key in iconIds) {
+      const el = document.getElementById(iconIds[key]);
+      if (el) {
+        el.style.display = (key === setting) ? "inline-block" : "none";
+      }
     }
   }
 
-  // Updates the background of medium-zoom overlay.
-  if (typeof medium_zoom !== "undefined") {
-    medium_zoom.update({
-      background: getComputedStyle(document.documentElement).getPropertyValue("--global-bg-color") + "ee", // + 'ee' for transparency.
-    });
-  }
-
-  // Re-initialize particles to match the new theme
-  if (typeof initParticles === 'function') {
-    initParticles();
-  }
-};
-
-let transTheme = () => {
-  document.documentElement.classList.add("transition");
-  window.setTimeout(() => {
-    document.documentElement.classList.remove("transition");
-  }, 500);
-};
-
-// Determine the expected state of the theme toggle, which can be "dark", "light", or
-// "system". Default is "system".
-let determineThemeSetting = () => {
-  let themeSetting = localStorage.getItem("theme");
-  if (themeSetting != "dark" && themeSetting != "light" && themeSetting != "system") {
-    themeSetting = "system";
-  }
-  return themeSetting;
-};
-
-// Determine the computed theme, which can be "dark" or "light". If the theme setting is
-// "system", the computed theme is determined based on the user's system preference.
-let determineComputedTheme = () => {
-  let themeSetting = determineThemeSetting();
-  if (themeSetting == "system") {
-    const userPref = window.matchMedia;
-    if (userPref && userPref("(prefers-color-scheme: dark)").matches) {
-      return "dark";
-    } else {
-      return "light";
-    }
-  } else {
-    return themeSetting;
-  }
-};
-
-let initTheme = () => {
-  let themeSetting = determineThemeSetting();
-  setThemeSetting(themeSetting);
-
-  // Add event listener to the theme toggle button.
-  document.addEventListener("DOMContentLoaded", function () {
-    const mode_toggle = document.getElementById("light-toggle");
-    mode_toggle.addEventListener("click", function () {
-      toggleThemeSetting();
-    });
-  });
-
-  // Add event listener to the system theme preference change.
-  window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", ({ matches }) => {
+  function toggleThemeSetting() {
+    const current = getThemeSetting();
+    const next = themeCycle[(themeCycle.indexOf(current) + 1) % themeCycle.length];
+    localStorage.setItem("theme", next);
     applyTheme();
+  }
+
+  document.addEventListener("DOMContentLoaded", () => {
+    const toggleBtn = document.getElementById("light-toggle");
+    if (toggleBtn) toggleBtn.addEventListener("click", toggleThemeSetting);
+    applyTheme();
+    window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", applyTheme);
   });
-};
+})();

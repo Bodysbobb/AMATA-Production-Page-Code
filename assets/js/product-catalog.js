@@ -1,73 +1,180 @@
+/**
+ * Optimized Product Catalog
+ * Handles product grid display, filtering, lightbox, and image protection
+ * Performance optimized for large collections of images
+ */
+
 document.addEventListener('DOMContentLoaded', function() {
-  // Get catalog container and its data attributes
+  // Get catalog container
   const catalogContainer = document.querySelector('.product-catalog');
+  if (!catalogContainer) return;
   
-  if (!catalogContainer) return; // Exit if no catalog is found
+  // ============ PERFORMANCE OPTIMIZATIONS ============
   
-  // Check if image saving is allowed from data attribute
-  const allowImageSave = catalogContainer.dataset.allowImageSave === 'true';
-  
-  // Disable right-click and prevent long-press on gallery images if saving is not allowed
-  if (!allowImageSave) {
-    const galleryImages = document.querySelectorAll('.product-image img');
-    galleryImages.forEach(img => {
-      // Prevent right-click
-      img.addEventListener('contextmenu', function(e) {
-        e.preventDefault();
-        return false;
+  // Use passive event listeners where possible for better scrolling performance
+  const supportsPassive = (function() {
+    let result = false;
+    try {
+      const opts = Object.defineProperty({}, 'passive', {
+        get: function() { result = true; }
       });
-      
-      // Prevent dragging
-      img.setAttribute('draggable', 'false');
-      
-      // Add CSS to disable touch-callout but preserve touch events
-      img.style.webkitTouchCallout = 'none';
-      img.style.webkitUserSelect = 'none';
-      img.style.khtmlUserSelect = 'none';
-      img.style.mozUserSelect = 'none';
-      img.style.msUserSelect = 'none';
-      img.style.userSelect = 'none';
-      
-      // Track touch start time to distinguish between tap and long-press
-      let touchStartTime = 0;
-      
-      img.addEventListener('touchstart', function(e) {
-        touchStartTime = Date.now();
-        // Let the event continue for normal taps
-      });
-      
-      img.addEventListener('touchend', function(e) {
-        const touchDuration = Date.now() - touchStartTime;
-        // Only prevent default if it's a long press (over 500ms)
-        if (touchDuration > 500) {
-          e.preventDefault();
+      window.addEventListener('test', null, opts);
+      window.removeEventListener('test', null, opts);
+    } catch (e) {}
+    return result;
+  })();
+  
+  const listenerOptions = supportsPassive ? { passive: true } : false;
+  
+  // Optimize image loading with IntersectionObserver
+  const imageObserver = 'IntersectionObserver' in window ? new IntersectionObserver(
+    (entries, observer) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const img = entry.target;
+          // Only deal with images that have data-src
+          if (img.dataset.src) {
+            img.src = img.dataset.src;
+            img.classList.add('loaded');
+            observer.unobserve(img);
+          }
         }
       });
-    });
+    }, 
+    {
+      rootMargin: '50px 0px', // Start loading a bit before they come into view
+      threshold: 0.01 // Trigger when just a small part is visible
+    }
+  ) : null;
+  
+  // Batch DOM operations for better performance
+  function batchDOM(callback) {
+    // Use requestAnimationFrame for better performance
+    return window.requestAnimationFrame 
+      ? window.requestAnimationFrame(callback) 
+      : setTimeout(callback, 0);
+  }
+  
+  // Debounce function to limit rapid function calls
+  function debounce(func, wait = 200) {
+    let timeout;
+    return function(...args) {
+      const context = this;
+      clearTimeout(timeout);
+      timeout = setTimeout(() => func.apply(context, args), wait);
+    };
+  }
+  
+  // ============ INITIALIZATION ============
+  
+  // Apply global settings from data attributes
+  applyAspectRatio();
+  applyImagesPerRow();
+  
+  // Get customizable labels
+  const textLabels = {
+    copyButton: catalogContainer.dataset.copyButtonLabel || 'Copy URL',
+    copyButtonFinal: catalogContainer.dataset.copyButtonLabelFinalstate || 'URL Copied!',
+    copyMessage: catalogContainer.dataset.copyMessageLabel || 'Copy image URL:',
+    selectedFilters: catalogContainer.dataset.selectedFiltersLabel || 'Selected Filters',
+    clearAll: catalogContainer.dataset.clearAllLabel || 'Clear All',
+    noFilters: catalogContainer.dataset.noFiltersLabel || 'No filters selected',
+    middleLabel: catalogContainer.dataset.middleLabelText || 'ส่งลิงก์ผ่าน LINE ได้เลย!'
+  };
+  
+  // Get feature settings
+  const featureSettings = {
+    allowImageSave: catalogContainer.dataset.allowImageSave === 'true',
+    showCopyUrl: !(catalogContainer.dataset.showCopyUrl === 'false'),
+    lineAccount: catalogContainer.dataset.lineAccount || '',
+    hasGlobalSizeGuide: catalogContainer.dataset.sizeGuide === 'true',
+    globalSizeContent: catalogContainer.dataset.sizeContent || '',
+    globalSizePicture: catalogContainer.dataset.sizePicture || ''
+  };
+  
+  // Optimize image loading
+  initLazyLoading();
+  
+  // ============ FILTER FUNCTIONALITY ============
+  
+  // Get filter elements
+  const filterTags = document.querySelectorAll('.filter-tag, .dropdown-filter-tag');
+  const productItems = document.querySelectorAll('.product-item');
+  const selectedFiltersList = document.querySelector('.selected-filters-list');
+  const clearAllButton = document.querySelector('.clear-all-filters');
+  const filterButton = document.querySelector('.filter-sort-button');
+  const filterDropdown = document.querySelector('.filter-dropdown');
+  
+  // Store active filters
+  let activeFilters = [];
+  
+  // Set the Selected Filters heading text
+  const selectedFiltersHeading = document.querySelector('.selected-filters h4');
+  if (selectedFiltersHeading) {
+    selectedFiltersHeading.textContent = textLabels.selectedFilters;
+  }
+  
+  // Update clear all button text
+  if (clearAllButton) {
+    clearAllButton.textContent = textLabels.clearAll;
+  }
+  
+  // Toggle category dropdowns
+  initCategoryToggles();
+  
+  // Initialize filter dropdown toggle
+  initFilterDropdown();
+  
+  // Add event listeners to filter tags
+  initFilterListeners();
+  
+  // Initialize selected filters display
+  updateSelectedFilters();
+  
+  // ============ LIGHTBOX FUNCTIONALITY ============
+  
+  // Get product links
+  const productLinks = document.querySelectorAll('.product-link');
+  let allProducts = Array.from(productLinks);
+  let currentProductIndex = 0;
+  
+  // Set up lightbox triggers
+  initLightboxTriggers();
+  
+  // Auto-open lightbox from URL
+  autoOpenFromURL();
+  
+  // ============ PROTECT IMAGES IF NEEDED ============
+  
+  if (!featureSettings.allowImageSave) {
+    protectGalleryImages();
+  }
+  
+  // ============ FUNCTION IMPLEMENTATIONS ============
+  
+  // Initialize lazy loading for images
+  function initLazyLoading() {
+    if (!imageObserver) return; // Skip if IntersectionObserver not supported
     
-    // Add a global right-click disabler for dynamically created lightbox images
-    document.addEventListener('contextmenu', function(e) {
-      if (e.target.closest('.lightbox img') || e.target.closest('.lightbox-content img')) {
-        e.preventDefault();
-        return false;
-      }
-    });
-    
-    // Add a global long-press prevention for lightbox images
-    document.addEventListener('touchstart', function(e) {
-      if (e.target.closest('.lightbox img') || e.target.closest('.lightbox-content img')) {
-        e.target.touchStartTime = Date.now();
-      }
-    });
-    
-    document.addEventListener('touchend', function(e) {
-      const target = e.target.closest('.lightbox img') || e.target.closest('.lightbox-content img');
-      if (target && target.touchStartTime) {
-        const touchDuration = Date.now() - target.touchStartTime;
-        if (touchDuration > 500) {
-          e.preventDefault();
+    const productImages = document.querySelectorAll('.product-image img[data-src]');
+    productImages.forEach(img => {
+      // Add loading class for styling
+      img.classList.add('loading');
+      
+      // Add placeholder if needed (technique to reduce layout shifts)
+      if (!img.width || !img.height) {
+        // Set placeholder dimensions from aspect ratio
+        const aspectRatio = catalogContainer.dataset.imageAspectRatio;
+        if (aspectRatio) {
+          const [width, height] = aspectRatio.split('/').map(n => parseFloat(n.trim()));
+          if (width && height) {
+            img.style.aspectRatio = `${width} / ${height}`;
+          }
         }
       }
+      
+      // Start observing
+      imageObserver.observe(img);
     });
   }
   
@@ -160,171 +267,91 @@ document.addEventListener('DOMContentLoaded', function() {
     // Initial call
     updateResponsiveGrid();
     
-    // Update on resize
-    window.addEventListener('resize', updateResponsiveGrid);
+    // Debounced resize handler for better performance
+    window.addEventListener('resize', debounce(updateResponsiveGrid, 200), listenerOptions);
   }
   
-  // Apply feature visibility
-  function applyFeatureVisibility() {
-    // Handle top filters visibility
-    const topFilterTags = document.querySelector('.top-filter-tags');
-    if (topFilterTags && catalogContainer.dataset.showTopFilters === 'false') {
-      topFilterTags.style.display = 'none';
-    }
-    
-    // Handle dropdown filters visibility
-    const filterSort = document.querySelector('.filter-sort');
-    if (filterSort && catalogContainer.dataset.showDropdownFilters === 'false') {
-      filterSort.style.display = 'none';
+  // Initialize category toggles
+  function initCategoryToggles() {
+    const categoryHeaders = document.querySelectorAll('.category-header');
+    categoryHeaders.forEach(header => {
+      header.addEventListener('click', function() {
+        const filters = this.nextElementSibling;
+        const arrow = this.querySelector('.arrow-icon');
+        
+        filters.classList.toggle('hidden');
+        arrow.classList.toggle('rotated');
+      });
+    });
+  }
+  
+  // Initialize filter dropdown toggle
+  function initFilterDropdown() {
+    if (filterButton && filterDropdown) {
+      filterButton.addEventListener('click', function() {
+        filterDropdown.classList.toggle('active');
+        this.classList.toggle('active');
+      });
+      
+      // Close dropdown when clicking outside (with event delegation)
+      document.addEventListener('click', function(e) {
+        if (!e.target.closest('.filter-sort') && filterDropdown.classList.contains('active')) {
+          filterDropdown.classList.remove('active');
+          filterButton.classList.remove('active');
+        }
+      });
     }
   }
   
-  // Apply all the global theme settings
-  applyAspectRatio();
-  applyImagesPerRow();
-  applyFeatureVisibility();
-  
-  // Toggle category dropdowns
-  const categoryHeaders = document.querySelectorAll('.category-header');
-  categoryHeaders.forEach(header => {
-    header.addEventListener('click', function() {
-      const filters = this.nextElementSibling;
-      const arrow = this.querySelector('.arrow-icon');
-      
-      filters.classList.toggle('hidden');
-      
-      if (filters.classList.contains('hidden')) {
-        arrow.innerHTML = '&#9662;'; // Down arrow
-      } else {
-        arrow.innerHTML = '&#9652;'; // Up arrow
-      }
-    });
-  });
-  
-  // Filter functionality
-  const filterTags = document.querySelectorAll('.filter-tag, .dropdown-filter-tag');
-  const productItems = document.querySelectorAll('.product-item');
-  const selectedFiltersList = document.querySelector('.selected-filters-list');
-  const clearAllButton = document.querySelector('.clear-all-filters');
-  
-  // Store active filters
-  let activeFilters = [];
-  
-  // Toggle filter dropdown
-  const filterButton = document.querySelector('.filter-sort-button');
-  const filterDropdown = document.querySelector('.filter-dropdown');
-  
-  if (filterButton && filterDropdown) {
-    filterButton.addEventListener('click', function() {
-      filterDropdown.classList.toggle('active');
-      this.classList.toggle('active');
-    });
-    
-    // Close dropdown when clicking outside
+  // Initialize filter tag listeners
+  function initFilterListeners() {
+    // Use event delegation for better performance
     document.addEventListener('click', function(e) {
-      if (!e.target.closest('.filter-sort') && filterDropdown.classList.contains('active')) {
-        filterDropdown.classList.remove('active');
-        filterButton.classList.remove('active');
-      }
-    });
-  }
-  
-  // Get customizable labels from data attributes on the catalog container
-  let copyButtonLabel = 'Copy URL';
-  let copyButtonLabelFinalState = 'URL Copied!';
-  let copyMessageLabel = 'Copy image URL:';
-  let selectedFiltersLabel = 'Selected Filters';
-  let clearAllLabel = 'Clear All';
-  let noFiltersLabel = 'No filters selected';
-  
-  if (catalogContainer) {
-    copyButtonLabel = catalogContainer.dataset.copyButtonLabel || copyButtonLabel;
-    copyButtonLabelFinalState = catalogContainer.dataset.copyButtonLabelFinalstate || copyButtonLabelFinalState;
-    copyMessageLabel = catalogContainer.dataset.copyMessageLabel || copyMessageLabel;
-    selectedFiltersLabel = catalogContainer.dataset.selectedFiltersLabel || selectedFiltersLabel;
-    clearAllLabel = catalogContainer.dataset.clearAllLabel || clearAllLabel;
-    noFiltersLabel = catalogContainer.dataset.noFiltersLabel || noFiltersLabel;
-  }
-  
-  // Set the Selected Filters heading text
-  const selectedFiltersHeading = document.querySelector('.selected-filters h4');
-  if (selectedFiltersHeading) {
-    selectedFiltersHeading.textContent = selectedFiltersLabel;
-  }
-  
-  // Update selected filters display
-  function updateSelectedFilters() {
-    if (!selectedFiltersList) return; // Exit if element doesn't exist
-    
-    selectedFiltersList.innerHTML = '';
-    
-    if (activeFilters.length === 0) {
-      selectedFiltersList.innerHTML = `<span class="no-filters">${noFiltersLabel}</span>`;
-      return;
-    }
-    
-    activeFilters.forEach(filter => {
-      const filterBadge = document.createElement('span');
-      filterBadge.className = 'filter-badge';
-      filterBadge.dataset.filter = filter;
-      filterBadge.innerHTML = `${filter} <span class="remove-filter">&times;</span>`;
+      const target = e.target;
       
-      filterBadge.querySelector('.remove-filter').addEventListener('click', function(e) {
-        e.stopPropagation();
-        removeFilter(filter);
-      });
-      
-      selectedFiltersList.appendChild(filterBadge);
-    });
-  }
-  
-  // Apply active filters to products
-  function applyFilters() {
-    if (activeFilters.length === 0) {
-      // If no filters, show all products
-      productItems.forEach(item => {
-        item.style.display = 'block';
-      });
-      
-      // Update top filter active state
-      document.querySelectorAll('.filter-tag').forEach(tag => {
-        if (tag.getAttribute('data-filter') === 'all') {
-          tag.classList.add('active');
+      // Handle filter tags
+      if (target.matches('.filter-tag, .dropdown-filter-tag')) {
+        e.preventDefault();
+        const filter = target.getAttribute('data-filter');
+        
+        // For top filters, toggle single filter
+        if (target.classList.contains('filter-tag')) {
+          if (filter === 'all') {
+            activeFilters = [];
+          } else if (activeFilters.includes(filter)) {
+            removeFilter(filter);
+          } else {
+            addFilter(filter);
+          }
         } else {
-          tag.classList.remove('active');
+          // For dropdown filters, add to multiple selection
+          addFilter(filter);
         }
-      });
+        
+        updateSelectedFilters();
+        applyFilters();
+      }
       
-      return;
-    }
-    
-    // Update top filter active state
-    document.querySelectorAll('.filter-tag').forEach(tag => {
-      const filter = tag.getAttribute('data-filter');
-      if (activeFilters.includes(filter)) {
-        tag.classList.add('active');
-      } else {
-        tag.classList.remove('active');
-        if (filter === 'all') {
-          tag.classList.remove('active');
+      // Handle filter badge removal
+      else if (target.classList.contains('remove-filter')) {
+        const filterBadge = target.closest('.filter-badge');
+        if (filterBadge) {
+          const filter = filterBadge.dataset.filter;
+          removeFilter(filter);
+          updateSelectedFilters();
+          applyFilters();
         }
       }
     });
     
-    // Filter products by active filters
-    productItems.forEach(item => {
-      const itemTags = item.getAttribute('data-tags');
-      let shouldDisplay = false;
-      
-      // Check if product has any of the active filters
-      activeFilters.forEach(filter => {
-        if (itemTags && itemTags.includes(filter)) {
-          shouldDisplay = true;
-        }
+    // Clear all filters
+    if (clearAllButton) {
+      clearAllButton.addEventListener('click', function() {
+        activeFilters = [];
+        updateSelectedFilters();
+        applyFilters();
       });
-      
-      item.style.display = shouldDisplay ? 'block' : 'none';
-    });
+    }
   }
   
   // Add a filter
@@ -339,115 +366,135 @@ document.addEventListener('DOMContentLoaded', function() {
     
     if (!activeFilters.includes(filter)) {
       activeFilters.push(filter);
-      updateSelectedFilters();
-      applyFilters();
     }
   }
   
   // Remove a filter
   function removeFilter(filter) {
     activeFilters = activeFilters.filter(f => f !== filter);
-    updateSelectedFilters();
-    applyFilters();
   }
   
-  // Clear all filters
-  if (clearAllButton) {
-    // Update the button text with custom label
-    clearAllButton.textContent = clearAllLabel;
+  // Update selected filters display
+  function updateSelectedFilters() {
+    if (!selectedFiltersList) return;
     
-    clearAllButton.addEventListener('click', function() {
-      activeFilters = [];
-      updateSelectedFilters();
-      applyFilters();
-    });
-  }
-  
-  // Add event listeners to filter tags
-  filterTags.forEach(tag => {
-    tag.addEventListener('click', function(e) {
-      e.preventDefault();
-      const filter = this.getAttribute('data-filter');
+    batchDOM(() => {
+      selectedFiltersList.innerHTML = '';
       
-      // For top filters, toggle single filter
-      if (this.classList.contains('filter-tag')) {
-        if (filter === 'all') {
-          activeFilters = [];
-        } else if (activeFilters.includes(filter)) {
-          removeFilter(filter);
-        } else {
-          addFilter(filter);
-        }
-      } else {
-        // For dropdown filters, add to multiple selection
-        addFilter(filter);
+      if (activeFilters.length === 0) {
+        selectedFiltersList.innerHTML = `<span class="no-filters">${textLabels.noFilters}</span>`;
+        return;
       }
       
-      updateSelectedFilters();
-      applyFilters();
+      // Create document fragment for better performance
+      const fragment = document.createDocumentFragment();
+      
+      activeFilters.forEach(filter => {
+        const filterBadge = document.createElement('span');
+        filterBadge.className = 'filter-badge';
+        filterBadge.dataset.filter = filter;
+        filterBadge.innerHTML = `${filter} <span class="remove-filter">&times;</span>`;
+        fragment.appendChild(filterBadge);
+      });
+      
+      selectedFiltersList.appendChild(fragment);
     });
-  });
+  }
   
-  // Initialize selected filters display
-  updateSelectedFilters();
+  // Apply active filters to products
+  function applyFilters() {
+    batchDOM(() => {
+      if (activeFilters.length === 0) {
+        // If no filters, show all products
+        productItems.forEach(item => {
+          item.style.display = 'block';
+        });
+        
+        // Update top filter active state
+        document.querySelectorAll('.filter-tag').forEach(tag => {
+          if (tag.getAttribute('data-filter') === 'all') {
+            tag.classList.add('active');
+          } else {
+            tag.classList.remove('active');
+          }
+        });
+        
+        return;
+      }
+      
+      // Update top filter active state
+      document.querySelectorAll('.filter-tag').forEach(tag => {
+        const filter = tag.getAttribute('data-filter');
+        if (activeFilters.includes(filter)) {
+          tag.classList.add('active');
+        } else {
+          tag.classList.remove('active');
+          if (filter === 'all') {
+            tag.classList.remove('active');
+          }
+        }
+      });
+      
+      // Filter products by active filters
+      productItems.forEach(item => {
+        const itemTags = (item.getAttribute('data-tags') || '').toLowerCase();
+        let shouldDisplay = false;
+        
+        // Check if product has any of the active filters
+        for (let i = 0; i < activeFilters.length; i++) {
+          if (itemTags && itemTags.includes(activeFilters[i])) {
+            shouldDisplay = true;
+            break; // Early exit for performance
+          }
+        }
+        
+        item.style.display = shouldDisplay ? 'block' : 'none';
+      });
+    });
+  }
   
-  // Check if copy URL feature should be hidden and if LINE account is available
-  const shouldShowCopyUrl = !(catalogContainer && catalogContainer.dataset.showCopyUrl === 'false');
-  const lineAccount = catalogContainer && catalogContainer.dataset.lineAccount;
-  
-  // Basic lightbox functionality
-  const productLinks = document.querySelectorAll('.product-link');
-  let allProducts = Array.from(productLinks); // Array of all product links for navigation
-  let currentProductIndex = 0; // To track current image in lightbox
-  
-  productLinks.forEach((link, index) => {
-    link.addEventListener('click', function(e) {
+  // Initialize lightbox triggers
+  function initLightboxTriggers() {
+    document.addEventListener('click', function(e) {
+      const target = e.target.closest('.product-link');
+      if (!target) return;
+      
       e.preventDefault();
       
-      const imgSrc = this.getAttribute('href');
-      const imgTitle = this.getAttribute('data-title') || '';
-      currentProductIndex = index; // Store the current index for navigation
-      
-      openLightbox(imgSrc, imgTitle, index);
+      const imgSrc = target.getAttribute('href');
+      const imgTitle = target.getAttribute('data-title') || '';
+      const index = allProducts.indexOf(target);
+      if (index !== -1) {
+        currentProductIndex = index;
+        openLightbox(imgSrc, imgTitle, index);
+      }
     });
-  });
-
-  // Auto-open lightbox if URL contains a matching slug (like ?sports-1)
-  (function autoOpenFromURL() {
+  }
+  
+  // Auto-open lightbox from URL
+  function autoOpenFromURL() {
     const search = window.location.search;
     if (search.startsWith("?")) {
       const slug = search.substring(1); // Remove "?"
       const targetLink = document.querySelector(`a[data-product-slug="${slug}"]`);
       if (targetLink) {
-        setTimeout(function() {
-          targetLink.click();
-        }, 300);
+        // Delay to ensure page is fully loaded
+        setTimeout(() => targetLink.click(), 300);
       }
     }
-  })();
+  }
   
-  // Track the active keyboard event handler to prevent duplicate listeners
-  let activeKeyHandler = null;
-  
-  function openLightbox(imgSrc, imgTitle, index) {
-    // Create lightbox elements
-    const lightbox = document.createElement('div');
-    lightbox.className = 'lightbox';
+  // Protect gallery images if image saving is disabled
+  function protectGalleryImages() {
+    // Use feature detection for advanced protection
+    const hasPointerEvents = CSS.supports('pointer-events', 'none');
     
-    const lightboxContent = document.createElement('div');
-    lightboxContent.className = 'lightbox-content';
+    // Common protection for all images
+    const galleryImages = document.querySelectorAll('.product-image img');
     
-    const img = document.createElement('img');
-    img.src = imgSrc;
-    img.alt = allProducts[index].querySelector('img').alt;
-  
-    const imageWrapper = document.createElement('div');
-    imageWrapper.className = 'lightbox-image-wrapper';    
-    
-    // Disable right-click and handle long-press on lightbox image if saving is not allowed
-    if (!allowImageSave) {
+    galleryImages.forEach(img => {
       // Prevent right-click
-      img.addEventListener('contextmenu', function(e) {
+      img.addEventListener('contextmenu', e => {
         e.preventDefault();
         return false;
       });
@@ -456,177 +503,94 @@ document.addEventListener('DOMContentLoaded', function() {
       img.setAttribute('draggable', 'false');
       
       // Add CSS to disable touch-callout
-      img.style.webkitTouchCallout = 'none';
-      img.style.webkitUserSelect = 'none';
-      img.style.khtmlUserSelect = 'none';
-      img.style.mozUserSelect = 'none';
-      img.style.msUserSelect = 'none';
-      img.style.userSelect = 'none';
-      
-      // Track touch start time to distinguish between tap and long-press
-      img.touchStartTime = 0;
-      
-      img.addEventListener('touchstart', function(e) {
-        this.touchStartTime = Date.now();
-        // Let the event continue for normal taps
-      });
-      
-      img.addEventListener('touchend', function(e) {
-        const touchDuration = Date.now() - this.touchStartTime;
-        // Only prevent default if it's a long press (over 500ms)
+      if (hasPointerEvents) {
+        img.style.webkitTouchCallout = 'none';
+        img.style.webkitUserSelect = 'none';
+        img.style.khtmlUserSelect = 'none';
+        img.style.mozUserSelect = 'none';
+        img.style.msUserSelect = 'none';
+        img.style.userSelect = 'none';
+      }
+    });
+    
+    // Add global handlers for dynamically created elements using event delegation
+    document.addEventListener('contextmenu', e => {
+      if (e.target.closest('.lightbox img, .lightbox-content img')) {
+        e.preventDefault();
+        return false;
+      }
+    });
+    
+    // Prevent long-press save on mobile
+    let touchStartTime = 0;
+    document.addEventListener('touchstart', e => {
+      if (e.target.closest('.product-image img, .lightbox img, .lightbox-content img')) {
+        touchStartTime = Date.now();
+      }
+    }, listenerOptions);
+    
+    document.addEventListener('touchend', e => {
+      if (e.target.closest('.product-image img, .lightbox img, .lightbox-content img')) {
+        const touchDuration = Date.now() - touchStartTime;
         if (touchDuration > 500) {
           e.preventDefault();
         }
-      });
-      
-      // Add protection to the entire lightbox too
-      lightbox.addEventListener('contextmenu', function(e) {
-        if (e.target === img || e.target.closest('img')) {
-          e.preventDefault();
-          return false;
-        }
-      });
+      }
+    }, listenerOptions);
+  }
+  
+  // Track the active keyboard event handler to prevent duplicate listeners
+  let activeKeyHandler = null;
+  
+  // Open lightbox
+  function openLightbox(imgSrc, imgTitle, index) {
+    // Create lightbox elements
+    const lightbox = document.createElement('div');
+    lightbox.className = 'lightbox';
+    
+    const lightboxContent = document.createElement('div');
+    lightboxContent.className = 'lightbox-content';
+    
+    // Create image element
+    const img = document.createElement('img');
+    img.src = imgSrc;
+    img.alt = allProducts[index].querySelector('img').alt;
+    
+    // Try to get image dimensions from original for better loading
+    const originalImg = allProducts[index].querySelector('img');
+    if (originalImg.width && originalImg.height) {
+      img.width = originalImg.width;
+      img.height = originalImg.height;
     }
     
+    const imageWrapper = document.createElement('div');
+    imageWrapper.className = 'lightbox-image-wrapper';
+    
+    // Disable right-click and long-press if needed
+    if (!featureSettings.allowImageSave) {
+      img.addEventListener('contextmenu', e => {
+        e.preventDefault();
+        return false;
+      });
+      img.setAttribute('draggable', 'false');
+    }
+    
+    // Add caption
     const caption = document.createElement('div');
     caption.className = 'lightbox-caption';
     caption.textContent = imgTitle;
-
-    const hasGlobalSizeGuide = catalogContainer.dataset.sizeGuide === 'true';
-    const globalSizeContent = catalogContainer.dataset.sizeContent || '';
-    const globalSizePicture = catalogContainer.dataset.sizePicture || '';
     
-    // Create navigation arrows (only if there are multiple products)
+    // Create navigation arrows if multiple products
     if (allProducts.length > 1) {
-      // Left arrow for navigation
-      const leftArrow = document.createElement('div');
-      leftArrow.className = 'lightbox-nav lightbox-prev';
-      leftArrow.innerHTML = '&#10094;';
-      leftArrow.style.opacity = '0.7'; // Semi-transparent
-      
-      // Right arrow for navigation
-      const rightArrow = document.createElement('div');
-      rightArrow.className = 'lightbox-nav lightbox-next';
-      rightArrow.innerHTML = '&#10095;';
-      rightArrow.style.opacity = '0.7'; // Semi-transparent
-      
-      // Add event listeners to arrows
-      leftArrow.addEventListener('click', function(e) {
-        e.stopPropagation(); // Prevent lightbox from closing
-        navigateLightbox('prev');
-      });
-      
-      rightArrow.addEventListener('click', function(e) {
-        e.stopPropagation(); // Prevent lightbox from closing
-        navigateLightbox('next');
-      });
-      
-      lightbox.appendChild(leftArrow);
-      lightbox.appendChild(rightArrow);
+      addNavigationArrows(lightbox);
     }
     
-    // Create copy button and LINE button - only if not specifically disabled
-    if (shouldShowCopyUrl) {
-      const shareSection = document.createElement('div');
-      shareSection.className = 'lightbox-share';
-      
-      const shareMessage = document.createElement('div');
-      shareMessage.className = 'share-message';
-      shareMessage.textContent = copyMessageLabel;
-      
-      const copyButton = document.createElement('button');
-      copyButton.className = 'copy-link-button';
-      copyButton.textContent = copyButtonLabel;
-  
-      // Create Middle Label
-      let middleLabelText = 'ส่งลิงก์ผ่าน LINE ได้เลย!';
-      if (catalogContainer.dataset.middleLabelText) {
-        middleLabelText = catalogContainer.dataset.middleLabelText;
-      }
-  
-      const middleLabel = document.createElement('div');
-      middleLabel.className = 'middle-label';
-      middleLabel.textContent = middleLabelText;
-      middleLabel.style.display = 'none'; // Hide initially
-      
-      // Create LINE button if a LINE account is provided
-      let lineButton = null;
-      if (lineAccount) {
-        lineButton = document.createElement('a');
-        lineButton.className = 'line-button';
-        lineButton.href = lineAccount;
-        lineButton.target = '_blank';
-        lineButton.innerHTML = '<svg class="line-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M272.1 204.2v71.1c0 1.8-1.4 3.2-3.2 3.2h-11.4c-1.1 0-2.1-.6-2.6-1.3l-32.6-44v42.2c0 1.8-1.4 3.2-3.2 3.2h-11.4c-1.8 0-3.2-1.4-3.2-3.2v-71.1c0-1.8 1.4-3.2 3.2-3.2H219c1 0 2.1.5 2.6 1.4l32.6 44v-42.2c0-1.8 1.4-3.2 3.2-3.2h11.4c1.8-.1 3.3 1.4 3.3 3.1zm-82-3.2h-11.4c-1.8 0-3.2 1.4-3.2 3.2v71.1c0 1.8 1.4 3.2 3.2 3.2h11.4c1.8 0 3.2-1.4 3.2-3.2v-71.1c0-1.7-1.4-3.2-3.2-3.2zm-27.5 59.6h-31.1v-56.4c0-1.8-1.4-3.2-3.2-3.2h-11.4c-1.8 0-3.2 1.4-3.2 3.2v71.1c0 .9.3 1.6.9 2.2.6.5 1.3.9 2.2.9h45.7c1.8 0 3.2-1.4 3.2-3.2v-11.4c0-1.7-1.4-3.2-3.1-3.2zM332.1 201h-45.7c-1.7 0-3.2 1.4-3.2 3.2v71.1c0 1.7 1.4 3.2 3.2 3.2h45.7c1.8 0 3.2-1.4 3.2-3.2v-11.4c0-1.8-1.4-3.2-3.2-3.2H301v-12h31.1c1.8 0 3.2-1.4 3.2-3.2V234c0-1.8-1.4-3.2-3.2-3.2H301v-12h31.1c1.8 0 3.2-1.4 3.2-3.2v-11.4c-.1-1.7-1.5-3.2-3.2-3.2zM448 113.7V399c-.1 44.8-36.8 81.1-81.7 81H81c-44.8-.1-81.1-36.9-81-81.7V113c.1-44.8 36.9-81.1 81.7-81H367c44.8.1 81.1 36.8 81 81.7zm-61.6 122.6c0-73-73.2-132.4-163.1-132.4-89.9 0-163.1 59.4-163.1 132.4 0 65.4 58 120.2 136.4 130.6 19.1 4.1 16.9 11.1 12.6 36.8-.7 4.1-3.3 16.1 14.1 8.8 17.4-7.3 93.9-55.3 128.2-94.7 23.6-26 34.9-52.3 34.9-81.5z"/></svg>LINE';
-      }
-      
-      // Copy functionality
-      copyButton.addEventListener('click', function() {
-        const productSlug = allProducts[index].dataset.productSlug || '';
-        let linkToCopy = imgSrc; // fallback to image if no slug
-      
-        if (productSlug) {
-          linkToCopy = window.location.origin + window.location.pathname + "?" + productSlug;
-        }
-      
-        navigator.clipboard.writeText(linkToCopy).then(function() {
-          copyButton.textContent = copyButtonLabelFinalState;
-          
-          // Show LINE button if it exists
-          if (lineButton) {
-            lineButton.style.display = 'inline-flex';
-          }
-          
-          middleLabel.style.display = 'inline-block';
-  
-          setTimeout(function() {
-            copyButton.textContent = copyButtonLabel;
-          }, 2000);
-        }).catch(function() {
-          const textArea = document.createElement('textarea');
-          textArea.value = linkToCopy;
-          textArea.style.position = 'fixed';
-          document.body.appendChild(textArea);
-          textArea.focus();
-          textArea.select();
-      
-          try {
-            document.execCommand('copy');
-            copyButton.textContent = copyButtonLabelFinalState;
-            
-            // Show LINE button if it exists
-            if (lineButton) {
-              lineButton.style.display = 'inline-flex';
-            }
-            
-            middleLabel.style.display = 'inline-block';
-            
-            setTimeout(function() {
-              copyButton.textContent = copyButtonLabel;
-            }, 2000);
-          } catch (err) {
-            copyButton.textContent = 'Failed to copy';
-          }
-      
-          document.body.removeChild(textArea);
-        });
-      });
-      
-      // Add the copy button to the share section
-      shareSection.appendChild(shareMessage);
-      shareSection.appendChild(copyButton);
-      
-      // Insert middle label
-      shareSection.appendChild(middleLabel);
-      
-      // Add LINE button if it exists
-      if (lineButton) {
-        shareSection.appendChild(lineButton);
-      }
-      
-      imageWrapper.appendChild(shareSection);
+    // Create copy button and LINE button if enabled
+    if (featureSettings.showCopyUrl) {
+      addShareControls(imageWrapper, index);
     }
     
-    // Enhanced close button
+    // Add close button
     const closeBtn = document.createElement('span');
     closeBtn.className = 'lightbox-close';
     closeBtn.innerHTML = '&times;';
@@ -640,87 +604,246 @@ document.addEventListener('DOMContentLoaded', function() {
       closeBtn.style.top = "10px"; 
     }
     
-    // IMPORTANT: Append closeBtn to lightbox (inside lightboxContent)
+    // Append elements
     lightboxContent.appendChild(closeBtn);
-  
-    // Image wrapper
     imageWrapper.appendChild(img);
     lightboxContent.appendChild(imageWrapper);
     
-    // Caption (optional)
     if (imgTitle) {
       lightboxContent.appendChild(caption);
     }
-
-    if (hasGlobalSizeGuide && globalSizeContent && globalSizePicture) {
+  
+    // Add size guide if enabled
+    if (featureSettings.hasGlobalSizeGuide && featureSettings.globalSizeContent && featureSettings.globalSizePicture) {
       const guideDiv = document.createElement('div');
       guideDiv.className = 'lightbox-size-guide';
-    
+      
       const guideLink = document.createElement('a');
       guideLink.className = 'size-guide-link';
-      guideLink.href = globalSizePicture;
+      guideLink.href = featureSettings.globalSizePicture;
       guideLink.target = '_blank';
-      guideLink.textContent = globalSizeContent;
-    
+      guideLink.rel = 'noopener noreferrer';
+      guideLink.textContent = featureSettings.globalSizeContent;
+      
       guideDiv.appendChild(guideLink);
       lightboxContent.appendChild(guideDiv);
-    }  
-    
+    }
+        
     lightbox.appendChild(lightboxContent);
+    // =========================
+    // SWIPE GESTURE FOR TOUCH
+    // =========================
+    let startX = 0;
+    let endX = 0;
+    const swipeThreshold = 50; // Minimum px to trigger swipe
+
+    lightboxContent.addEventListener('touchstart', function(e) {
+      if (e.touches && e.touches.length === 1) {
+        startX = e.touches[0].clientX;
+      }
+    }, listenerOptions);
+
+    lightboxContent.addEventListener('touchmove', function(e) {
+      if (e.touches && e.touches.length === 1) {
+        endX = e.touches[0].clientX;
+      }
+    }, listenerOptions);
+
+    lightboxContent.addEventListener('touchend', function() {
+      const diffX = endX - startX;
+      if (Math.abs(diffX) > swipeThreshold) {
+        if (diffX > 0) {
+          navigateLightbox('prev');
+        } else {
+          navigateLightbox('next');
+        }
+      }
+      startX = 0;
+      endX = 0;
+    }, listenerOptions);
+
     document.body.appendChild(lightbox);
     
     // Prevent body scrolling
     document.body.style.overflow = 'hidden';
     
-    // Create a named function for keyboard navigation to allow removal later
-    function keyboardNavHandler(e) {
-      if (e.key === 'Escape') {
-        closeLightbox();
-      } else if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
-        // Prevent default browser behavior for arrow keys
-        e.preventDefault();
-        
-        if (e.key === 'ArrowLeft') {
-          navigateLightbox('prev');
-        } else if (e.key === 'ArrowRight') {
-          navigateLightbox('next');
-        }
-      }
-    }
-    
-    // Store the current handler for later removal
-    activeKeyHandler = keyboardNavHandler;
-    
-    // First remove any existing keyboard handlers to prevent duplicates
-    document.removeEventListener('keydown', activeKeyHandler);
-    
-    // Then add our new handler
-    document.addEventListener('keydown', activeKeyHandler);
-    
-    // Close function
-    const closeLightbox = function() {
-      // Remove the keyboard event listener when closing
-      document.removeEventListener('keydown', activeKeyHandler);
-      activeKeyHandler = null;
-      
-      document.body.removeChild(lightbox);
-      document.body.style.overflow = '';
-    };
+    // Add keyboard navigation
+    setupKeyboardNavigation();
     
     // Close events
-    closeBtn.addEventListener('click', function(e) {
+    closeBtn.addEventListener('click', e => {
       e.stopPropagation();
       closeLightbox();
     });
     
-    lightbox.addEventListener('click', function(e) {
+    lightbox.addEventListener('click', e => {
       if (e.target === lightbox) {
         closeLightbox();
       }
     });
+    
+    // Add navigation arrows
+    function addNavigationArrows(lightbox) {
+      const leftArrow = document.createElement('div');
+      leftArrow.className = 'lightbox-nav lightbox-prev';
+      leftArrow.innerHTML = '&#10094;';
+      leftArrow.style.opacity = '0.7';
+      leftArrow.setAttribute('aria-label', 'Previous image');
+      
+      const rightArrow = document.createElement('div');
+      rightArrow.className = 'lightbox-nav lightbox-next';
+      rightArrow.innerHTML = '&#10095;';
+      rightArrow.style.opacity = '0.7';
+      rightArrow.setAttribute('aria-label', 'Next image');
+      
+      leftArrow.addEventListener('click', e => {
+        e.stopPropagation();
+        navigateLightbox('prev');
+      });
+      
+      rightArrow.addEventListener('click', e => {
+        e.stopPropagation();
+        navigateLightbox('next');
+      });
+      
+      lightbox.appendChild(leftArrow);
+      lightbox.appendChild(rightArrow);
+    }
+    
+    // Add share controls
+    function addShareControls(imageWrapper, index) {
+      const shareSection = document.createElement('div');
+      shareSection.className = 'lightbox-share';
+      
+      const shareMessage = document.createElement('div');
+      shareMessage.className = 'share-message';
+      shareMessage.textContent = textLabels.copyMessage;
+      
+      const copyButton = document.createElement('button');
+      copyButton.className = 'copy-link-button';
+      copyButton.textContent = textLabels.copyButton;
+      
+      const middleLabel = document.createElement('div');
+      middleLabel.className = 'middle-label';
+      middleLabel.textContent = textLabels.middleLabel;
+      middleLabel.style.display = 'none'; // Hide initially
+      
+      // Create LINE button if a LINE account is provided
+      let lineButton = null;
+      if (featureSettings.lineAccount) {
+        lineButton = document.createElement('a');
+        lineButton.className = 'line-button';
+        lineButton.href = featureSettings.lineAccount;
+        lineButton.target = '_blank';
+        lineButton.rel = 'noopener noreferrer';
+        lineButton.innerHTML = '<svg class="line-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M272.1 204.2v71.1c0 1.8-1.4 3.2-3.2 3.2h-11.4c-1.1 0-2.1-.6-2.6-1.3l-32.6-44v42.2c0 1.8-1.4 3.2-3.2 3.2h-11.4c-1.8 0-3.2-1.4-3.2-3.2v-71.1c0-1.8 1.4-3.2 3.2-3.2H219c1 0 2.1.5 2.6 1.4l32.6 44v-42.2c0-1.8 1.4-3.2 3.2-3.2h11.4c1.8-.1 3.3 1.4 3.3 3.1zm-82-3.2h-11.4c-1.8 0-3.2 1.4-3.2 3.2v71.1c0 1.8 1.4 3.2 3.2 3.2h11.4c1.8 0 3.2-1.4 3.2-3.2v-71.1c0-1.7-1.4-3.2-3.2-3.2zm-27.5 59.6h-31.1v-56.4c0-1.8-1.4-3.2-3.2-3.2h-11.4c-1.8 0-3.2 1.4-3.2 3.2v71.1c0 .9.3 1.6.9 2.2.6.5 1.3.9 2.2.9h45.7c1.8 0 3.2-1.4 3.2-3.2v-11.4c0-1.7-1.4-3.2-3.1-3.2zM332.1 201h-45.7c-1.7 0-3.2 1.4-3.2 3.2v71.1c0 1.7 1.4 3.2 3.2 3.2h45.7c1.8 0 3.2-1.4 3.2-3.2v-11.4c0-1.8-1.4-3.2-3.2-3.2H301v-12h31.1c1.8 0 3.2-1.4 3.2-3.2V234c0-1.8-1.4-3.2-3.2-3.2H301v-12h31.1c1.8 0 3.2-1.4 3.2-3.2v-11.4c-.1-1.7-1.5-3.2-3.2-3.2zM448 113.7V399c-.1 44.8-36.8 81.1-81.7 81H81c-44.8-.1-81.1-36.9-81-81.7V113c.1-44.8 36.9-81.1 81.7-81H367c44.8.1 81.1 36.8 81 81.7zm-61.6 122.6c0-73-73.2-132.4-163.1-132.4-89.9 0-163.1 59.4-163.1 132.4 0 65.4 58 120.2 136.4 130.6 19.1 4.1 16.9 11.1 12.6 36.8-.7 4.1-3.3 16.1 14.1 8.8 17.4-7.3 93.9-55.3 128.2-94.7 23.6-26 34.9-52.3 34.9-81.5z"/></svg>LINE';
+      }
+
+      // Copy functionality with fallback
+      copyButton.addEventListener('click', function() {
+        const productSlug = allProducts[index].dataset.productSlug || '';
+        let linkToCopy = imgSrc; // fallback to image if no slug
+        
+        if (productSlug) {
+          linkToCopy = window.location.origin + window.location.pathname + "?" + productSlug;
+        }
+        
+        // Use modern clipboard API with fallback
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(linkToCopy)
+            .then(() => {
+              copyButton.textContent = textLabels.copyButtonFinal;
+              
+              // Show LINE button and middle label
+              if (lineButton) {
+                lineButton.style.display = 'inline-flex';
+              }
+              
+              middleLabel.style.display = 'inline-block';
+              
+              setTimeout(() => {
+                copyButton.textContent = textLabels.copyButton;
+              }, 2000);
+            })
+            .catch(() => {
+              fallbackCopy(linkToCopy, copyButton, lineButton, middleLabel);
+            });
+        } else {
+          fallbackCopy(linkToCopy, copyButton, lineButton, middleLabel);
+        }
+      });
+      
+      // Build share section
+      shareSection.appendChild(shareMessage);
+      shareSection.appendChild(copyButton);
+      shareSection.appendChild(middleLabel);
+      
+      if (lineButton) {
+        shareSection.appendChild(lineButton);
+      }
+      
+      imageWrapper.appendChild(shareSection);
+    }
+    
+    // Set up keyboard navigation
+    function setupKeyboardNavigation() {
+      // Create named function for keyboard navigation
+      function keyboardNavHandler(e) {
+        if (e.key === 'Escape') {
+          closeLightbox();
+        } else if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
+          // Prevent default browser behavior for arrow keys
+          e.preventDefault();
+          
+          if (e.key === 'ArrowLeft') {
+            navigateLightbox('prev');
+          } else if (e.key === 'ArrowRight') {
+            navigateLightbox('next');
+          }
+        }
+      }
+      
+      // Store the current handler for later removal
+      activeKeyHandler = keyboardNavHandler;
+      
+      // First remove any existing keyboard handlers
+      document.removeEventListener('keydown', activeKeyHandler);
+      
+      // Then add our new handler
+      document.addEventListener('keydown', activeKeyHandler);
+    }
   }
   
-  // Function to navigate between lightbox images
+  // Close lightbox
+  function closeLightbox() {
+    // Remove keyboard event listener
+    if (activeKeyHandler) {
+      document.removeEventListener('keydown', activeKeyHandler);
+      activeKeyHandler = null;
+    }
+    
+    // Remove lightbox element with fade-out effect for smoother UX
+    const lightbox = document.querySelector('.lightbox');
+    if (lightbox) {
+      // Apply fade-out effect
+      lightbox.style.opacity = '0';
+      lightbox.style.transition = 'opacity 0.3s ease';
+      
+      // Remove after transition completes
+      setTimeout(() => {
+        if (lightbox.parentNode) {
+          document.body.removeChild(lightbox);
+        }
+        // Restore body scrolling
+        document.body.style.overflow = '';
+      }, 300);
+    } else {
+      // Immediate fallback if transition fails
+      document.body.style.overflow = '';
+    }
+  }
+  
+  // Navigate between lightbox images
   function navigateLightbox(direction) {
     let newIndex = currentProductIndex;
     
@@ -755,4 +878,76 @@ document.addEventListener('DOMContentLoaded', function() {
       openLightbox(imgSrc, imgTitle, newIndex);
     }
   }
+  
+  // Fallback copy method for older browsers
+  function fallbackCopy(text, copyButton, lineButton, middleLabel) {
+    const textArea = document.createElement('textarea');
+    textArea.value = text;
+    textArea.style.position = 'fixed';
+    textArea.style.left = '-9999px';
+    textArea.style.top = '-9999px';
+    document.body.appendChild(textArea);
+    
+    try {
+      textArea.focus();
+      textArea.select();
+      
+      const successful = document.execCommand('copy');
+      if (successful) {
+        if (copyButton) {
+          copyButton.textContent = textLabels.copyButtonFinal;
+          
+          // Show LINE button if it exists
+          if (lineButton) {
+            lineButton.style.display = 'inline-flex';
+          }
+          
+          if (middleLabel) {
+            middleLabel.style.display = 'inline-block';
+          }
+          
+          setTimeout(() => {
+            copyButton.textContent = textLabels.copyButton;
+          }, 2000);
+        }
+      } else {
+        if (copyButton) {
+          copyButton.textContent = 'Failed to copy';
+        }
+      }
+    } catch (err) {
+      if (copyButton) {
+        copyButton.textContent = 'Failed to copy';
+      }
+      console.error('Copy fallback failed:', err);
+    }
+    
+    document.body.removeChild(textArea);
+  }
+  
+  // Handle errors gracefully
+  window.addEventListener('error', function(e) {
+    console.error('Error in product-catalog.js:', e.message);
+    // Prevent user-visible errors
+    return true;
+  });
+  
+  // Clean up on page unload to prevent memory leaks
+  window.addEventListener('beforeunload', function() {
+    // Remove any open lightboxes
+    const lightbox = document.querySelector('.lightbox');
+    if (lightbox && lightbox.parentNode) {
+      lightbox.parentNode.removeChild(lightbox);
+    }
+    
+    // Remove event listeners
+    if (activeKeyHandler) {
+      document.removeEventListener('keydown', activeKeyHandler);
+    }
+    
+    // Disconnect observers
+    if (imageObserver) {
+      imageObserver.disconnect();
+    }
+  });
 });

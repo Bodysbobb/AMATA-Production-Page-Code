@@ -1,12 +1,13 @@
-<!-- Contact Info Button Fix -->
+{% comment %}
+Optimized Contact Info Button Component
+Improved for page speed, reduced redundancy, and better LCP
+{% endcomment %}
+
 {% assign position = include.position | default: page.contact_position | default: "right" %}
 {% assign theme = include.theme | default: page.contact_theme | default: "default-theme" %}
 {% assign current_lang = page.lang | default: site.lang | default: 'en' %}
 
-{% comment %}
-Theme selection - this is where the preset themes are defined
-{% endcomment %}
-{% if theme == "amata_th" %}
+{% if current_lang == "th" %}
   {% assign contact_title = "ติดต่อเรา" %}
   {% assign call_label = "โทร" %}
   {% assign line_label = "ไลน์@" %}
@@ -23,7 +24,7 @@ Theme selection - this is where the preset themes are defined
   {% assign line_url = "https://line.me/ti/p/@amatapr" %}
   {% assign digitalcard_url = "https://vcard-admin.pkp.homes/U0NtnOPAOx" %}
   {% assign contact_order = "email,location,call,digitalcard,messenger,line" | split: "," %}
-{% elsif theme == "amata_en" %}
+{% elsif current_lang == "en" %}
   {% assign contact_title = "Get In Touch" %}
   {% assign call_label = "Call Us" %}
   {% assign line_label = "Line Official" %}
@@ -40,42 +41,6 @@ Theme selection - this is where the preset themes are defined
   {% assign line_url = "https://line.me/ti/p/@amatapr" %}
   {% assign digitalcard_url = "https://vcard-admin.pkp.homes/U0NtnOPAOx" %}
   {% assign contact_order = "email,location,call,digitalcard,messenger,line" | split: "," %}
-{% else %}
-  {% comment %}
-  Default behavior - use individual parameters as before
-  {% endcomment %}
-
-  {% if current_lang == "th" %}
-    {% assign contact_title = include.contact_title | default: page.contact_title | default: "ติดต่อเรา" %}
-    {% assign call_label = include.call_label | default: page.call_label | default: "โทร" %}
-    {% assign line_label = include.line_label | default: page.line_label | default: "ไลน์" %}
-    {% assign messenger_label = include.messenger_label | default: page.messenger_label | default: "Messenger" %}
-    {% assign smart_card_label = include.smart_card_label | default: page.smart_card_label | default: "สมาร์ทการ์ด" %}
-    {% assign location_label = include.location_label | default: page.location_label | default: "ที่อยู่" %}
-    {% assign email_label = include.email_label | default: page.email_label | default: "อีเมล" %}
-  {% else %}
-    {% assign contact_title = include.contact_title | default: page.contact_title | default: "Contact Us" %}
-    {% assign call_label = include.call_label | default: page.call_label | default: "Call" %}
-    {% assign line_label = include.line_label | default: page.line_label | default: "Line" %}
-    {% assign messenger_label = include.messenger_label | default: page.messenger_label | default: "Messenger" %}
-    {% assign smart_card_label = include.smart_card_label | default: page.smart_card_label | default: "Smart Card" %}
-    {% assign location_label = include.location_label | default: page.location_label | default: "Location" %}
-    {% assign email_label = include.email_label | default: page.email_label | default: "Email" %}
-  {% endif %}
-
-  {% assign call = include.call | default: page.contact_call %}
-  {% assign email = include.email | default: page.contact_email %}
-  {% assign location_url = include.location_url | default: page.contact_location_url %}
-  {% assign chat_url = include.chat_url | default: page.contact_chat_url %}
-  {% assign messenger = include.messenger | default: page.contact_messenger %}
-  {% assign whatsapp = include.whatsapp | default: page.contact_whatsapp %}
-  {% assign line_url = include.line_url | default: page.contact_line_url %}
-  {% assign digitalcard_url = include.digitalcard_url | default: page.contact_digitalcard_url %}
-
-  {% assign contact_order = include.contact_order | default: page.contact_order %}
-  {% unless contact_order %}
-    {% assign contact_order = "email,location,messenger,line,call,digitalcard" | split: "," %}
-  {% endunless %}
 {% endif %}
 
 {% comment %}
@@ -100,11 +65,11 @@ Animation settings - enable by default for attention-grabbing features
             {% if position == "right" %}
             <div class="contact-button-label">{{ email_label }}</div>
             <div class="contact-button-icon">
-              <i class="fa-solid fa-envelope" aria-hidden="true"></i>
+              {% include icons/email-solid.liquid %}
             </div>
             {% else %}
             <div class="contact-button-icon">
-              <i class="fa-solid fa-envelope" aria-hidden="true"></i>
+              {% include icons/email-solid.liquid %}
             </div>
             <div class="contact-button-label">{{ email_label }}</div>
             {% endif %}
@@ -117,11 +82,11 @@ Animation settings - enable by default for attention-grabbing features
             {% if position == "right" %}
             <div class="contact-button-label">{{ location_label }}</div>
             <div class="contact-button-icon">
-              <i class="fa-solid fa-location-dot" aria-hidden="true"></i>
+              {% include icons/location-dot-solid.liquid %}
             </div>
             {% else %}
             <div class="contact-button-icon">
-              <i class="fa-solid fa-location-dot" aria-hidden="true"></i>
+              {% include icons/location-dot-solid.liquid %}
             </div>
             <div class="contact-button-label">{{ location_label }}</div>
             {% endif %}
@@ -134,11 +99,11 @@ Animation settings - enable by default for attention-grabbing features
             {% if position == "right" %}
             <div class="contact-button-label">{{ messenger_label }}</div>
             <div class="contact-button-icon">
-              <i class="fa-brands fa-facebook-messenger" aria-hidden="true"></i>
+              {% include icons/facebook-messenger-brands.liquid %}
             </div>
             {% else %}
             <div class="contact-button-icon">
-              <i class="fa-brands fa-facebook-messenger" aria-hidden="true"></i>
+              {% include icons/facebook-messenger-brands.liquid %}
             </div>
             <div class="contact-button-label">{{ messenger_label }}</div>
             {% endif %}
@@ -151,11 +116,11 @@ Animation settings - enable by default for attention-grabbing features
             {% if position == "right" %}
             <div class="contact-button-label">{{ line_label }}</div>
             <div class="contact-button-icon">
-              <i class="fa-brands fa-line" aria-hidden="true"></i>
+              {% include icons/line-brands.liquid %}
             </div>
             {% else %}
             <div class="contact-button-icon">
-              <i class="fa-brands fa-line" aria-hidden="true"></i>
+              {% include icons/line-brands.liquid %}
             </div>
             <div class="contact-button-label">{{ line_label }}</div>
             {% endif %}
@@ -168,11 +133,11 @@ Animation settings - enable by default for attention-grabbing features
             {% if position == "right" %}
             <div class="contact-button-label">{{ call_label }}</div>
             <div class="contact-button-icon">
-              <i class="fa-solid fa-phone" aria-hidden="true"></i>
+              {% include icons/phone-solid.liquid %}
             </div>
             {% else %}
             <div class="contact-button-icon">
-              <i class="fa-solid fa-phone" aria-hidden="true"></i>
+              {% include icons/phone-solid.liquid %}
             </div>
             <div class="contact-button-label">{{ call_label }}</div>
             {% endif %}
@@ -185,11 +150,11 @@ Animation settings - enable by default for attention-grabbing features
             {% if position == "right" %}
             <div class="contact-button-label">{{ smart_card_label }}</div>
             <div class="contact-button-icon">
-              <i class="fa-solid fa-id-card" aria-hidden="true"></i>
+              {% include icons/id-card-solid.liquid %}
             </div>
             {% else %}
             <div class="contact-button-icon">
-              <i class="fa-solid fa-id-card" aria-hidden="true"></i>
+              {% include icons/id-card-solid.liquid %}
             </div>
             <div class="contact-button-label">{{ smart_card_label }}</div>
             {% endif %}
@@ -200,105 +165,14 @@ Animation settings - enable by default for attention-grabbing features
     {% endfor %}
   </div>
 
-<div class="contact-toggle-wrapper">
+  <div class="contact-toggle-wrapper">
     <div class="contact-toggle-bubble" aria-hidden="true">{{ contact_title }}</div>
-      <button class="contact-toggle" 
-              aria-controls="contact-options" 
-              aria-expanded="false" 
-              aria-label="{{ contact_title }}">
-        <svg class="fa-comment" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="24" height="24" aria-hidden="true">
-          <path fill="currentColor" d="M256 32C114.6 32 0 125.1 0 240c0 49.6 21.4 95 57 130.7C44.5 421.1 2.7 466 2.2 466.5c-2.2 2.3-2.8 5.7-1.5 8.7S4.8 480 8 480c66.3 0 116-31.8 140.6-51.4 32.7 12.3 69 19.4 107.4 19.4 141.4 0 256-93.1 256-208S397.4 32 256 32z"/>
-        </svg>
-        <svg class="fa-times" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 352 512" width="24" height="24" aria-hidden="true">
-          <path fill="currentColor" d="M242.72 256l100.07-100.07c12.28-12.28 12.28-32.19 0-44.48l-22.24-22.24c-12.28-12.28-32.19-12.28-44.48 0L176 189.28 75.93 89.21c-12.28-12.28-32.19-12.28-44.48 0L9.21 111.45c-12.28 12.28-12.28 32.19 0 44.48L109.28 256 9.21 356.07c-12.28 12.28-12.28 32.19 0 44.48l22.24 22.24c12.28 12.28 32.2 12.28 44.48 0L176 322.72l100.07 100.07c12.28 12.28 32.2 12.28 44.48 0l22.24-22.24c12.28-12.28 12.28-32.19 0-44.48L242.72 256z"/>
-        </svg>
-      </button>
+    <button class="contact-toggle" 
+            aria-controls="contact-options" 
+            aria-expanded="false" 
+            aria-label="{{ contact_title }}">
+      <span class="icon-comment">{% include icons/comment-solid.liquid %}</span>
+      <span class="icon-times">{% include icons/times-solid.liquid %}</span>
+    </button>
   </div>
 </div>
-
-<!-- Add this CSS to your stylesheet -->
-<style>
-.visually-hidden {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  margin: -1px;
-  padding: 0;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  border: 0;
-}
-
-/* Add CSS to hide the contact options when not expanded */
-.contact-options {
-  visibility: hidden;
-  opacity: 0;
-  transition: visibility 0.3s, opacity 0.3s;
-}
-
-.contact-options.visible {
-  visibility: visible;
-  opacity: 1;
-}
-</style>
-
-<!-- Updated JavaScript to ensure contact options are properly accessible -->
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-  // Handle banner dots accessibility
-  const dots = document.querySelectorAll('.banner-dot');
-  
-  dots.forEach((dot, index) => {
-    dot.addEventListener('click', function() {
-      // Update active state
-      dots.forEach(d => {
-        d.classList.remove('active');
-        d.setAttribute('aria-label', `Go to slide ${d.getAttribute('data-index')*1 + 1}`);
-        if (d.querySelector('.visually-hidden')) {
-          d.querySelector('.visually-hidden').textContent = `Go to slide ${d.getAttribute('data-index')*1 + 1}`;
-        }
-      });
-      
-      dot.classList.add('active');
-      dot.setAttribute('aria-label', `Go to slide ${index + 1} (current slide)`);
-      if (dot.querySelector('.visually-hidden')) {
-        dot.querySelector('.visually-hidden').textContent = `Go to slide ${index + 1} (current slide)`;
-      }
-    });
-  });
-  
-  // Handle contact button accessibility
-  const contactToggle = document.querySelector('.contact-toggle');
-  const contactOptions = document.getElementById('contact-options');
-  const focusableElements = contactOptions ? contactOptions.querySelectorAll('a, button, input, select, textarea') : [];
-  
-  if (contactToggle && contactOptions) {
-    contactToggle.addEventListener('click', function() {
-      const expanded = contactToggle.getAttribute('aria-expanded') === 'true';
-      contactToggle.setAttribute('aria-expanded', !expanded);
-      
-      if (expanded) {
-        // Closing the menu
-        contactOptions.classList.remove('visible');
-        // Set all interactive elements to non-focusable
-        focusableElements.forEach(el => {
-          el.setAttribute('tabindex', '-1');
-        });
-      } else {
-        // Opening the menu
-        contactOptions.classList.add('visible');
-        // Make interactive elements focusable
-        focusableElements.forEach(el => {
-          el.setAttribute('tabindex', '0');
-        });
-      }
-    });
-    
-    // Initialize with menu closed
-    contactOptions.classList.remove('visible');
-    focusableElements.forEach(el => {
-      el.setAttribute('tabindex', '-1');
-    });
-  }
-});
-</script>

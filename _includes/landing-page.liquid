@@ -1,0 +1,22 @@
+<section class="hero-simple-section">
+  <div class="hero-simple-content">
+    <div class="hero-logo-container">
+      {% if include.logo %}
+        <div class="hero-logo-wrapper">
+          <div class="hero-logo-bg">
+            {% include_relative {{ include.logo }} %}
+          </div>
+        </div>
+      {% endif %}
+    </div>
+    <div class="hero-text-container">
+      {% if include.title %}
+        <h1 class="hero-title">{{ include.title }}</h1>
+      {% endif %}
+      {% if include.subtitle %}
+        <h2 class="hero-subtitle">{{ include.subtitle }}</h2>
+      {% endif %}
+    </div>
+  </div>
+</section>
+

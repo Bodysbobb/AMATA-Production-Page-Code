@@ -1,28 +1,18 @@
-<!-- Bootstrap Bundle -->
-<script src="{{ '/assets/js/bootstrap.bundle.min.js' | relative_url }}"></script>
-
-<!-- Theme support -->
-<script src="{{ '/assets/js/theme.js' | relative_url | bust_file_cache }}"></script>
-
-<!-- Navbar controller -->
+<!-- Core Scripts -->
 <script src="{{ '/assets/js/navbar-controller.js' | relative_url | bust_file_cache }}"></script>
 
-<!-- Banner catalog -->
-<script src="{{ '/assets/js/banner-catalog.js' | relative_url | bust_file_cache }}"></script>
-
-<!-- Product catalog -->
-<script src="{{ '/assets/js/product-catalog.js' | relative_url | bust_file_cache }}"></script>
-
-<!-- Text animation -->
-<script src="{{ '/assets/js/text_animation.js' | relative_url | bust_file_cache }}" defer></script>
+<!-- Contact Button - Only load if contact_info is true -->
+{% if page.contact_info %}
+  <script src="{{ '/assets/js/contact-button.js' | relative_url | bust_file_cache }}" defer></script>
+{% endif %}
 
 <!-- Progress bar -->
 {% if site.enable_progressbar %}
   <script defer src="{{ '/assets/js/progress-bar.js' | relative_url | bust_file_cache }}" type="text/javascript"></script>
 {% endif %}
 
-<!-- Back to top -->
-{% if site.back_to_top and not page.contact_info %}
+<!-- Back to top - don't load if contact button exists -->
+{% if site.back_to_top and page.contact_info != true %}
   <script src="{{ '/assets/js/vanilla-back-to-top.min.js' | relative_url | bust_file_cache }}"></script>
   <script>
     addBackToTop();

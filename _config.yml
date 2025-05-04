@@ -38,6 +38,7 @@ rss_icon: true
 
 navbar_fixed: true
 footer_fixed: false
+amata_footer: true
 search_enabled: false
 socials_in_search: true
 bib_search: false
@@ -195,7 +196,6 @@ plugins:
   - jekyll-tabs
   - jekyll-terser
   - jekyll-toc
-  - jemoji
 
 sass:
   style: compressed
@@ -292,32 +292,3 @@ enable_medium_zoom: true
 enable_progressbar: true
 enable_video_embedding: false
 
-# -----------------------------------------------------------------------------
-# Library versions
-# -----------------------------------------------------------------------------
-
-third_party_libraries:
-  download: false
-  google_fonts:
-    url:
-      fonts: "https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:100,300,400,500,700|Material+Icons&display=swap"
-  jquery:
-    integrity:
-      js: "sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
-    url:
-      js: "https://cdn.jsdelivr.net/npm/jquery@{{version}}/dist/jquery.min.js"
-    version: "3.6.0"
-  lightbox2:
-    integrity:
-      css: "sha256-uypRbsAiJcFInM/ndyI/JHpzNe6DtUNXaWEUWEPfMGo="
-      js: "sha256-A6jI5V9s1JznkWwsBaRK8kSeXLgIqQfxfnvdDOZEURY="
-    url:
-      css: "https://cdn.jsdelivr.net/npm/lightbox2@{{version}}/dist/css/lightbox.min.css"
-      js: "https://cdn.jsdelivr.net/npm/lightbox2@{{version}}/dist/js/lightbox.min.js"
-    version: "2.11.5"
-  medium_zoom:
-    integrity:
-      js: "sha256-ZgMyDAIYDYGxbcpJcfUnYwNevG/xi9OHKaR/8GK+jWc="
-    url:
-      js: "https://cdn.jsdelivr.net/npm/medium-zoom@{{version}}/dist/medium-zoom.min.js"
-    version: "1.1.0"

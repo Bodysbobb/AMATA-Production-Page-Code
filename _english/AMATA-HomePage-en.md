@@ -231,7 +231,7 @@ latest_posts:
 
 <!-- Client Banners (EN) -->
 {% include client-catalog.liquid 
-  paths="/assets/img/Banner/clients/c1.png, /assets/img/Banner/clients/c2.png, /assets/img/Banner/clients/c3.png, /assets/img/Banner/clients/c4.png"
+  paths="/assets/img/Banner/clients/c1.webp, /assets/img/Banner/clients/c2.webp, /assets/img/Banner/clients/c3.webp, /assets/img/Banner/clients/c4.webp"
   alts="Top clients who trust AMATA Production, including PTTEP, Mitsubishi Electric, Thammasat University, government ministries, and private companies"
   titles="Trusted by leading clients – PTTEP, Mitsubishi, Thammasat, Mahidol, Krungsri Bank, Thai Red Cross, government agencies, and more"
   links="https://www.amataproduction.com/english/about-amata-production/"
@@ -251,83 +251,4 @@ latest_posts:
 <h1 class="section-heading" data-aos="fade-up" data-aos-once="true">
   Contact Us
 </h1>
-{% include amata-footer.liquid lang="en" aos="fade-up" aos_once="true" %}
-
-<!-- PAGE STYLE -->
-<style>
-  #projects-start {
-	  scroll-margin-top: 0px !important;
-  }
-
-  .section-heading {
-    text-align: center;
-    font-size: clamp(1.75rem, 4vw, 3rem);
-    font-weight: bold;
-    color: var(--global-text-color);
-    margin-top: 10vh;
-    margin-bottom: 3vh;
-  }
-
-  /* === HERO SECTION === */
-  .landing-signature {
-    will-change: transform, opacity;
-  }
-
-  .landing-signature {
-    color: var(--global-text-secondary-color) !important;
-    animation-delay: 3.4s !important;
-  }
-
-  /* Apply Prompt Thai font globally but exclude icons */
-  .post, .post *:not(i[class^="fa-"]):not(i[class*=" fa-"]) {
-    font-family: 'Prompt', sans-serif !important;
-  }
-
-  /* Font Awesome: solid and regular icons */
-  .post i.fa-solid,
-  .post i.fa-regular {
-    font-family: "Font Awesome 6 Free" !important;
-    font-weight: 900 !important;
-  }
-
-  /* Font Awesome: brand icons */
-  .post i.fa-brands {
-    font-family: "Font Awesome 6 Brands" !important;
-    font-weight: 400 !important;
-  }
-
-  /* Optional: ensure headings also use Prompt */
-  .post h1, .post h2, .post h3, .post h4, .post h5, .post h6 {
-    font-family: 'Prompt', sans-serif !important;
-  }
-
-  .page-heading {
-    font-size: clamp(1.75rem, 4vw, 3rem);
-    font-weight: bold;
-    color: var(--global-text-color);
-    text-align: center;
-    margin-top: 0vh;
-  }
-
-  .section-heading {
-    font-size: clamp(1.5rem, 4vw, 2.5rem);
-    font-weight: bold;
-    color: var(--global-text-color);
-    text-align: center;
-    margin-top: 5vh;
-    margin-bottom: 2vh;
-  }
-
-  .section-text {
-    font-size: clamp(1rem, 2.2vw, 1.2rem) !important;
-    line-height: 1.8;
-  }
-
-  .section-divider {
-    border: none;
-    height: 1px;
-    background-color: var(--global-divider-color);
-    margin: 2rem 0;
-  }
-</style>
-<!-- END STYLE -->
+{% include amata-contact-section.liquid aos="fade-up" aos_once="true" %}

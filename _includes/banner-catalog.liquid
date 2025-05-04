@@ -1,5 +1,5 @@
 {% comment %}
-  Fixed Height Banner Slider with Auto-Sliding
+  Optimized Banner Slider with Auto-Sliding
   
   Parameters:
   - paths: Comma-separated list of image paths
@@ -10,7 +10,7 @@
   
   Options:
   - container_width: Width of the banner (default: "100%")
-  - container_height: Height of the banner (default: "300px") - RESPECTED ON LARGE SCREENS
+  - container_height: Height of the banner (default: "300px")
   - slide_interval: Time between slides in ms (default: 5000)
   - transition_speed: Speed of transition in ms (default: 500)
   - display_pictures: Number of pictures to display at once (default: 1)
@@ -23,6 +23,16 @@
 {% assign display_max = include.display_pictures_max | default: display_count | plus: 0 %}
 {% assign display_min = include.display_pictures_min | default: 1 | plus: 0 %}
 {% assign display_description = include.display_description | default: true %}
+
+{% unless banner_catalog_script_included %}
+  {% assign banner_catalog_script_included = true %}
+
+  <!-- Shared Banner Catalog CSS -->
+  <link rel="stylesheet" href="{{ '/assets/css/banner-catalog.css' | relative_url }}">
+
+  <!-- Shared Banner Catalog JS -->
+  <script src="{{ '/assets/js/banner-catalog.js' | relative_url }}" defer></script>
+{% endunless %}
 
 <div class="banner-slider-container" style="width: {{ include.container_width | default: '100%' }};">
   <div class="banner-slider" style="height: {{ include.container_height | default: '300px' }};"
@@ -60,20 +70,24 @@
                     <!-- Image container -->
                     <div class="banner-image-container">
                       {% if link != "" %}<a href="{{ link }}" class="banner-link">{% endif %}
-                        <img src="{{ path }}" alt="{{ alt }}" title="{{ title }}" class="banner-image">
+                        <img src="{{ path }}" alt="{{ alt }}" title="{{ title }}" loading="{% if forloop.first %}eager{% else %}lazy{% endif %}" class="banner-image">
                       {% if link != "" %}</a>{% endif %}
                     </div>
                     
                     <!-- UI Container -->
                     <div class="banner-ui-container">
+                      {% if display_description and description != "" %}
+                        <div class="banner-description">{{ description }}</div>
+                      {% endif %}
+                      
                       <div class="banner-dots-container">
                         <div class="banner-dots" role="tablist" aria-label="Slide navigation">
                           {% for dot_path in image_paths %}
                             {% if dot_path != "" %}
-                              <button class="banner-dot{% if forloop.index0 == index %} active{% endif %}" 
+                              <button class="banner-dot{% if forloop.index0 == 0 %} active{% endif %}" 
                                       data-index="{{ forloop.index0 }}" 
                                       aria-label="Go to slide {{ forloop.index }}" 
-                                      aria-selected="{% if forloop.index0 == index %}true{% else %}false{% endif %}"
+                                      aria-selected="{% if forloop.index0 == 0 %}true{% else %}false{% endif %}"
                                       role="tab">
                                 <span class="visually-hidden">Slide {{ forloop.index }}</span>
                               </button>
@@ -81,10 +95,6 @@
                           {% endfor %}
                         </div>
                       </div>
-                      
-                      {% if display_description and description != "" %}
-                        <div class="banner-description">{{ description }}</div>
-                      {% endif %}
                     </div>
                   </div>
                 </div>
@@ -108,7 +118,7 @@
                     <div class="banner-content">
                       <div class="banner-image-container">
                         {% if link != "" %}<a href="{{ link }}" class="banner-link">{% endif %}
-                          <img src="{{ path }}" alt="{{ alt }}" title="{{ title }}" class="banner-image">
+                          <img src="{{ path }}" alt="{{ alt }}" title="{{ title }}" loading="{% if forloop.index <= display_max %}eager{% else %}lazy{% endif %}" class="banner-image">
                         {% if link != "" %}</a>{% endif %}
                       </div>
                       
@@ -129,6 +139,7 @@
                 <div class="banner-dots" role="tablist" aria-label="Slide navigation">
                   {% assign total_slides = image_paths | size %}
                   {% assign num_dots = total_slides | minus: display_count | plus: 1 %}
+                  {% if num_dots < 1 %}{% assign num_dots = 1 %}{% endif %}
                   {% for i in (1..num_dots) %}
                     <button class="banner-dot{% if forloop.first %} active{% endif %}" 
                             data-index="{{ forloop.index0 }}" 
@@ -144,317 +155,10 @@
           </div>
         {% endif %}
         
+        <!-- Navigation arrows -->
         <button class="banner-nav banner-prev" aria-label="Previous slide">&#10094;</button>
         <button class="banner-nav banner-next" aria-label="Next slide">&#10095;</button>
       {% endif %}
     </div>
   </div>
 </div>
-
-<!-- Add this CSS for accessibility -->
-<style>
-.visually-hidden {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  margin: -1px;
-  padding: 0;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  border: 0;
-}
-</style>
-
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-  const sliders = document.querySelectorAll('.banner-slider');
-  
-  sliders.forEach(function(slider) {
-    // Get slider parameters
-    const interval = parseInt(slider.dataset.interval) || 5000;
-    const speed = parseInt(slider.dataset.speed) || 500;
-    const displayCount = parseInt(slider.dataset.display) || 1;
-    const displayMax = parseInt(slider.dataset.displayMax) || displayCount;
-    const displayMin = parseInt(slider.dataset.displayMin) || 1;
-    
-    // Set CSS variables for responsive display
-    slider.style.setProperty('--display-count', displayCount);
-    slider.style.setProperty('--display-max', displayMax);
-    slider.style.setProperty('--display-min', displayMin);
-    
-    // Get slider elements based on mode
-    const isSingleMode = (displayCount === 1 && displayMax === 1);
-    const slidesContainer = isSingleMode ? 
-      slider.querySelector('.banner-slides.single-mode') : 
-      slider.querySelector('.banner-slides.multi-mode');
-    
-    if (!slidesContainer) return;
-    
-    const dots = slider.querySelectorAll('.banner-dot');
-    const prevBtn = slider.querySelector('.banner-prev');
-    const nextBtn = slider.querySelector('.banner-next');
-    
-    let currentIndex = 0;
-    let timer;
-    let isAnimating = false;
-    
-    // Different handling based on display mode
-    if (isSingleMode) {
-      // Single picture display mode
-      const slides = Array.from(slidesContainer.querySelectorAll('.banner-slide'));
-      if (slides.length <= 1) return;
-      
-      // Apply transition speed
-      slides.forEach(slide => {
-        slide.style.transition = `opacity ${speed}ms ease`;
-      });
-      
-      // Show navigation only on hover
-      slider.addEventListener('mouseenter', function() {
-        if (prevBtn) prevBtn.classList.add('visible');
-        if (nextBtn) nextBtn.classList.add('visible');
-      });
-      
-      slider.addEventListener('mouseleave', function() {
-        if (prevBtn) prevBtn.classList.remove('visible');
-        if (nextBtn) nextBtn.classList.remove('visible');
-      });
-      
-      // Start slideshow
-      startSlideShow();
-      
-      // Set up navigation
-      if (prevBtn) prevBtn.addEventListener('click', goToPrevSlide);
-      if (nextBtn) nextBtn.addEventListener('click', goToNextSlide);
-      
-      // Handle dot navigation - FIXED
-      dots.forEach((dot) => {
-        dot.addEventListener('click', () => {
-          const dotIndex = parseInt(dot.getAttribute('data-index'));
-          if (!isNaN(dotIndex)) {
-            goToSlide(dotIndex);
-          }
-        });
-      });
-      
-      function goToSlide(index) {
-        if (isAnimating || index < 0 || index >= slides.length) return;
-        isAnimating = true;
-        
-        // Hide current slide
-        slides[currentIndex].classList.remove('active');
-        
-        // Update all dots - FIXED
-        dots.forEach((dot) => {
-          const dotIndex = parseInt(dot.getAttribute('data-index'));
-          if (!isNaN(dotIndex)) {
-            dot.classList.toggle('active', dotIndex === index);
-            dot.setAttribute('aria-selected', dotIndex === index ? 'true' : 'false');
-          }
-        });
-        
-        // Show new slide
-        currentIndex = index;
-        slides[currentIndex].classList.add('active');
-        
-        // Reset animation state
-        setTimeout(() => {
-          isAnimating = false;
-        }, speed);
-        
-        // Restart timer
-        startSlideShow();
-      }
-      
-      function goToNextSlide() {
-        const nextIndex = (currentIndex + 1) % slides.length;
-        goToSlide(nextIndex);
-      }
-      
-      function goToPrevSlide() {
-        const prevIndex = (currentIndex - 1 + slides.length) % slides.length;
-        goToSlide(prevIndex);
-      }
-    } else {
-      // Multiple pictures display mode
-      const track = slidesContainer.querySelector('.slides-track');
-      const slides = Array.from(track.querySelectorAll('.banner-slide'));
-      const totalSlides = slides.length;
-      
-      // Handle case where totalSlides <= displayCount
-      // Clone slides if needed to ensure continuous looping
-      if (totalSlides > 1 && totalSlides <= displayCount) {
-        // Clone slides to ensure we have enough for looping
-        for (let i = 0; i < totalSlides; i++) {
-          const clone = slides[i].cloneNode(true);
-          track.appendChild(clone);
-        }
-      }
-      
-      // Recalculate after potential cloning
-      const allSlides = Array.from(track.querySelectorAll('.banner-slide'));
-      const effectiveTotalSlides = allSlides.length;
-      
-      // Always enable looping regardless of slide count
-      let numVisiblePositions = Math.max(1, effectiveTotalSlides - (currentDisplayCount - 1));
-      
-      // Track current display count based on screen size
-      let currentDisplayCount = displayCount;
-      
-      // Apply transition speed
-      track.style.transition = `transform ${speed}ms ease`;
-      
-      // Show navigation only on hover
-      slider.addEventListener('mouseenter', function() {
-        if (prevBtn) prevBtn.classList.add('visible');
-        if (nextBtn) nextBtn.classList.add('visible');
-      });
-      
-      slider.addEventListener('mouseleave', function() {
-        if (prevBtn) prevBtn.classList.remove('visible');
-        if (nextBtn) nextBtn.classList.remove('visible');
-      });
-      
-      // Initialize slide width
-      updateSlideDisplay();
-      
-      // Start slideshow if we have multiple positions
-      if (numVisiblePositions > 1) {
-        startSlideShow();
-      }
-      
-      // Set up navigation
-      if (prevBtn) prevBtn.addEventListener('click', goToPrevSlide);
-      if (nextBtn) nextBtn.addEventListener('click', goToNextSlide);
-      
-      // Handle dot navigation - FIXED
-      dots.forEach((dot) => {
-        dot.addEventListener('click', () => {
-          const dotIndex = parseInt(dot.getAttribute('data-index'));
-          if (!isNaN(dotIndex) && dotIndex < numVisiblePositions) {
-            goToSlide(dotIndex);
-          }
-        });
-      });
-      
-      // Handle window resize
-      window.addEventListener('resize', handleResize);
-      handleResize(); // Initial check
-      
-      function handleResize() {
-        let newDisplayCount = displayCount;
-        
-        // Determine display count based on screen width
-        if (window.innerWidth <= 576) {
-          newDisplayCount = displayMin;
-        } else if (window.innerWidth <= 768) {
-          newDisplayCount = Math.min(displayMax, 2);
-        } else if (window.innerWidth <= 992) {
-          newDisplayCount = Math.min(displayMax, 3);
-        } else {
-          newDisplayCount = displayMax;
-        }
-        
-        if (newDisplayCount !== currentDisplayCount) {
-          currentDisplayCount = newDisplayCount;
-          
-          // Update CSS variable
-          slider.style.setProperty('--display-count', currentDisplayCount);
-          
-          // Recalculate visible positions
-          numVisiblePositions = Math.max(1, effectiveTotalSlides - (currentDisplayCount - 1));
-          
-          // Update slide display
-          updateSlideDisplay();
-          
-          // Clamp current index if needed
-          if (currentIndex >= numVisiblePositions) {
-            currentIndex = numVisiblePositions - 1;
-          }
-          
-          // Update track position
-          updateTrackPosition();
-          
-          // Update active dot
-          updateActiveDot();
-        }
-      }
-      
-      function updateSlideDisplay() {
-        allSlides.forEach(slide => {
-          slide.style.flex = `0 0 calc(100% / ${currentDisplayCount})`;
-          slide.style.minWidth = `calc(100% / ${currentDisplayCount})`;
-        });
-      }
-      
-      function updateActiveDot() {
-        dots.forEach((dot, i) => {
-          dot.classList.toggle('active', i === currentIndex);
-          dot.setAttribute('aria-selected', i === currentIndex ? 'true' : 'false');
-          // Only show dots that correspond to visible positions
-          dot.style.display = i < numVisiblePositions ? '' : 'none';
-        });
-      }
-      
-      function updateTrackPosition() {
-        if (effectiveTotalSlides <= currentDisplayCount) {
-          // Center the slides if there are fewer slides than the display count
-          track.style.transform = 'translateX(0)';
-        } else {
-          const translateValue = (currentIndex * (100 / currentDisplayCount));
-          track.style.transform = `translateX(-${translateValue}%)`;
-        }
-      }
-      
-      function goToSlide(index) {
-        if (isAnimating || index === currentIndex || index < 0 || index >= numVisiblePositions) return;
-        isAnimating = true;
-        
-        // Update dots
-        currentIndex = index;
-        updateActiveDot();
-        
-        // Move track to new position
-        updateTrackPosition();
-        
-        // Reset animation state
-        setTimeout(() => {
-          isAnimating = false;
-        }, speed);
-        
-        // Restart timer
-        startSlideShow();
-      }
-      
-      function goToNextSlide() {
-        const nextIndex = (currentIndex + 1) % numVisiblePositions;
-        goToSlide(nextIndex);
-      }
-      
-      function goToPrevSlide() {
-        const prevIndex = (currentIndex - 1 + numVisiblePositions) % numVisiblePositions;
-        goToSlide(prevIndex);
-      }
-    }
-    
-    // Common functions for both modes
-    function startSlideShow() {
-      if (timer) clearInterval(timer);
-      timer = setInterval(() => {
-        if (!isAnimating) {
-          goToNextSlide();
-        }
-      }, interval);
-    }
-    
-    // Pause on visibility change
-    document.addEventListener('visibilitychange', function() {
-      if (document.hidden) {
-        if (timer) clearInterval(timer);
-      } else {
-        startSlideShow();
-      }
-    });
-  });
-});
-</script>

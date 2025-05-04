@@ -95,7 +95,7 @@ og_image: /assets/img/page_logo/amata_logo.png
 <h1 class="section-heading">
   ติดต่อเรา
 </h1>
-{% include amata-footer.liquid lang="th" %}
+{% include amata-contact-section.liquid %}
 
 <div class="page-content">
 <section>

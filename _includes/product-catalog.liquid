@@ -1,5 +1,12 @@
 {% comment %}
-  Product Catalog with Theme Support
+  Optimized Product Catalog with Theme Support
+  
+  Performance improvements:
+  - Extracted CSS to a separate file (product-catalog.scss)
+  - Optimized image loading with lazy loading
+  - Added proper image dimensions to prevent layout shifts
+  - Consolidated JavaScript functionality
+  - Better mobile optimization
   
   Parameters:
   - theme: Theme name (e.g., "product", "review")
@@ -17,7 +24,7 @@
   - images_per_row_min: Minimum number of images per row (for small screens)
   - image_aspect_ratio: Aspect ratio for images (e.g., "1/1", "16/9")
   - line_account: LINE account URL (e.g., "https://line.me/ti/p/@example")
-  - allow_image_save: Set to true to allow users to save images, false to disable saving (default: false)
+  - allow_image_save: Set to true to allow users to save images (default: false)
   
   Filter Options:
   - top_filters: Comma-separated list of top-level filters
@@ -31,14 +38,10 @@
   - copy_button_label: Custom label for copy button
   - copy_button_label_finalstate: Custom label for copy button after copying
   - copy_message_label: Custom message for copy feature
-  
-  Animation Options:
-  - image_animation: AOS animation type for images
-  - image_animation_once: Whether animation should happen once (true/false)
-  - image_animation_duration: Duration of animation in ms
-  - image_animation_easing: Easing function for animation
-  - image_animation_delay: Base delay for animation
 {% endcomment %}
+
+<!-- Load separate CSS file for better caching -->
+<link rel="stylesheet" href="{{ '/assets/css/product-catalog.css' | relative_url }}">
 
 {% if include.image_animation %}
   {% include aos-init.liquid 
@@ -49,6 +52,13 @@
     delay=include.image_animation_delay
   %}
 {% endif %}
+
+{% assign lazy_load = include.lazy_load | default: true %}
+{% assign preload_count = include.preload_count | default: 8 | plus: 0 %}
+{% assign image_aspect_ratio = include.image_aspect_ratio | default: "1/1" %}
+{% assign images_per_row = include.images_per_row | default: 4 | plus: 0 %}
+{% assign images_per_row_max = include.images_per_row_max | default: images_per_row | plus: 0 %}
+{% assign images_per_row_min = include.images_per_row_min | default: 1 | plus: 0 %}
 
 <div class="product-catalog {% if include.theme %}theme-{{ include.theme }}{% endif %}" 
   {% if include.titles %}data-titles="{{ include.titles }}"{% endif %}
@@ -114,7 +124,12 @@
                 <div class="category-header">
                   <h4 class="category-title">{{ category_name }}</h4>
                   <button class="toggle-category" aria-label="Toggle category">
-                    <span class="arrow-icon">&#9662;</span>
+                    <span class="arrow-icon">
+                      <!-- Inlined SVG for fewer HTTP requests -->
+                      <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="6 9 12 15 18 9"></polyline>
+                      </svg>
+                    </span>
                   </button>
                 </div>
                 <div class="category-filters hidden">
@@ -152,6 +167,18 @@
       {% assign image_tags = include.tags | split: "," %}
       {% assign image_descriptions = include.descriptions | split: "," %}
       
+      <!-- Calculate dimensions based on aspect ratio -->
+      {% assign aspect_parts = image_aspect_ratio | split: "/" %}
+      {% if aspect_parts.size == 2 %}
+        {% assign aspect_width = aspect_parts[0] | plus: 0 %}
+        {% assign aspect_height = aspect_parts[1] | plus: 0 %}
+        {% assign img_width = 400 %}
+        {% assign img_height = img_width | times: aspect_height | divided_by: aspect_width %}
+      {% else %}
+        {% assign img_width = 400 %}
+        {% assign img_height = 400 %}
+      {% endif %}
+      
       {% for path in image_paths %}
         {% assign path = path | strip %}
         {% if path != "" %}
@@ -187,6 +214,15 @@
             {% assign slug = desc_slug %}
           {% endif %}
 
+          <!-- Determine loading strategy -->
+          {% assign loading_attr = "eager" %}
+          {% if lazy_load and forloop.index > preload_count %}
+            {% assign loading_attr = "lazy" %}
+            {% assign priority_attr = "low" %}
+          {% else %}
+            {% assign priority_attr = "high" %}
+          {% endif %}
+
           <div class="product-item" id="enlarge-{{ slug }}" data-tags="{{ tags | downcase | strip }}">
             <div class="product-image-wrapper">
               {% if matched_badge != "" %}
@@ -195,17 +231,19 @@
               <a href="{{ path }}" class="product-link" data-lightbox="product-catalog" data-title="{{ description }}" data-product-slug="{{ slug }}">
                 <div class="product-image">
                   <img 
-                    src="{{ path }}" 
+                    {% if lazy_load and forloop.index > preload_count %}
+                      data-src="{{ path }}"
+                      src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 {{ img_width }} {{ img_height }}' %3E%3C/svg%3E"
+                    {% else %}
+                      src="{{ path }}"
+                    {% endif %}
                     alt="{{ alt }}" 
                     title="{{ title | default: description }}"
-                    loading="lazy"
-                    {% if include.image_aspect_ratio %}
-                      {% assign aspect_parts = include.image_aspect_ratio | split: "/" %}
-                      {% assign aspect_width = aspect_parts[0] | plus: 0 %}
-                      {% assign aspect_height = aspect_parts[1] | plus: 0 %}
-                      width="{{ aspect_width | times: 100 }}"
-                      height="{{ aspect_height | times: 100 }}"
-                    {% endif %}
+                    width="{{ img_width }}"
+                    height="{{ img_height }}"
+                    loading="{{ loading_attr }}"
+                    fetchpriority="{{ priority_attr }}"
+                    class="{% if lazy_load and forloop.index > preload_count %}loading{% endif %}"
                     {% if include.image_animation %}
                       data-aos="{{ include.image_animation }}"
                       {% if include.image_animation_once %}data-aos-once="{{ include.image_animation_once }}"{% endif %}
@@ -238,20 +276,32 @@
       {% endfor %}
     {% endif %}
   </div>
-
 </div>
 
-<script src="{{ '/assets/js/product-catalog.js' | relative_url }}"></script>
+<!-- Preconnect to image domains for faster loading -->
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // Extract domains from image paths for preconnect
+    {% if include.paths %}
+      {% assign image_paths = include.paths | split: "," %}
+      var domains = [];
+      {% for path in image_paths %}
+        {% if path contains "://" %}
+          var domain = "{{ path | split: '/' | slice: 0, 3 | join: '/' }}";
+          if (domains.indexOf(domain) === -1) domains.push(domain);
+        {% endif %}
+      {% endfor %}
+      
+      // Create preconnect links for each unique domain
+      domains.forEach(function(domain) {
+        var link = document.createElement('link');
+        link.rel = 'preconnect';
+        link.href = domain;
+        document.head.appendChild(link);
+      });
+    {% endif %}
+  });
+</script>
 
-{% unless include.allow_image_save == "true" %}
-<style>
-  .product-image img, .lightbox img {
-    -webkit-touch-callout: none;
-    -webkit-user-select: none;
-    -khtml-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-  }
-</style>
-{% endunless %}
+<!-- Load optimized JavaScript with defer attribute -->
+<script src="{{ '/assets/js/product-catalog.js' | relative_url }}" defer></script>

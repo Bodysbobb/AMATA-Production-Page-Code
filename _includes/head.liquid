@@ -2,15 +2,21 @@
 {% include metadata.liquid %}
 {% include hreflang.liquid %}
 
-<!-- Fonts -->
-<link rel="preload" href="https://fonts.googleapis.com/css2?family=Prompt:wght@200;300;400;500;700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
-<noscript>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Prompt:wght@200;300;400;500;700&display=swap">
-</noscript>
+<!-- Main Styles -->
+<link rel="stylesheet" href="{{ '/assets/css/main.css' | relative_url | bust_css_cache }}">
 
-<!-- Font Awesome -->
-<link defer rel="stylesheet" href="{{ '/assets/css/academicons.min.css' | relative_url | bust_file_cache }}">
-<link defer rel="stylesheet" href="{{ '/assets/css/scholar-icons.css' | relative_url | bust_file_cache }}">
+<!-- Fonts -->
+{% if page.lang == "th" %}
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;500;600;700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;500;600;700&display=swap">
+  </noscript>
+{% elsif page.lang == "en" %}
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;500;600;700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;500;600;700&display=swap">
+  </noscript>
+{% endif %}
 
 <!-- Site Icons -->
 <link rel="apple-touch-icon" sizes="180x180" href="{{ '/apple-touch-icon.png' | relative_url }}">
@@ -21,17 +27,10 @@
 <link rel="shortcut icon" href="{{ '/favicon.ico' | relative_url }}">
 <link rel="manifest" href="{{ '/site.webmanifest' | relative_url }}">
 
-<!-- Main Styles -->
-<link rel="stylesheet" href="{{ '/assets/css/main.css' | relative_url | bust_css_cache }}">
 <link rel="canonical" href="{{ page.url | replace:'index.html','' | absolute_url }}">
 
 <!-- Dark Mode -->
 <script src="{{ '/assets/js/theme.js' | relative_url | bust_file_cache }}"></script>
-{% if site.enable_darkmode %}
-  <script>
-    initTheme();
-  </script>
-{% endif %}
 
 <!-- Language toggle controller -->
 {% if page.language_switch %}

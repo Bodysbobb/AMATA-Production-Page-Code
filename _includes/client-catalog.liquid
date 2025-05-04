@@ -1,6 +1,6 @@
 {% comment %}
-  Continuous Clients Slider
-  Automatically slides without stopping, pauses on hover
+  Optimized Client Logo Slider
+  Continuously slides client logos with performance enhancements
   
   Parameters:
   - paths: Comma-separated list of client logo image paths
@@ -11,7 +11,7 @@
   Options:
   - container_width: Width of the clients slider (default: "100%")
   - container_height: Height of the clients slider (default: "150px")
-  - slide_speed: Speed of the continuous sliding in ms (default: 30)
+  - slide_speed: Speed of the continuous sliding (default: 30, lower = faster)
   - items_to_show: Number of client logos to show at once (default: 5)
   - items_to_show_mobile: Number of client logos on mobile (default: 2)
   - pause_on_hover: Pause sliding on hover (default: true)
@@ -21,6 +21,16 @@
 {% assign items_to_show_mobile = include.items_to_show_mobile | default: 2 | plus: 0 %}
 {% assign slide_speed = include.slide_speed | default: 30 | plus: 0 %}
 {% assign pause_on_hover = include.pause_on_hover | default: true %}
+
+{% unless banner_catalog_script_included %}
+  {% assign banner_catalog_script_included = true %}
+
+  <!-- Shared Banner Catalog CSS -->
+  <link rel="stylesheet" href="{{ '/assets/css/banner-catalog.css' | relative_url }}">
+
+  <!-- Shared Banner Catalog JS -->
+  <script src="{{ '/assets/js/banner-catalog.js' | relative_url }}" defer></script>
+{% endunless %}
 
 <div class="clients-slider-container" style="width: {{ include.container_width | default: '100%' }}; max-width: {{ include.container_width | default: '100%' }};">
   <div class="clients-slider" 
@@ -37,7 +47,7 @@
       {% assign image_titles = include.titles | split: "," %}
       
       <div class="clients-track">
-        <!-- First set of images -->
+        <!-- First set of logos -->
         {% for path in image_paths %}
           {% assign path = path | strip %}
           {% if path != "" %}
@@ -47,14 +57,16 @@
             {% assign link = image_links[index] | default: "" | strip %}
             
             <div class="client-item">
-              {% if link != "" %}<a href="{{ link }}" class="client-link" target="_blank">{% endif %}
-                <img src="{{ path }}" alt="{{ alt }}" {% if title != "" %}title="{{ title }}"{% endif %} class="client-image">
+              {% if link != "" %}<a href="{{ link }}" class="client-link" target="_blank" rel="noopener">{% endif %}
+                <img src="{{ path }}" alt="{{ alt }}" {% if title != "" %}title="{{ title }}"{% endif %} 
+                     loading="{% if forloop.index <= items_to_show %}eager{% else %}lazy{% endif %}" 
+                     class="client-image">
               {% if link != "" %}</a>{% endif %}
             </div>
           {% endif %}
         {% endfor %}
         
-        <!-- Duplicate set of images for seamless scrolling -->
+        <!-- Duplicate set of logos for seamless scrolling -->
         {% for path in image_paths %}
           {% assign path = path | strip %}
           {% if path != "" %}
@@ -64,8 +76,9 @@
             {% assign link = image_links[index] | default: "" | strip %}
             
             <div class="client-item">
-              {% if link != "" %}<a href="{{ link }}" class="client-link" target="_blank">{% endif %}
-                <img src="{{ path }}" alt="{{ alt }}" {% if title != "" %}title="{{ title }}"{% endif %} class="client-image">
+              {% if link != "" %}<a href="{{ link }}" class="client-link" target="_blank" rel="noopener">{% endif %}
+                <img src="{{ path }}" alt="{{ alt }}" {% if title != "" %}title="{{ title }}"{% endif %} 
+                     loading="lazy" class="client-image">
               {% if link != "" %}</a>{% endif %}
             </div>
           {% endif %}
@@ -74,97 +87,3 @@
     {% endif %}
   </div>
 </div>
-
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-  const clientSliders = document.querySelectorAll('.clients-slider');
-  
-  clientSliders.forEach(function(slider) {
-    // Get slider parameters
-    const speed = parseInt(slider.dataset.speed) || 30;
-    const items = parseInt(slider.dataset.items) || 5;
-    const itemsMobile = parseInt(slider.dataset.itemsMobile) || 2;
-    const pauseOnHover = slider.dataset.pause !== 'false';
-    
-    // Set CSS variables
-    slider.style.setProperty('--items-to-show', items);
-    slider.style.setProperty('--items-to-show-mobile', itemsMobile);
-    
-    const track = slider.querySelector('.clients-track');
-    if (!track) return;
-    
-    const clientItems = track.querySelectorAll('.client-item');
-    const totalItems = clientItems.length / 2; // We duplicated items, so divide by 2
-    
-    // Initialize
-    let position = 0;
-    let animationId = null;
-    let isPaused = false;
-    
-    // Set initial item widths
-    updateItemWidths();
-    
-    // Start animation
-    startAnimation();
-    
-    // Handle window resize
-    window.addEventListener('resize', updateItemWidths);
-    
-    // Pause on hover if enabled
-    if (pauseOnHover) {
-      slider.addEventListener('mouseenter', function() {
-        isPaused = true;
-      });
-      
-      slider.addEventListener('mouseleave', function() {
-        isPaused = false;
-      });
-    }
-    
-    // Function to update item widths based on screen size
-    function updateItemWidths() {
-      let currentItems = items;
-      
-      if (window.innerWidth <= 576) {
-        currentItems = itemsMobile;
-      }
-      
-      const itemWidth = 100 / currentItems;
-      
-      clientItems.forEach(item => {
-        item.style.width = `${itemWidth}%`;
-      });
-    }
-    
-    // Animation function
-    function animate() {
-      if (!isPaused) {
-        position -= 0.05;
-        
-        // Reset position when a full item has scrolled
-        if (position <= -100 / items) {
-          position = 0;
-          // Move first item to the end
-          track.appendChild(track.firstElementChild);
-        }
-        
-        track.style.transform = `translateX(${position}%)`;
-      }
-      
-      animationId = requestAnimationFrame(animate);
-    }
-    
-    function startAnimation() {
-      if (animationId) cancelAnimationFrame(animationId);
-      animationId = requestAnimationFrame(animate);
-    }
-    
-    // Clean up on page changes
-    window.addEventListener('beforeunload', function() {
-      if (animationId) {
-        cancelAnimationFrame(animationId);
-      }
-    });
-  });
-});
-</script>

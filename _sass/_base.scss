@@ -1,27 +1,78 @@
 /*******************************************************************************
- * Base elements for AMATA Production website
+ * Base elements for Business website - Core styles only
+ * Provides foundational styles without redundancies from navbar/components
  ******************************************************************************/
 
-// Body reset and base styling
+// =========================
+// Core Variables
+// =========================
+:root {
+  // Content width constraint (can be overridden in themes)
+  --max-content-width: 1200px;
+  
+  // Offsets for fixed elements
+  --navbar-height: 65px;
+  --footer-height: 70px;
+}
+
+// Back To Top button config
+$back-to-top-z-index: 10;
+$back-to-top-bottom: 30px;
+$back-to-top-right: 30px;
+$back-to-top-diameter: 40px;
+$back-to-top-height: $back-to-top-diameter;
+$back-to-top-width: $back-to-top-diameter;
+
+
+// =========================
+// Document & Body Base
+// =========================
+html {
+  scroll-behavior: smooth;
+  box-sizing: border-box;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+*, *::before, *::after {
+  box-sizing: inherit;
+}
+
 body {
-  padding-top: 72px !important; // Offset for fixed navbar
-  color: var(--global-text-color);
-  background-color: var(--global-bg-color);
+  margin: 0;
+  padding-top: var(--navbar-height);    // Offset for fixed navbar
+  padding-bottom: var(--footer-height); // Space for fixed-bottom footer
   font-family: inherit;
   line-height: 1.6;
-  margin: 0;
+  color: var(--global-text-color);
+  background-color: var(--global-bg-color);
   
-  // Thai language support
+  // Language-specific font families
   &[data-lang="th"] {
-    font-family: 'Prompt', sans-serif !important;
+    font-family: 'Prompt', sans-serif;
+  }
+  
+  &[data-lang="en"] {
+    font-family: 'Roboto', sans-serif;
+  }
+  
+  // First child spacing (after navbar)
+  > *:first-child {
+    margin-top: 1.5rem;
+  }
+  
+  // Sticky footer variant
+  &.sticky-bottom-footer {
+    padding-bottom: 0;
   }
 }
 
-// Typography base
+// =========================
+// Typography Base
+// =========================
 h1, h2, h3, h4, h5, h6 {
   color: var(--global-text-color);
   margin-bottom: 1rem;
-  scroll-margin-top: 66px; // For anchor links with fixed navbar
+  scroll-margin-top: calc(var(--navbar-height) + 1px); // For anchor links with fixed navbar
 }
 
 p {
@@ -30,7 +81,9 @@ p {
   margin-bottom: 1.5rem;
 }
 
+// =========================
 // Links
+// =========================
 a {
   color: var(--global-link-color);
   text-decoration: none;
@@ -42,42 +95,62 @@ a {
   }
 }
 
-// Horizontal rules
+// =========================
+// Lists
+// =========================
+ul, ol {
+  padding-left: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+// Reset for navigation lists
+nav ul, nav ol, 
+.navbar-nav, 
+.footer-links,
+.no-bullets {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+// =========================
+// Layout Elements
+// =========================
+// Container - consistent constraints
+.container {
+  max-width: var(--max-content-width);
+  margin: 0 auto;
+  padding: 0 1rem;
+  width: 100%;
+}
+
+// Horizontal rule
 hr {
   border: 0;
   border-top: 1px solid var(--global-divider-color);
   margin: 1.5rem 0;
 }
 
-// Icons (keep font family for icon libraries)
-.ti, .fa, .fas, .far, .fab {
-  font-family: inherit !important;
-}
-
-// Background Logo base styles
+// =========================
+// Background Watermark
+// =========================
 .background-logo {
   position: fixed;
-  top: 74px;
+  top: var(--navbar-height);
+  left: 0;
   pointer-events: none;
   width: 100%;
   height: 100%;
   z-index: 0.7;
   background-repeat: no-repeat;
   opacity: 0.07;
-  left: 0;
   background-size: 45%;
   background-position: center center;
 }
 
-// Container
-.container {
-  max-width: var(--max-content-width, 1400px);
-  margin: 0 auto;
-  padding: 0 1rem;
-  width: 100%;
-}
-
-// Card components
+// =========================
+// Card Elements
+// =========================
 .card {
   background-color: var(--global-card-bg-color);
   border-radius: 8px;
@@ -102,7 +175,9 @@ hr {
   }
 }
 
-// Buttons
+// =========================
+// Button Base
+// =========================
 .btn {
   display: inline-block;
   padding: 0.5rem 1rem;
@@ -117,7 +192,37 @@ hr {
   }
 }
 
-// Utility classes
+// =========================
+// Progress Bar
+// =========================
+progress {
+  position: fixed;
+  left: 0;
+  top: var(--navbar-height);
+  z-index: 10;
+  width: 100%;
+  height: 2px;
+  appearance: none;
+  border: none;
+  background-color: transparent;
+  color: var(--global-progress-bar-color);
+  
+  &::-webkit-progress-bar {
+    background-color: transparent;
+  }
+  
+  &::-webkit-progress-value {
+    background-color: var(--global-progress-bar-color);
+  }
+  
+  &::-moz-progress-bar {
+    background-color: var(--global-progress-bar-color);
+  }
+}
+
+// =========================
+// Utility Classes
+// =========================
 .visually-hidden {
   position: absolute;
   width: 1px;
@@ -129,204 +234,158 @@ hr {
   border: 0;
 }
 
-.text-center {
+.text-center { text-align: center; }
+.text-left { text-align: left; }
+.text-right { text-align: right; }
+.text-start { text-align: left; }
+.text-end { text-align: right; }
+
+// =========================
+// Global Content Sections
+// =========================
+.page-heading {
+  font-size: clamp(1.75rem, 4vw, 3rem);
+  font-weight: bold;
+  color: var(--global-text-color);
   text-align: center;
+  margin-top: 0vh;
 }
 
-.text-left {
-  text-align: left;
+.section-heading {
+  font-size: clamp(1.5rem, 4vw, 2.5rem);
+  font-weight: bold;
+  color: var(--global-text-color);
+  text-align: center;
+  margin-top: 5vh;
+  margin-bottom: 2vh;
 }
 
-.text-right {
-  text-align: right;
+.section-text {
+  font-size: clamp(1rem, 2.2vw, 1.2rem) !important;
+  line-height: 1.8;
 }
 
-// Responsive images
-img {
-  max-width: 100%;
-  height: auto;
+.section-divider {
+  border: none;
+  height: 1px;
+  background-color: var(--global-divider-color);
+  margin: 2rem 0;
 }
 
+// =========================
+// Responsive Adjustments
+// =========================
 // Responsive typography
 @media (max-width: 576px) {
   body {
     font-size: 1rem;
   }
   
-  h1 {
-    font-size: 2rem;
-  }
-  
-  h2 {
-    font-size: 1.75rem;
-  }
-  
-  h3 {
-    font-size: 1.5rem;
-  }
-}
-
-// Smooth scrolling
-html {
-  scroll-behavior: smooth;
-}
-
-// Progress bar (if used)
-progress {
-  position: fixed;
-  left: 0;
-  top: 56px;
-  z-index: 10;
-  width: 100%;
-  height: 2px;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
-  border: none;
-  background-color: transparent;
-  color: var(--global-progress-bar-color);
-}
-
-progress::-webkit-progress-bar {
-  background-color: transparent;
-}
-
-progress::-webkit-progress-value {
-  background-color: var(--global-progress-bar-color);
-}
-
-progress::-moz-progress-bar {
-  background-color: var(--global-progress-bar-color);
-}
-
-// Reset box sizing
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-}
-
-// Remove list styles
-ul, ol {
-  list-style: none;
-  padding: 0;
-  margin: 0;
+  h1 { font-size: 2rem; }
+  h2 { font-size: 1.75rem; }
+  h3 { font-size: 1.5rem; }
 }
 
 // Responsive background logo sizes
 @media (max-width: 576px) {
-  .background-logo {
-    background-size: 70%;
-  }
+  .background-logo { background-size: 70%; }
 }
 
 @media (min-width: 577px) and (max-width: 768px) {
-  .background-logo {
-    background-size: 65%;
-  }
+  .background-logo { background-size: 65%; }
 }
 
 @media (min-width: 769px) and (max-width: 992px) {
-  .background-logo {
-    background-size: 55%;
-  }
+  .background-logo { background-size: 55%; }
 }
 
 @media (min-width: 993px) and (max-width: 1200px) {
-  .background-logo {
-    background-size: 50%;
-  }
+  .background-logo { background-size: 50%; }
 }
 
-// Footer
-footer {
-  background-color: var(--global-footer-bg-color);
-  color: var(--global-footer-text-color);
-  padding: 1rem 0;
-  margin-top: 3rem;
-  border-top: 1px solid var(--global-divider-color);
-}
-
-// Form elements
-input, textarea, select {
-  width: 100%;
-  padding: 0.5rem;
-  margin-bottom: 1rem;
-  border: 1px solid var(--global-divider-color);
-  border-radius: 4px;
-  background-color: var(--global-card-bg-color);
-  color: var(--global-text-color);
-  transition: border-color 0.3s ease;
-  
-  &:focus {
-    outline: none;
-    border-color: var(--global-theme-color);
-  }
-}
-
-// Sections
-section {
-  padding: 3rem 0;
-  
-  &:first-child {
-    padding-top: 2rem;
-  }
-}
-
-// Text alignment helpers for Thai content
-[data-lang="th"] {
-  h1, h2, h3, h4, h5, h6,
-  p, div, li, span, strong, em, a,
-  .navbar-title, .navbar-brand, .nav-link, 
-  button, input, textarea {
-    font-family: 'Prompt', sans-serif !important;
-  }
-}
-
-// Print styles
+// =========================
+// Print Styles
+// =========================
 @media print {
   .no-print {
-    display: none !important;
+    display: none;
   }
   
   body {
-    padding-top: 0 !important;
+    padding-top: 0;
   }
   
   .background-logo {
     display: none;
   }
-}
-
-// Responsive navbar support
-@media (max-width: 991px) {
-  body {
-    padding-top: 60px !important;
+  
+  a {
+    color: #000;
+    text-decoration: underline;
   }
 }
 
-// Theme transition support (useful for dark mode)
-html {
-  transition: background-color 0.3s ease, color 0.3s ease;
+// =========================
+// Accessibility Improvements
+// =========================
+:focus-visible {
+  outline: 2px solid var(--global-theme-color);
+  outline-offset: 2px;
 }
 
-// Animation utilities
-.animate-fade-in {
-  animation: fadeIn 0.5s ease-in;
+/* ==========================================
+ * TEMPORARILY DISABLED: Reduced motion override
+ * ==========================================
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  * {
+    transition-duration: 0.001ms !important;
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}
+*/
+
+/* =========================
+ * Footer Styles
+ * ========================= */
+
+.footer-normal {
+  background-color: var(--global-footer-bg-color);
+  color: var(--global-footer-text-color);
+  font-size: 0.95rem;
+  padding: 1.5rem 0;
+  text-align: center;
+  border-top: 1px solid var(--global-divider-color);
+
+  a {
+    color: var(--global-footer-link-color);
+    text-decoration: none;
+    font-weight: 500;
+
+    &:hover {
+      color: var(--global-hover-color);
+      text-decoration: underline;
+    }
+  }
+
+  .container {
+    max-width: var(--max-content-width);
+    margin: 0 auto;
+    padding: 0 1rem;
+  }
 }
 
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
-// Vendor prefix support
-::selection {
-  background: var(--global-theme-color);
-  color: var(--global-badge-text-color);
-}
-
-::-moz-selection {
-  background: var(--global-theme-color);
-  color: var(--global-badge-text-color);
+.fixed-bottom {
+  background-color: var(--global-footer-bg-color);
+  color: var(--global-footer-text-color);
+  font-size: 0.9rem;
+  padding: 0.75rem 1rem;
+  border-top: 1px solid var(--global-divider-color);
+  text-align: center;
+  width: 100%;
+  z-index: 100;
 }

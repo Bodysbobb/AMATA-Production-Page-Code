@@ -15,7 +15,10 @@
     {% endif %}
     
     {% include head.liquid %}
-    
+    {% if page.page_stylesheet %}
+      <link rel="stylesheet" href="{{ '/assets/css/' | append: page.page_stylesheet | relative_url | bust_css_cache }}">
+    {% endif %}
+  
     {% if page.need_aos %}
       {% include aos-init.liquid need_aos=true duration=700 easing="ease-out-cubic" once=true delay=0 %}
     {% endif %}
@@ -27,23 +30,21 @@
         
     {% include header.liquid %}
 
-    {% if page.contact_info %}
-      {% include contact_info_button.liquid %}
+    <!-- Content -->
+    {% if page.raw_fullscreen_hero %}
+      {{ content }}
+    {% else %}
+      <div class="container mt-5 landing-page-content" role="main">
+        {{ content }}
+      </div>
     {% endif %}
 
-    <!-- Content -->
-    <div class="container mt-5 landing-page-content" role="main">
-      {{ content }}
-    </div>
-
     <!-- Footer -->
-    {% if page.use_custom_footer %}
-      {% include amata-footer.liquid 
-         language=page.lang 
-         aos="fade" 
-         aos_once="true" %}
-    {% else %}
-      {% include footer.liquid %}
+    {% include footer.liquid %}
+
+    <!-- Contact Button (only added if page.contact_info is true) -->
+    {% if page.contact_info %}
+      {% include contact_info_button.liquid %}
     {% endif %}
 
     <!-- JavaScripts -->
