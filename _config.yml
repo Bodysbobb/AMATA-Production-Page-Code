@@ -37,7 +37,6 @@ rss_icon: true
 # -----------------------------------------------------------------------------
 
 navbar_fixed: true
-footer_fixed: false
 amata_footer: true
 search_enabled: false
 socials_in_search: true

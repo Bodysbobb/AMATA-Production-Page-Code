@@ -2,7 +2,8 @@
 <script src="{{ '/assets/js/navbar-controller.js' | relative_url | bust_file_cache }}"></script>
 
 <!-- Contact Button - Only load if contact_info is true -->
-{% if page.contact_info %}
+{% assign display_contact = page.contact_info | default: site.contact_info %}
+{% if display_contact %}
   <script src="{{ '/assets/js/contact-button.js' | relative_url | bust_file_cache }}" defer></script>
 {% endif %}
 

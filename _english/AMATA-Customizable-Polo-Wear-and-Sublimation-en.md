@@ -1,37 +1,30 @@
 ---
 layout: page
-title: Polo Shirts & Custom Printed Apparel | AMATA Production (Design Your Own)
+title_en: true
 img: assets/img/Banner/banner/amata_polo.webp
 importance: 1
 category: Polo
+nav: true
+nav_order: 2
 
 # ================ TITLE & Description ================ #
 hide_title: true
 hide_description: true
 
 # ================ NAVBAR ================ #
-## Defailt Navbar
-default_navbar_logo: /assets/img/page_logo/amata_main_text.png
-navbar_default_logo_bg: true
-navbar_default_logo_bg_color: "#ffffff" 
+navbar_scroll_effect: true
+navbar_logo_one: /assets/img/page_logo/amata_main_logo.webp
 
-## Special Navbar
-special_navbar: true
-special_navbar_logo_one: /assets/img/page_logo/amata_sport.png
-special_navbar_title: AMATA Polo & Sublimation
-special_navbar_color: "#58595A"
-switch_navbar: true
-toggle_down: true
+navbar_scroll_title: AMATA Polo & Sublimation
+navbar_scroll_logo_one: /assets/img/page_logo/amata_garment_logo.webp
 
 # ================ Contact Info Button Configuration ================ #
 contact_info: true
-contact_theme: "amata_en"
 
 # ================ Language Switch ================ #
 language_switch: true
 lang: "en"
-hreflang: "en"
-alternate_lang_url: "/สินค้า/อมตะ-โปรดักชั่น-เสื้อโปโล-เสื้อพิมพ์ลาย/"
+alternate_lang_url: "/products/amata-polo-designs"
 
 # ================ Background ================ #
 background_logo: /assets/img/custom_logo/amata/AMATA_Logo_Hover.svg
@@ -50,35 +43,8 @@ og_title: AMATA Production – Polo Shirts & Custom Printed Apparel with Persona
 og_description: AMATA Production offers full-service design and production of polo shirts, custom-printed teamwear, and event shirts. Complete with embroidery and screen-printing, vibrant colors, modern designs, and fast delivery — all in one place.
 og_image: /assets/img/META_pic/amata_polo.jpg
 ---
-<style>
-  .product-catalog.theme-product {
-    .lightbox-close-product {
-      top: 25px !important;
-    }
-  }
-
-  .post h1, .post h2, .post h3, .post h4, .post h5, .post h6 {
-    font-family: 'Prompt', sans-serif !important;
-  }
-
-  .textc-click-link {
-    display: inline-block;
-    padding: 12px 24px;
-    font-size: 1.25rem;
-    font-weight: bold;
-    color: white;
-    background-color: var(--global-theme-color); /* your theme color */
-    text-decoration: none;
-    border-radius: 8px;
-    transition: background-color 0.3s ease, transform 0.3s ease;
-  }
-
-  .textc-click-link:hover {
-    background-color: var(--global-hover-color); /* hover color */
-    transform: scale(1.02);
-    text-decoration: none;
-  }
-</style>
+<!-- Load separate CSS file for better caching -->
+<link rel="stylesheet" href="{{ '/assets/css/product-catalog.css' | relative_url }}">
 
 {% include product-catalog.liquid 
   theme="product"

@@ -39,7 +39,8 @@
     {% include footer.liquid %}
 
     <!-- Contact Button (only added if page.contact_info is true) -->
-    {% if page.contact_info %}
+    {% assign display_contact = page.contact_info | default: site.contact_info %}
+    {% if display_contact %}
       {% include contact_info_button.liquid %}
     {% endif %}
 

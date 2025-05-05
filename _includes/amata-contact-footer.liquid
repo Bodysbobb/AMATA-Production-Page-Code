@@ -1,0 +1,191 @@
+<section class="amata-contact-footer">
+  <div class="contact-info-aos-wrapper">
+    <div class="contact-info-grid-3col">
+
+      <!-- Column 1: Company Info -->
+      <div class="contact-info-box company-box">
+        {% if page.lang == "th" %}
+          <h2 class="contact-info-title">{{ site.company.name_th | default: "บริษัท อมตะ โปรดักชั่น จำกัด" }}</h2>
+          <p class="contact-info-item">
+              <a href="https://maps.app.goo.gl/46SZnCwHuesWyBwm7" target="_blank" aria-label="View on Google Maps">
+                {% include icons/location-dot-solid.liquid %}
+              </a>
+            สำนักงานใหญ่: {{ site.company.address_th | default: "110/2 ถนนสามชัย ตำบลหาดใหญ่ อำเภอหาดใหญ่ สงขลา 90110" }}
+          </p>
+          <p class="contact-info-item">
+            {% include icons/id-card-solid.liquid %}
+            <a href="{{ site.company.vcard_url | default: 'https://vcard-admin.pkp.homes/U0NtnOPAOx' }}" target="_blank">นามบัตรดิจิทอล</a>
+          </p>
+        {% else %}
+          <h2 class="contact-info-title">{{ site.company.name | default: "Amata Production Co., Ltd." }}</h2>
+          <p class="contact-info-item">
+              <a href="https://maps.app.goo.gl/46SZnCwHuesWyBwm7" target="_blank" aria-label="View on Google Maps">
+                {% include icons/location-dot-solid.liquid %}
+              </a>
+            Head Office: {{ site.company.address | default: "110/2 Samchai Road, Hat Yai Subdistrict, Hat Yai District, Songkhla 90110" }}
+          </p>
+          <p class="contact-info-item">
+            {% include icons/id-card-solid.liquid %}
+            <a href="{{ site.company.vcard_url | default: 'https://vcard-admin.pkp.homes/U0NtnOPAOx' }}" target="_blank">Digital Card</a>
+          </p>
+        {% endif %}
+      </div>
+
+      <!-- Divider -->
+      <div class="contact-info-divider"></div>
+
+      <!-- Column 2: Contact -->
+      <div class="contact-info-box contact-box">
+        <div class="contact-info-item">{% include icons/phone-solid.liquid %}<a href="tel:{{ site.company.phone | default: '0818888866' | remove: '-' }}">{{ site.company.phone | default: "081-888-8866" }}</a></div>
+        <div class="contact-info-item">{% include icons/line-brands.liquid %}<a href="https://line.me/ti/p/{{ site.company.line | default: '@amatapr' | remove: '@' }}" target="_blank">{{ site.company.line | default: "@amatapr" }}</a></div>
+        <div class="contact-info-item">{% include icons/email-solid.liquid %}<a href="mailto:{{ site.company.email | default: 'sales@amataproduction.com' }}">{{ site.company.email | default: "sales@amataproduction.com" }}</a></div>
+        <div class="contact-info-item">{% include icons/world.liquid %}<a href="https://{{ site.company.website | default: 'www.amataproduction.com' }}" target="_blank">{{ site.company.website | default: "www.amataproduction.com" }}</a></div>
+      </div>
+
+      <!-- Divider -->
+      <div class="contact-info-divider"></div>
+
+      <!-- Column 3: Social Media -->
+      <div class="contact-info-box social-box">
+        {% if site.company.social %}
+          {% for social in site.company.social %}
+            <div class="contact-info-item">
+              {% include icons/{{ social.icon | default: 'social-brands' }}.liquid %}
+              <a href="{{ social.url }}" target="_blank">{{ social.name }}</a>
+            </div>
+          {% endfor %}
+        {% else %}
+          <div class="contact-info-item">{% include icons/facebook-brands.liquid %}<a href="https://www.facebook.com/amataproduction" target="_blank">AMATA Production</a></div>
+          <div class="contact-info-item">{% include icons/facebook-brands.liquid %}<a href="https://www.facebook.com/amataproduction.polo" target="_blank">AMATA Polo</a></div>
+          <div class="contact-info-item">{% include icons/facebook-brands.liquid %}<a href="https://www.facebook.com/amataproduction.sport" target="_blank">AMATA Sport</a></div>
+          <div class="contact-info-item">{% include icons/instagram-brands.liquid %}<a href="https://www.instagram.com/amata.production/" target="_blank">amata.production</a></div>
+        {% endif %}
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<style>
+.amata-contact-footer {
+  width: 100%;
+  max-width: 100%;
+  background-color: var(--global-nav-color);
+  color: var(--global-text-nav-color);
+  padding: 2.5rem 2rem;
+  margin: 0;
+}
+
+.amata-contact-footer .contact-info-aos-wrapper {
+  max-width: 1300px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.amata-contact-footer .contact-info-grid-3col {
+  display: grid;
+  grid-template-columns: 32% 1px 32% 1px 32%;
+  gap: 2rem;
+  align-items: flex-start;
+}
+
+.amata-contact-footer .contact-info-box {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.amata-contact-footer .contact-info-title {
+  font-size: clamp(1.05rem, 1.5vw, 1.3rem);
+  font-weight: 700;
+  margin: 0;
+  color: var(--global-text-nav-color);
+}
+
+.amata-contact-footer .contact-info-item {
+  display: flex;
+  align-items: flex-start;
+  font-size: clamp(0.9rem, 1.3vw, 1.05rem);
+  line-height: 1.6;
+  color: var(--global-text-nav-color);
+}
+
+.amata-contact-footer .contact-info-item svg {
+  width: 24px;
+  height: 24px;
+  margin-right: 0.6rem;
+  flex-shrink: 0;
+  display: inline-block;
+  fill: var(--global-text-nav-color);
+  vertical-align: middle;
+}
+
+.amata-contact-footer .contact-info-item a {
+  color: var(--global-text-nav-color);
+  text-decoration: none;
+  font-weight: 500;
+  word-break: break-word;
+  transition: color 0.2s ease;
+}
+
+.amata-contact-footer .contact-info-item a:hover {
+  color: var(--global-hover-nav-color);
+}
+
+.amata-contact-footer .contact-info-divider {
+  background-color: var(--global-text-color);
+  width: 1px;
+  height: 100%;
+}
+
+.footer-contact-wrapper {
+  width: 100%;
+  padding: 0;
+  margin: 0;
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .amata-contact-footer .contact-info-grid-3col {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .amata-contact-footer .company-box {
+    gap: 1.2rem;
+  }
+
+  .amata-contact-footer .company-box .contact-info-title {
+    margin: 0 0 0.5rem 0;
+  }
+
+  .amata-contact-footer .company-box .contact-info-item {
+    margin: 0;
+    padding: 0;
+    line-height: 1.4;
+  }
+
+  .amata-contact-footer .contact-info-divider {
+    height: 1px;
+    width: 100%;
+    background-color: var(--global-text-color);
+  }
+
+  .amata-contact-footer .contact-info-box {
+    align-items: flex-start !important;
+    text-align: left !important;
+    width: 100%;
+  }
+
+  .amata-contact-footer .contact-info-item {
+    justify-content: flex-start !important;
+    text-align: left !important;
+    width: 100%;
+  }
+
+  .amata-contact-footer .contact-info-item svg {
+    margin-right: 0.6rem;
+  }
+}
+</style>

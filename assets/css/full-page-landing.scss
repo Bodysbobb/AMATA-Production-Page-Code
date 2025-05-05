@@ -60,30 +60,28 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  
+
   // Desktop logo size
   @media (min-width: 1400px) {
     width: 450px;
   }
-  
-  // Laptop logo size - MAINTAINED LARGE
+
   @media (min-width: 992px) and (max-width: 1399px) {
     width: 420px;
   }
-  
-  // Tablet logo size
+
   @media (min-width: 576px) and (max-width: 991px) {
     width: 320px;
   }
-  
-  // Phone logo size
+
   @media (min-width: 376px) and (max-width: 575px) {
     width: 260px;
+    max-height: 180px; // ✅ Move here
   }
-  
-  // Small phone logo size
+
   @media (max-width: 375px) {
     width: 220px;
+    max-height: 160px; // ✅ Move here
   }
 }
 
@@ -134,7 +132,7 @@
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
   
   @media (min-width: 1400px) {
-    font-size: 4.5rem;
+    font-size: 4rem;
     margin-bottom: 1rem;
   }
   

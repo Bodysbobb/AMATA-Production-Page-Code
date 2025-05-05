@@ -59,18 +59,7 @@ latest_posts:
   limit: 5 # leave blank to include all the blog posts        
 ---
 
-<!-- Hero Section -->
-{% include landing-hero.liquid
-  title="AMATA Production Co., Ltd."
-  subtext="Every design has a story. Print quality brings it to life."
-  signature="— AMATA Production —"
-  scroll_text="Get in Touch"
-  particle_mode="hero-only"
-  letter_delay="0.05"
-  initial_delay="300"
-  data-final-class="animation-complete"
-  has_navbar=true 
-%}
+
 <a id="projects-start"></a>
 
 <hr class="section-divider">

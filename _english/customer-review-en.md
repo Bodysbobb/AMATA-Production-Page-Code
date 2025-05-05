@@ -1,31 +1,24 @@
 ---
 layout: page
-title: รีวิว
-title_en: Review
-permalink: /ความประทับใจจากลูกค้า/
+title: Cutomer Reviews
 img: assets/img/project_covers/Customer_Review_AMATASport.jpg
-nav: true
-nav_order: 2
+importance: 1
+category: Review
 
 # ================ TITLE & Description ================ #
 hide_title: true
 hide_description: true
 
 # ================ NAVBAR ================ #
-## Defailt Navbar
-default_navbar_logo: /assets/img/page_logo/amata_main_text.png
-navbar_default_logo_bg: true
-navbar_default_logo_bg_color: "#ffffff" 
+navbar_logo_one: /assets/img/page_logo/amata_main_logo.webp
 
 # ================ Contact Info Button Configuration ================ #
 contact_info: true
-contact_theme: "amata_th"
 
 # ================ Language Switch ================ #
 language_switch: true
-lang: "th"
-hreflang: "th"
-alternate_lang_url: "/english/AMATA-Sports-Review-en/"
+lang: "en"
+alternate_lang_url: "/customer-review"
 
 # ================ Background ================ #
 background_logo: /assets/img/custom_logo/amata/AMATA_Logo.svg
@@ -36,38 +29,16 @@ background_position: center
 schema_type: business
 
 # Google META
-description: ความประทับใจจากลูกค้าที่เลือกใช้บริการ AMATA Production ในการรับผลิตและออกแบบเสื้อกีฬา เสื้อพิมพ์ลาย เสื้อหน่วยงาน เสื้อโปโล เสื้อองค์กร รวมถึงงานพิมพ์และงานออกแบบคุณภาพสูง ดีไซน์ล้ำ ทันสมัย ส่งมอบตรงเวลา ในราคาจากโรงงาน
-keywords: รีวิวลูกค้า, ความคิดเห็นลูกค้า, ประสบการณ์จากผู้ใช้, เสื้อกีฬา AMATA, งานพิมพ์คุณภาพ, รับผลิตเสื้อ, ผลิตเสื้อหน่วยงาน, ออกแบบเสื้อกีฬา, รีวิวเสื้อพิมพ์ลาย, ความพึงพอใจลูกค้า
+description: Customer impressions and testimonials for AMATA Production’s custom design and manufacturing services — including sportswear, printed apparel, organization uniforms, polo shirts, and corporate wear. High-quality printing, modern design, fast delivery, and direct-from-factory pricing.
+keywords: customer reviews, client feedback, user experience, AMATA sportswear, premium printing, custom shirt production, organization uniforms, sportswear design, printed shirt reviews, customer satisfaction
 
 # OG META
-og_title: รีวิวจากลูกค้า AMATA Production
-og_description: รวมคำชมและประสบการณ์จริงจากลูกค้าที่ไว้วางใจ AMATA Production รับผลิตและออกแบบเสื้อกีฬา เสื้อพิมพ์ลาย และสื่อสิ่งพิมพ์คุณภาพ พร้อมบริการที่รวดเร็วและเป็นมืออาชีพ
+og_title: Customer Reviews of AMATA Production
+og_description: Real testimonials and praise from satisfied customers who trust AMATA Production for designing and producing high-quality sportswear, printed apparel, and professional media — all delivered with speed and reliability.
 og_image: /assets/img/META_pic/Customer_Review_AMATASport.jpg
 ---
-
-<style>
-  .post h1, .post h2, .post h3, .post h4, .post h5, .post h6 {
-    font-family: 'Prompt', sans-serif !important;
-  }
-
-  .textc-click-link {
-    display: inline-block;
-    padding: 12px 24px;
-    font-size: 1.25rem;
-    font-weight: bold;
-    color: white;
-    background-color: var(--global-theme-color); /* your theme color */
-    text-decoration: none;
-    border-radius: 8px;
-    transition: background-color 0.3s ease, transform 0.3s ease;
-  }
-
-  .textc-click-link:hover {
-    background-color: var(--global-hover-color); /* hover color */
-    transform: scale(1.05);
-    text-decoration: none;
-  }
-</style>
+<!-- Load separate CSS file for better caching -->
+<link rel="stylesheet" href="{{ '/assets/css/product-catalog.css' | relative_url }}">
 
 {% include product-catalog.liquid 
   theme="review"

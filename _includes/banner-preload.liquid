@@ -1,0 +1,14 @@
+{% if include.paths %}
+  {% assign display_max = include.display_pictures_max | default: 1 | plus: 0 %}
+  {% assign all_paths = include.paths | split: "," %}
+  {% for preload_path in all_paths limit: display_max %}
+    {% assign preload_path = preload_path | strip %}
+    {% if preload_path != "" %}
+      <link rel="preload"
+            href="{{ preload_path | relative_url }}"
+            as="image"
+            type="image/webp"
+            fetchpriority="high">
+    {% endif %}
+  {% endfor %}
+{% endif %}

@@ -23,6 +23,18 @@
 {% assign display_max = include.display_pictures_max | default: display_count | plus: 0 %}
 {% assign display_min = include.display_pictures_min | default: 1 | plus: 0 %}
 {% assign display_description = include.display_description | default: true %}
+{% if include.paths %}
+  {% assign banner_paths = include.paths | split: "," | slice: 0, 2 %}
+  {% for path in banner_paths %}
+    {% assign path = path | strip %}
+    {% if path != "" %}
+<link rel="preload"
+      href="{{ path | relative_url }}"
+      as="image"
+      type="image/webp">
+    {% endif %}
+  {% endfor %}
+{% endif %}
 
 {% unless banner_catalog_script_included %}
   {% assign banner_catalog_script_included = true %}
