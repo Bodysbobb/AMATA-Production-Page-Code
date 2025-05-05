@@ -1,29 +1,21 @@
 ---
 layout: page
 title: ไซซ์เสื้อ
-img: assets/img/Size/Sports-Size-Guide.jpg
+img: assets/img/Size/Sports-Size-Guide.webp
 importance: 1
 category: บริการ
 
-# ================ TITLE & Description ================ #
-hide_title: true
-hide_description: true
-
 # ================ NAVBAR ================ #
-## Defailt Navbar
-default_navbar_logo: /assets/img/page_logo/amata_main_text.png
-navbar_default_logo_bg: true
-navbar_default_logo_bg_color: "#ffffff" 
+navbar_scroll_effect: true
+navbar_logo_one: /assets/img/page_logo/amata_main_logo.webp
 
 # ================ Contact Info Button Configuration ================ #
 contact_info: true
-contact_theme: "amata_th"
 
 # ================ Language Switch ================ #
 language_switch: true
 lang: "th"
-hreflang: "th"
-alternate_lang_url: "/english/AMATA-Size-Guide-en/"
+alternate_lang_url: "/AMATA-Size-Guide-en/"
 
 # ================ Background ================ #
 background_logo: /assets/img/custom_logo/amata/AMATA_Logo.svg
@@ -42,7 +34,7 @@ keywords: ตารางไซซ์เสื้อ, ไซซ์เสื้�
 ## OG META
 og_title: ตารางไซซ์เสื้อ AMATA Production
 og_description: ดูรายละเอียดตารางไซซ์สำหรับเสื้อกีฬา เสื้อพิมพ์ลาย และเสื้อองค์กรจาก AMATA Production เพื่อให้คุณมั่นใจว่าเลือกไซซ์ได้พอดีกับคุณ
-og_image: /assets/img/Size/Sports-Size-Guide.jpg
+og_image: /assets/img/Size/Sports-Size-Guide.webp
 ---
 
 <style>
@@ -181,7 +173,7 @@ og_image: /assets/img/Size/Sports-Size-Guide.jpg
   clear_all_label="ล้างทั้งหมด"
   no_filters_label="ไม่มีตัวกรองที่เลือก"
   image_animation=false
-  paths="/assets/img/Size/Sports-Size-Guide.jpg, /assets/img/Size/Polo-Size-Guide.jpg"
+  paths="/assets/img/Size/Sports-Size-Guide.webp, /assets/img/Size/Polo-Size-Guide.webp"
   max_width="800px"
 
   alts="เสื้อกีฬา เสื้อพิมพ์ลาย เสื้อทีม ตารางขนาด ไซซ์เสื้อกีฬา สั่งผลิตใหม่ ออกแบบเอง AMATA, เสื้อโปโล แขรสั้น แขนยาว เสื้อพิมพ์ลาย ตารางขนาด ไซซ์เสื้อโปโลสั่งผลิต AMATA"

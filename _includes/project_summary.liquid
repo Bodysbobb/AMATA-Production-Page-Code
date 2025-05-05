@@ -17,7 +17,7 @@
         {% if page.lang == "en" %}
           {% assign grouped = site.english | where: "category", category | sort: "importance" %}
         {% else %}
-          {% assign grouped = site.projects | where: "category", category | sort: "importance" %}
+          {% assign grouped = site.pages | where: "category", category | concat: site.projects | where: "category", category | sort: "importance" %}
         {% endif %}
         {% assign sorted_projects = sorted_projects | concat: grouped %}
       {% endfor %}

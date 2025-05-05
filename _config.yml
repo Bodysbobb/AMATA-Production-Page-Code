@@ -22,7 +22,7 @@ back_to_top: true
 repo_theme_light: default
 repo_theme_dark: dark
 repo_trophies:
-  enabled: true
+  enabled: false
   theme_light: flat
   theme_dark: gitdimmed
 
@@ -112,7 +112,7 @@ newsletter:
 collections:
   projects:
     output: true
-    permalink: /สินค้า/:path/
+    permalink: /products/:path/
     defaults:
       - scope:
           path: ""
@@ -204,7 +204,7 @@ sass:
 # -----------------------------------------------------------------------------
 
 jekyll-minifier:
-  compress_javascript: false
+  compress_javascript: true
   exclude: ["robots.txt", "assets/js/search/*.js"]
 
 # -----------------------------------------------------------------------------
@@ -230,20 +230,13 @@ jekyll-archives:
 display_tags: ["JavaScript", "Python", "R", "HTML/CSS"]
 display_categories: ["data-visualization", "cge-model"]
 
-# -----------------------------------------------------------------------------
-# Get external JSON data
-# -----------------------------------------------------------------------------
-
-jekyll_get_json:
-  - data: resume
-    json: assets/json/resume.json
 
 # -----------------------------------------------------------------------------
 # Jekyll Link Attributes
 # -----------------------------------------------------------------------------
 
 external_links:
-  enabled: true
+  enabled: false
   rel: external nofollow noopener
   target: _blank
   exclude:
@@ -253,23 +246,22 @@ external_links:
 # -----------------------------------------------------------------------------
 
 imagemagick:
-  enabled: true
-  widths:
-    - 480
-    - 800
-    - 1200
-    - 1400
-  input_directories:
-    - assets/img/
-  input_formats:
-    - ".jpg"
-    - ".jpeg"
-    - ".png"
-    - ".tiff"
-    - ".gif"
-    - ".webp"
-  output_formats:
-    webp: "-quality 85"
+   enabled: true
+   widths:
+     - 480
+     - 800
+     - 1200
+   input_directories:
+     - assets/img/
+   input_formats:
+     - ".jpg"
+     - ".jpeg"
+     - ".png"
+     - ".tiff"
+     - ".gif"
+   output_formats:
+     webp: "-quality 85"
+
 
 lazy_loading_images: true
 

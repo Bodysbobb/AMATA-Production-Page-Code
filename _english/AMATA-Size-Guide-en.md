@@ -1,7 +1,7 @@
 ---
 layout: page
 title: Size Guide
-img: assets/img/Size/Sports-Size-Guide.jpg
+img: assets/img/Size/Sports-Size-Guide.webp
 importance: 1
 category: Services
 
@@ -41,7 +41,7 @@ keywords: shirt size chart, clothing sizes, sportswear sizing, uniform size guid
 ## OG META
 og_title: AMATA Production Shirt Size Guide
 og_description: Explore detailed size charts for sportswear, printed apparel, and corporate uniforms from AMATA Production — helping you select the right size with confidence.
-og_image: /assets/img/Size/Sports-Size-Guide.jpg
+og_image: /assets/img/Size/Sports-Size-Guide.webp
 ---
 
 <style>
@@ -180,7 +180,7 @@ og_image: /assets/img/Size/Sports-Size-Guide.jpg
   clear_all_label="ล้างทั้งหมด"
   no_filters_label="ไม่มีตัวกรองที่เลือก"
   image_animation=false
-  paths="/assets/img/Size/Sports-Size-Guide.jpg, /assets/img/Size/Polo-Size-Guide.jpg"
+  paths="/assets/img/Size/Sports-Size-Guide.webp, /assets/img/Size/Polo-Size-Guide.webp"
   max_width="800px"
 
   alts="เสื้อกีฬา เสื้อพิมพ์ลาย เสื้อทีม ตารางขนาด ไซซ์เสื้อกีฬา สั่งผลิตใหม่ ออกแบบเอง AMATA, เสื้อโปโล แขรสั้น แขนยาว เสื้อพิมพ์ลาย ตารางขนาด ไซซ์เสื้อโปโลสั่งผลิต AMATA"

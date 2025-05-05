@@ -35,6 +35,11 @@
       {{ content }}
     </div>
 
+    {% if page.background_logo %}
+    <!-- Background -->
+      {% include background_logo.liquid %}
+    {% endif %}
+    
     <!-- Footer -->
     {% include footer.liquid %}
 

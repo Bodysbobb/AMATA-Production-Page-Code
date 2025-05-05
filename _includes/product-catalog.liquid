@@ -169,15 +169,8 @@
       
       <!-- Calculate dimensions based on aspect ratio -->
       {% assign aspect_parts = image_aspect_ratio | split: "/" %}
-      {% if aspect_parts.size == 2 %}
-        {% assign aspect_width = aspect_parts[0] | plus: 0 %}
-        {% assign aspect_height = aspect_parts[1] | plus: 0 %}
-        {% assign img_width = 400 %}
-        {% assign img_height = img_width | times: aspect_height | divided_by: aspect_width %}
-      {% else %}
-        {% assign img_width = 400 %}
-        {% assign img_height = 400 %}
-      {% endif %}
+      {% assign img_width = 400 %}
+      {% assign img_height = 400 %}
       
       {% for path in image_paths %}
         {% assign path = path | strip %}
