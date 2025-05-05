@@ -12,7 +12,7 @@ hide_title: true
 hide_description: true
 
 # ================ NAVBAR ================ #
-navbar_logo_one: /assets/img/page_logo/amata_main_text.png
+navbar_logo_one: /assets/img/page_logo/amata_main_logo.webp
 navbar_logo_one_badge_color: "#ffffff" 
 
 # ================ Contact Info Button Configuration ================ #
@@ -24,7 +24,7 @@ lang: "th"
 alternate_lang_url: "/english/AMATA-HomePage-en/"
 
 # ================ HERO SECTION ================ #
-raw_fullscreen_hero: false
+#raw_fullscreen_hero: false
 
 # ================ Background & Effects ================ #
 need_aos: false
@@ -55,22 +55,15 @@ latest_posts:
   enabled: false
   scrollable: true # adds a vertical scroll bar if there are more than 3 new posts items
   limit: 5 # leave blank to include all the blog posts        
+
+# New hero landing parameter
+hero_landing: true
+hero_logo: /assets/img/custom_logo/amata/AMATA_Logo.svg
+hero_title: Welcome to AMATA
+hero_subtitle: Your one-stop smart printing solution
 ---
 <!-- Load separate CSS file for better caching -->
 <link rel="stylesheet" href="{{ '/assets/css/homepage.css' | relative_url }}">
-
-<!-- Hero Section -->
-<section class="full-page-section">
-  <div class="full-page-inner">
-    <div class="full-page-left">
-      <img src="/assets/img/custom_logo/amata/AMATA_Logo.svg" alt="Logo" class="full-page-logo">
-    </div>
-    <div class="full-page-right">
-      <h1 class="full-page-title">Welcome to AMATA</h1>
-      <p class="full-page-subtitle">Your one-stop smart printing solution</p>
-    </div>
-  </div>
-</section>
 
 <a id="projects-start"></a>
 
@@ -90,13 +83,13 @@ latest_posts:
 
 <!-- Advertising Banners -->
 {% include banner-catalog.liquid 
-  paths="/assets/img/META_pic/sports_product.jpg, /assets/img/META_pic/amata_polo.jpg, /assets/img/META_pic/smart_card.webp"
+  paths="/assets/img/Banner/banner/sports_product.webp, /assets/img/Banner/banner/amata_polo.webp, /assets/img/Banner/banner/smart_card.webp"
   alts="เสื้อกีฬา เสื้อทีม เสื้อพิมพ์ลายคุณภาพสูง ราคาถูก โรงงานผลิต, เสื้อโปโลพิมพ์ลาย เสื้อองค์กร เสื้อยูนิฟอร์ม ดีไซน์พิเศษ ผลิตตามแบบ, นามบัตรดิจิทอล NFC การ์ดอัจฉริยะสำหรับธุรกิจ AMATA Production"
   titles="เสื้อกีฬา เสื้อกีฬาสี เสื้อทีม เสื้อพิมพ์ลาย คุณภาพดี ราคาจากโรงงาน, เสื้อโปโลพิมพ์ลาย เสื้อองค์กร เสื้อยูนิฟอร์ม พร้อมบริการออกแบบครบวงจร, นามบัตรดิจิทอลอัจฉริยะ NFC Card สำหรับธุรกิจยุคใหม่"
   links="https://www.amataproduction.com/สินค้า/อมตะ-โปรดักชั่น-เสื้อกีฬา-เสื้อพิมพ์ลาย/, https://www.amataproduction.com/สินค้า/อมตะ-โปรดักชั่น-เสื้อโปโล-เสื้อพิมพ์ลาย/, "
   descriptions="เสื้อกีฬา จากอมตะ โปรดักชั่น, เสื้อโปโลพิมพ์ลาย จากอมตะ โปรดักชั่น, นามบัตรดิจิทอล"
   container_width="100%"
-  container_height="600px"
+  container_height="300px"
   slide_interval="5000"
   transition_speed="500"
   display_pictures="1"
@@ -240,7 +233,7 @@ latest_posts:
   links="https://www.amataproduction.com/เกี่ยวกับเรา/"
   descriptions="รวมโลโก้ลูกค้าชั้นนำ เช่น PTTEP, Mitsubishi, Thammasat, มหาวิทยาลัยชื่อดัง, หน่วยงานรัฐ, เอกชน, และองค์กรชั้นนำอื่น ๆ ที่เลือกใช้บริการจาก AMATA Production"
   container_width="100%"
-  container_height="300px"
+  container_height="150px"
   items_to_show="4"
   items_to_show_mobile="2"
 %}

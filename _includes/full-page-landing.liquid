@@ -1,7 +1,112 @@
-<section class="hero-section">
-  <div class="hero-content">
-    <img src="/assets/img/page_logo/amata_main_text.png" alt="Logo" class="hero-logo">
-    <h1 class="hero-title">Welcome to AMATA</h1>
-    <p class="hero-subtitle">Your one-stop smart printing solution</p>
+<!-- Hero Landing Page with CSS Grid Layout -->
+<div id="hero-landing" class="hero-landing-container">
+  <!-- Logo Section (Left on desktop, Top on mobile) -->
+  <div class="hero-logo-section">
+    <div class="hero-logo-container">
+      <img src="{{ page.hero_logo | default: '/assets/img/custom_logo/amata/AMATA_Logo.svg' | relative_url }}" 
+           alt="{{ site.title }}" 
+           class="hero-logo" 
+           width="420"
+           height="168"
+           fetchpriority="high"
+           loading="eager">
+    </div>
   </div>
-</section>
+  
+  <!-- Content Section (Right on desktop, Bottom on mobile) -->
+  <div class="hero-content-section">
+    <h1 class="hero-title">{{ page.hero_title | default: "Welcome to AMATA" }}</h1>
+    <p class="hero-subtitle">{{ page.hero_subtitle | default: "Your one-stop smart printing solution" }}</p>
+    
+    <!-- Navigation links from navbar -->
+    <nav class="hero-nav" aria-label="Main navigation">
+      <ul class="hero-nav-links">
+        {% assign sorted_pages = site.pages | sort: 'nav_order' %}
+        {% for p in sorted_pages %}
+          {% if p.nav and p.autogen == null and p.dropdown != true %}
+            <li class="hero-nav-item">
+              <a href="{{ p.url | relative_url }}" class="hero-nav-link {% if page.url contains p.url %}active{% endif %}">
+                {% if page.lang == "en" and p.title_en %}
+                  {{ p.title_en }}
+                {% else %}
+                  {{ p.title }}
+                {% endif %}
+              </a>
+            </li>
+          {% endif %}
+        {% endfor %}
+      </ul>
+    </nav>
+    
+    <!-- Scroll Down Indicator with Chevron -->
+    <div class="scroll-indicator">
+      {{ page.scroll_text | default: "Scroll down to see more" }}
+      <div class="chevron-icon">
+        {% include icons/chevron-down.liquid %}
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Optimized JS -->
+<script>
+  // Add class to body
+  document.body.classList.add('has-hero-landing');
+  
+  // Simple scroll handler with throttling
+  let ticking = false;
+  window.addEventListener('scroll', function() {
+    if (!ticking) {
+      window.requestAnimationFrame(function() {
+        if (window.scrollY > 5) { // Very small threshold
+          document.getElementById('hero-landing').classList.add('scrolled');
+          document.body.classList.add('navbar-visible');
+        } else {
+          document.getElementById('hero-landing').classList.remove('scrolled');
+          document.body.classList.remove('navbar-visible');
+        }
+        ticking = false;
+      });
+      ticking = true;
+    }
+  }, {passive: true});
+  
+  // Original scroll behavior - scroll to first section-heading
+  window.addEventListener('wheel', function handler(e) {
+    if (e.deltaY > 0) { // Scrolling down
+      e.preventDefault();
+      
+      // Hide the landing page
+      document.getElementById('hero-landing').classList.add('scrolled');
+      document.body.classList.add('navbar-visible');
+      
+      // Manually set scroll position to the first heading (section-heading)
+      const firstHeading = document.querySelector('.section-heading');
+      if (firstHeading) {
+        window.scrollTo({
+          top: firstHeading.offsetTop - 100,
+          behavior: 'smooth'
+        });
+      }
+      
+      // Remove the event listener after first use
+      window.removeEventListener('wheel', handler);
+    }
+  }, {passive: false});
+  
+  // Add click handler for scroll indicator
+  document.querySelector('.scroll-indicator').addEventListener('click', function() {
+    // Hide the landing page
+    document.getElementById('hero-landing').classList.add('scrolled');
+    document.body.classList.add('navbar-visible');
+    
+    // Manually set scroll position to the first heading
+    const firstHeading = document.querySelector('.section-heading');
+    if (firstHeading) {
+      window.scrollTo({
+        top: firstHeading.offsetTop - 100,
+        behavior: 'smooth'
+      });
+    }
+  });
+</script>

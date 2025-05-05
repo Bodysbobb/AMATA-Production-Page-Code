@@ -139,6 +139,8 @@
 .banner-image-container {
   @extend .slider-image-container;
   flex: 1;
+  aspect-ratio: 1000 / 400;
+  width: 100%;
 }
 
 .banner-image {
@@ -270,41 +272,37 @@
 }
 
 /* Clients-specific styles */
+.clients-slider-container {
+  overflow: hidden;
+}
+
 .clients-slider {
-  @extend .slider-base;
-  /* Default values for responsive display */
-  --items-to-show: 5;
-  --items-to-show-mobile: 2;
+  position: relative;
+  overflow: hidden;
+  min-height: 100px; /* Minimum height only */
 }
 
 .clients-track {
   display: flex;
   align-items: center;
   width: 100%;
-  height: 100%;
-  will-change: transform;
 }
 
 .client-item {
   flex: 0 0 calc(100% / var(--items-to-show));
-  width: calc(100% / var(--items-to-show));
-  height: 100%;
-  padding: 10px;
+  min-width: calc(100% / var(--items-to-show));
   box-sizing: border-box;
+  padding: 5px; /* Minimal padding */
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.client-link {
-  @extend .slider-link;
-}
-
 .client-image {
-  @extend .slider-image;
+  display: block;
+  max-width: 100%;
+  height: auto; /* Let height adjust automatically */
   object-fit: contain;
-  max-height: 100%;
-  transition: transform 0.3s ease;
 }
 
 /* Optional hover effect */

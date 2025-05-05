@@ -1,0 +1,330 @@
+---
+---
+// Hero Landing Page Styles
+// This file should be placed in assets/css/hero-section.scss
+
+// Fixed position container
+.hero-landing-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  display: grid;
+  overflow: hidden;
+  z-index: 10;
+  
+  // Desktop: Left/Right grid
+  @media (min-width: 992px) {
+    grid-template-columns: 42% 58%;
+    grid-template-rows: 100vh;
+  }
+  
+  // Mobile: Top/Bottom grid
+  @media (max-width: 991px) {
+    grid-template-columns: 100%;
+    grid-template-rows: auto 1fr;
+  }
+  
+  &.scrolled {
+    transform: translateY(-100%);
+    transition: transform 0.3s ease;
+  }
+}
+
+// Logo section - white background
+.hero-logo-section {
+  background-color: #FFFFFF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
+  // Desktop sizing
+  @media (min-width: 992px) {
+    height: 100vh;
+  }
+  
+  // Mobile sizing
+  @media (max-width: 991px) {
+    padding: 2rem 1rem;
+  }
+  
+  // Small phones
+  @media (max-width: 375px) {
+    padding: 1.5rem 1rem;
+  }
+}
+
+// Logo container
+.hero-logo-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
+  // Desktop logo size
+  @media (min-width: 1400px) {
+    width: 450px;
+  }
+  
+  // Laptop logo size - MAINTAINED LARGE
+  @media (min-width: 992px) and (max-width: 1399px) {
+    width: 420px;
+  }
+  
+  // Tablet logo size
+  @media (min-width: 576px) and (max-width: 991px) {
+    width: 320px;
+  }
+  
+  // Phone logo size
+  @media (min-width: 376px) and (max-width: 575px) {
+    width: 260px;
+  }
+  
+  // Small phone logo size
+  @media (max-width: 375px) {
+    width: 220px;
+  }
+}
+
+// Logo image
+.hero-logo {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+// Content section - blue background
+.hero-content-section {
+  background-color: #001464; // Dark navy blue
+  color: #FFFFFF;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  overflow: hidden;
+  position: relative; // For scroll indicator positioning
+  
+  // Desktop content
+  @media (min-width: 992px) {
+    padding: 0 3rem 0 4rem;
+    text-align: left;
+    height: 100vh;
+  }
+  
+  // Mobile content 
+  @media (max-width: 991px) {
+    padding: 2rem;
+    text-align: center;
+    min-height: 60vh;
+  }
+  
+  // Small phone
+  @media (max-width: 375px) {
+    padding: 1.5rem;
+    min-height: 70vh;
+  }
+}
+
+// Title styling
+.hero-title {
+  margin-top: 0;
+  font-weight: bold;
+  line-height: 1.2;
+  color: #FFFFFF;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+  
+  @media (min-width: 1400px) {
+    font-size: 4.5rem;
+    margin-bottom: 1rem;
+  }
+  
+  @media (min-width: 992px) and (max-width: 1399px) {
+    font-size: 3.8rem;
+    margin-bottom: 0.8rem;
+  }
+  
+  @media (min-width: 576px) and (max-width: 991px) {
+    font-size: 2.8rem;
+    margin-bottom: 0.7rem;
+  }
+  
+  @media (min-width: 376px) and (max-width: 575px) {
+    font-size: 2.2rem;
+    margin-bottom: 0.6rem;
+  }
+  
+  @media (max-width: 375px) {
+    font-size: 1.8rem;
+    margin-bottom: 0.5rem;
+  }
+}
+
+// Subtitle styling
+.hero-subtitle {
+  color: #FFFFFF;
+  opacity: 0.95;
+  
+  @media (min-width: 1400px) {
+    font-size: 1.8rem;
+    margin-bottom: 3rem;
+  }
+  
+  @media (min-width: 992px) and (max-width: 1399px) {
+    font-size: 1.5rem;
+    margin-bottom: 2.5rem;
+  }
+  
+  @media (min-width: 576px) and (max-width: 991px) {
+    font-size: 1.2rem;
+    margin-bottom: 2rem;
+  }
+  
+  @media (min-width: 376px) and (max-width: 575px) {
+    font-size: 1.1rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  @media (max-width: 375px) {
+    font-size: 1rem;
+    margin-bottom: 1.2rem;
+  }
+}
+
+// Navigation links
+.hero-nav {
+  display: flex;
+  width: 100%;
+  
+  @media (min-width: 992px) {
+    justify-content: flex-start;
+  }
+  
+  @media (max-width: 991px) {
+    justify-content: center;
+  }
+}
+
+.hero-nav-links {
+  display: flex;
+  flex-wrap: wrap;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  
+  @media (min-width: 992px) {
+    gap: 1rem;
+    justify-content: flex-start;
+  }
+  
+  @media (max-width: 991px) {
+    gap: 0.75rem;
+    justify-content: center;
+  }
+  
+  @media (max-width: 375px) {
+    gap: 0.4rem;
+  }
+}
+
+.hero-nav-item {
+  margin: 0.25rem;
+  
+  @media (max-width: 375px) {
+    margin: 0.1rem;
+  }
+}
+
+.hero-nav-link {
+  display: inline-block;
+  font-size: 1.1rem;
+  color: #FFFFFF;
+  text-decoration: none;
+  padding: 0.5rem 1.5rem;
+  border-radius: 4px;
+  background-color: rgba(255, 255, 255, 0.15);
+  transition: all 0.2s;
+  white-space: nowrap;
+  border: 1px solid transparent;
+  
+  @media (max-width: 767px) {
+    font-size: 1rem;
+    padding: 0.4rem 1rem;
+  }
+  
+  @media (max-width: 375px) {
+    font-size: 0.9rem;
+    padding: 0.3rem 0.8rem;
+  }
+  
+  &:hover,
+  &.active {
+    background-color: rgba(255, 255, 255, 0.2);
+    color: #FFFFFF;
+    border-color: rgba(255, 255, 255, 0.5);
+  }
+}
+
+// Scroll down indicator with chevron icon
+.scroll-indicator {
+  position: absolute;
+  text-align: center;
+  color: #FFFFFF;
+  font-size: 1rem;
+  opacity: 0.8;
+  cursor: pointer;
+  
+  @media (min-width: 992px) {
+    bottom: 2rem;
+    left: 0;
+    right: 0;
+  }
+  
+  @media (max-width: 991px) {
+    bottom: 1.5rem;
+    left: 0;
+    right: 0;
+  }
+  
+  @media (max-width: 767px) {
+    bottom: 1rem;
+    font-size: 0.9rem;
+  }
+  
+  .chevron-icon {
+    display: block;
+    margin: 0.5rem auto 0;
+    width: 24px;
+    height: 24px;
+    fill: currentColor;
+  }
+  
+  @media (max-width: 767px) {
+    .chevron-icon {
+      width: 20px;
+      height: 20px;
+      margin-top: 0.3rem;
+    }
+  }
+  
+  &:hover {
+    opacity: 1;
+  }
+}
+
+// Additional body classes
+body.has-hero-landing .container.mt-5 {
+  margin-top: 100vh !important;
+  position: relative;
+  z-index: 20;
+}
+
+.navbar-hidden {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s;
+}
+
+body.navbar-visible .navbar-hidden {
+  opacity: 1;
+  pointer-events: auto;
+}

@@ -1,7 +1,7 @@
 ---
 layout: page
 title: Polo Shirts & Custom Printed Apparel | AMATA Production (Design Your Own)
-img: assets/img/META_pic/amata_polo.jpg
+img: assets/img/Banner/banner/amata_polo.webp
 importance: 1
 category: Polo
 

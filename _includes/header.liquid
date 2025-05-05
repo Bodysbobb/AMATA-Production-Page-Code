@@ -1,10 +1,15 @@
 <header>
-  {% comment %} Single consolidated navbar {% endcomment %}
-  <div id="navbar-container">
-    {% include navbar.liquid %}
-  </div>
+  {% if page.hero_landing %}
+    {% include full-page-landing.liquid %}
+    <div id="navbar-container" class="navbar-hidden">
+      {% include navbar.liquid %}
+    </div>
+  {% else %}
+    <div id="navbar-container">
+      {% include navbar.liquid %}
+    </div>
+  {% endif %}
   
-  {% comment %} Only include progress bar if auto-hide is disabled {% endcomment %}
   {% if site.enable_progressbar and page.navbar_auto_hide != true %}
     <progress id="progress" value="0">
       <div class="progress-container">
@@ -13,3 +18,5 @@
     </progress>
   {% endif %}
 </header>
+<!-- Anchor point for scrolling from hero landing to content -->
+<div id="projects-start"></div>

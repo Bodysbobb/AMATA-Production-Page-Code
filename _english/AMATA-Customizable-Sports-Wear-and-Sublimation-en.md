@@ -1,7 +1,7 @@
 ---
 layout: page
 title: AMATA Production Sports Designs
-img: assets/img/META_pic/sports_product.jpg
+img: assets/img/Banner/banner/sports_product.webp
 category: Sports
 importance: 1
 

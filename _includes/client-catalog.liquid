@@ -34,7 +34,6 @@
 
 <div class="clients-slider-container" style="width: {{ include.container_width | default: '100%' }}; max-width: {{ include.container_width | default: '100%' }};">
   <div class="clients-slider" 
-       style="height: {{ include.container_height | default: '150px' }};"
        data-speed="{{ slide_speed }}"
        data-items="{{ items_to_show }}"
        data-items-mobile="{{ items_to_show_mobile }}"
@@ -66,7 +65,7 @@
           {% endif %}
         {% endfor %}
         
-        <!-- Duplicate set of logos for seamless scrolling -->
+        <!-- Duplicate set for scrolling -->
         {% for path in image_paths %}
           {% assign path = path | strip %}
           {% if path != "" %}

@@ -258,6 +258,7 @@ imagemagick:
   widths:
     - 480
     - 800
+    - 1200
     - 1400
   input_directories:
     - assets/img/
@@ -267,6 +268,7 @@ imagemagick:
     - ".png"
     - ".tiff"
     - ".gif"
+    - ".webp"
   output_formats:
     webp: "-quality 85"
 

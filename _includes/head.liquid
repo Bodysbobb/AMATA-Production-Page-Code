@@ -2,20 +2,118 @@
 {% include metadata.liquid %}
 {% include hreflang.liquid %}
 
+<!-- Preload critical resources based on page type -->
+{% if page.hero_landing %}
+  <!-- Preload hero section CSS file for hero landing pages -->
+  <link rel="preload" href="{{ '/assets/css/full-page-landing.css' | relative_url | bust_css_cache }}" as="style">
+  <link rel="stylesheet" href="{{ '/assets/css/full-page-landing.css' | relative_url | bust_css_cache }}">
+  
+  <!-- Preload hero logo with high priority -->
+  <link rel="preload" 
+        href="{{ page.hero_logo | default: '/assets/img/custom_logo/amata/AMATA_Logo.svg' | relative_url }}" 
+        as="image"
+        fetchpriority="high">
+{% endif %}
+
+<!-- Preload all navbar logos if they exist -->
+{% if page.navbar_logo_one %}
+  <link rel="preload" 
+        href="{{ page.navbar_logo_one | relative_url }}" 
+        as="image" 
+        fetchpriority="high">
+{% endif %}
+
+{% if page.navbar_logo_two %}
+  <link rel="preload" 
+        href="{{ page.navbar_logo_two | relative_url }}" 
+        as="image">
+{% endif %}
+
+{% if page.navbar_scroll_logo_one %}
+  <link rel="preload" 
+        href="{{ page.navbar_scroll_logo_one | relative_url }}" 
+        as="image">
+{% endif %}
+
+{% if page.navbar_scroll_logo_two %}
+  <link rel="preload" 
+        href="{{ page.navbar_scroll_logo_two | relative_url }}" 
+        as="image">
+{% endif %}
+
 <!-- Main Styles -->
 <link rel="stylesheet" href="{{ '/assets/css/main.css' | relative_url | bust_css_cache }}">
 
 <!-- Fonts -->
 {% if page.lang == "th" %}
-  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;500;600;700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
-  <noscript>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;500;600;700&display=swap">
-  </noscript>
+  <style>
+    @font-face {
+      font-family: 'Prompt';
+      font-style: normal;
+      font-weight: 300;
+      font-display: swap;
+      src: url('{{ "/assets/fonts/prompt/prompt-v11-thai-300.woff2" | relative_url }}') format('woff2');
+    }
+    @font-face {
+      font-family: 'Prompt';
+      font-style: normal;
+      font-weight: 400;
+      font-display: swap;
+      src: url('{{ "/assets/fonts/prompt/prompt-v11-thai-regular.woff2" | relative_url }}') format('woff2');
+    }
+    @font-face {
+      font-family: 'Prompt';
+      font-style: normal;
+      font-weight: 500;
+      font-display: swap;
+      src: url('{{ "/assets/fonts/prompt/prompt-v11-thai-500.woff2" | relative_url }}') format('woff2');
+    }
+    @font-face {
+      font-family: 'Prompt';
+      font-style: normal;
+      font-weight: 600;
+      font-display: swap;
+      src: url('{{ "/assets/fonts/prompt/prompt-v11-thai-600.woff2" | relative_url }}') format('woff2');
+    }
+    @font-face {
+      font-family: 'Prompt';
+      font-style: normal;
+      font-weight: 700;
+      font-display: swap;
+      src: url('{{ "/assets/fonts/prompt/prompt-v11-thai-700.woff2" | relative_url }}') format('woff2');
+    }
+  </style>
 {% elsif page.lang == "en" %}
-  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;500;600;700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
-  <noscript>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;500;600;700&display=swap">
-  </noscript>
+  <style>
+    @font-face {
+      font-family: 'Roboto';
+      font-style: normal;
+      font-weight: 300;
+      font-display: swap;
+      src: url('{{ "/assets/fonts/roboto/roboto-v47-latin-300.woff2" | relative_url }}') format('woff2');
+    }
+    @font-face {
+      font-family: 'Roboto';
+      font-style: normal;
+      font-weight: 400;
+      font-display: swap;
+      src: url('{{ "/assets/fonts/roboto/roboto-v47-latin-regular.woff2" | relative_url }}') format('woff2');
+    }
+    @font-face {
+      font-family: 'Roboto';
+      font-style: normal;
+      font-weight: 500;
+      font-display: swap;
+      src: url('{{ "/assets/fonts/roboto/roboto-v47-latin-500.woff2" | relative_url }}') format('woff2');
+    }
+    @font-face {
+      font-family: 'Roboto';
+      font-style: normal;
+      font-weight: 700;
+      font-display: swap;
+      src: url('{{ "/assets/fonts/roboto/roboto-v47-latin-700.woff2" | relative_url }}') format('woff2');
+    }
+  </style>
 {% endif %}
 
 <!-- Site Icons -->
@@ -30,7 +128,7 @@
 <link rel="canonical" href="{{ page.url | replace:'index.html','' | absolute_url }}">
 
 <!-- Dark Mode -->
-<script src="{{ '/assets/js/theme.js' | relative_url | bust_file_cache }}"></script>
+<script src="{{ '/assets/js/theme.js' | relative_url }}" defer></script>
 
 <!-- Language toggle controller -->
 {% if page.language_switch %}

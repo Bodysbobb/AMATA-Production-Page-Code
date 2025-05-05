@@ -35,14 +35,14 @@
 {% endunless %}
 
 <div class="banner-slider-container" style="width: {{ include.container_width | default: '100%' }};">
-  <div class="banner-slider" style="height: {{ include.container_height | default: '300px' }};"
-       data-interval="{{ include.slide_interval | default: '5000' }}"
-       data-speed="{{ include.transition_speed | default: '500' }}"
-       data-display="{{ display_count }}"
-       data-display-max="{{ display_max }}"
-       data-display-min="{{ display_min }}"
-       role="region"
-       aria-label="Image Slider">
+    <div class="banner-slider"
+        data-interval="{{ include.slide_interval | default: '5000' }}"
+        data-speed="{{ include.transition_speed | default: '500' }}"
+        data-display="{{ display_count }}"
+        data-display-max="{{ display_max }}"
+        data-display-min="{{ display_min }}"
+        role="region"
+        aria-label="Image Slider">
     
     <!-- MAIN WRAPPER FOR ALL CONTENT -->
     <div class="banner-wrapper">  
@@ -70,7 +70,7 @@
                     <!-- Image container -->
                     <div class="banner-image-container">
                       {% if link != "" %}<a href="{{ link }}" class="banner-link">{% endif %}
-                        <img src="{{ path }}" alt="{{ alt }}" title="{{ title }}" loading="{% if forloop.first %}eager{% else %}lazy{% endif %}" class="banner-image">
+                        <img src="{{ path }}" alt="{{ alt }}" title="{{ title }}" loading="{% if forloop.first %}eager{% else %}lazy{% endif %}" class="banner-image" width="600" height="315">
                       {% if link != "" %}</a>{% endif %}
                     </div>
                     

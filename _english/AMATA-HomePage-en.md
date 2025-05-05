@@ -91,7 +91,7 @@ latest_posts:
 
 <!-- Advertising Banners (EN) -->
 {% include banner-catalog.liquid 
-  paths="/assets/img/META_pic/sports_product.jpg, /assets/img/META_pic/amata_polo.jpg, /assets/img/META_pic/smart_card.webp"
+  paths="/assets/img/Banner/banner/sports_product.webp, /assets/img/Banner/banner/amata_polo.webp, /assets/img/Banner/banner/smart_card.webp"
   alts="High-quality custom sports shirts and teamwear, Custom corporate polo shirts and uniform design, AMATA Production NFC smart digital business card"
   titles="Custom sports shirts, team color shirts, printed teamwear — factory-direct prices, Corporate polo shirts and printed uniforms with full design support, NFC smart business card for modern professional branding"
   links="https://www.amataproduction.com/สินค้า/อมตะ-โปรดักชั่น-เสื้อกีฬา-เสื้อพิมพ์ลาย/, https://www.amataproduction.com/สินค้า/อมตะ-โปรดักชั่น-เสื้อโปโล-เสื้อพิมพ์ลาย/, "

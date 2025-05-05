@@ -30,14 +30,10 @@
         
     {% include header.liquid %}
 
-    <!-- Content -->
-    {% if page.raw_fullscreen_hero %}
+    <!-- Content - no top margin when using hero landing -->
+    <div class="container {% if page.hero_landing %}mt-0{% else %}mt-5{% endif %} landing-page-content" role="main">
       {{ content }}
-    {% else %}
-      <div class="container mt-5 landing-page-content" role="main">
-        {{ content }}
-      </div>
-    {% endif %}
+    </div>
 
     <!-- Footer -->
     {% include footer.liquid %}
