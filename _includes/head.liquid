@@ -29,18 +29,6 @@
         as="image">
 {% endif %}
 
-{% if page.navbar_scroll_logo_one %}
-  <link rel="preload" 
-        href="{{ page.navbar_scroll_logo_one | relative_url }}" 
-        as="image">
-{% endif %}
-
-{% if page.navbar_scroll_logo_two %}
-  <link rel="preload" 
-        href="{{ page.navbar_scroll_logo_two | relative_url }}" 
-        as="image">
-{% endif %}
-
 <!-- Main Styles -->
 <link rel="stylesheet" href="{{ '/assets/css/main.css' | relative_url | bust_css_cache }}">
 

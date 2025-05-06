@@ -1,300 +1,272 @@
-{% comment %}
-  Optimized Product Catalog with Theme Support
-  
-  Performance improvements:
-  - Extracted CSS to a separate file (product-catalog.scss)
-  - Optimized image loading with lazy loading
-  - Added proper image dimensions to prevent layout shifts
-  - Consolidated JavaScript functionality
-  - Better mobile optimization
-  
-  Parameters:
-  - theme: Theme name (e.g., "product", "review")
-  - paths: Comma-separated list of image paths
-  - alts: Comma-separated list of alt texts
-  - titles: Comma-separated list of SEO titles for images
-  - tags: Comma-separated list of tags for filtering
-  - descriptions: Comma-separated list of descriptions
-  
-  Display Options:
-  - show_top_filters: Set to false to hide top filters
-  - show_dropdown_filters: Set to false to hide dropdown filters
-  - show_copy_url: Set to false to hide copy URL button
-  - images_per_row_max: Maximum number of images per row (for large screens)
-  - images_per_row_min: Minimum number of images per row (for small screens)
-  - image_aspect_ratio: Aspect ratio for images (e.g., "1/1", "16/9")
-  - line_account: LINE account URL (e.g., "https://line.me/ti/p/@example")
-  - allow_image_save: Set to true to allow users to save images (default: false)
-  
-  Filter Options:
-  - top_filters: Comma-separated list of top-level filters
-  - filter_categories: Double-pipe separated list of filter categories
-  - filter_button_label: Custom label for filter button
-  - selected_filters_label: Custom label for selected filters section
-  - clear_all_label: Custom label for clear all button
-  - no_filters_label: Custom label for when no filters are selected
-  
-  Copy Options:
-  - copy_button_label: Custom label for copy button
-  - copy_button_label_finalstate: Custom label for copy button after copying
-  - copy_message_label: Custom message for copy feature
-{% endcomment %}
+<style>
+/* Critical CSS to be inlined in <head> */
+.product-catalog {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px 0;
+}
 
-<!-- Load separate CSS file for better caching -->
-<link rel="stylesheet" href="{{ '/assets/css/product-catalog.css' | relative_url }}">
+/* Product Grid - Critical for LCP */
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  width: 100%;
+}
 
-{% if include.image_animation %}
-  {% include aos-init.liquid 
-    need_aos=true 
-    once=include.image_animation_once
-    duration=include.image_animation_duration
-    easing=include.image_animation_easing
-    delay=include.image_animation_delay
-  %}
-{% endif %}
+/* Prevent layout shift with aspect ratio */
+.product-image-wrapper {
+  position: relative;
+}
 
-{% assign lazy_load = include.lazy_load | default: true %}
-{% assign preload_count = include.preload_count | default: 8 | plus: 0 %}
-{% assign image_aspect_ratio = include.image_aspect_ratio | default: "1/1" %}
-{% assign images_per_row = include.images_per_row | default: 4 | plus: 0 %}
-{% assign images_per_row_max = include.images_per_row_max | default: images_per_row | plus: 0 %}
-{% assign images_per_row_min = include.images_per_row_min | default: 1 | plus: 0 %}
+.product-image {
+  position: relative;
+  width: 100%;
+  height: 0;
+  padding-bottom: 100%; /* Default 1:1 aspect ratio */
+  overflow: hidden;
+  background-color: #f0f0f0; /* Placeholder color */
+  border-radius: 4px;
+}
+
+.product-image img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.product-description {
+  margin-top: 8px;
+  font-size: 14px;
+  color: #333;
+  line-height: 1.4;
+}
+
+/* Critical Responsive Breakpoints */
+@media screen and (max-width: 1200px) {
+  .product-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .product-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media screen and (max-width: 576px) {
+  .product-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+</style>
+
+<!-- Defer non-critical CSS -->
+<link rel="stylesheet" href="{{ '/assets/css/product-catalog.css' | relative_url }}" media="print" onload="this.media='all'">
+<noscript><link rel="stylesheet" href="{{ '/assets/css/product-catalog.css' | relative_url }}"></noscript>
 
 <div class="product-catalog {% if include.theme %}theme-{{ include.theme }}{% endif %}" 
-  {% if include.titles %}data-titles="{{ include.titles }}"{% endif %}
-  {% if include.copy_button_label %}data-copy-button-label="{{ include.copy_button_label }}"{% endif %}
-  {% if include.copy_button_label_finalstate %}data-copy-button-label-finalstate="{{ include.copy_button_label_finalstate }}"{% endif %}
-  {% if include.copy_message_label %}data-copy-message-label="{{ include.copy_message_label }}"{% endif %}
-  {% if include.selected_filters_label %}data-selected-filters-label="{{ include.selected_filters_label }}"{% endif %}
-  {% if include.clear_all_label %}data-clear-all-label="{{ include.clear_all_label }}"{% endif %}
-  {% if include.no_filters_label %}data-no-filters-label="{{ include.no_filters_label }}"{% endif %}
-  {% if include.show_copy_url == false %}data-show-copy-url="false"{% endif %}
-  {% if include.show_top_filters == false %}data-show-top-filters="false"{% endif %}
-  {% if include.show_dropdown_filters == false %}data-show-dropdown-filters="false"{% endif %}
-  {% if include.images_per_row_max %}data-images-per-row-max="{{ include.images_per_row_max }}"{% endif %}
-  {% if include.images_per_row_min %}data-images-per-row-min="{{ include.images_per_row_min }}"{% endif %}
-  {% if include.images_per_row %}data-images-per-row="{{ include.images_per_row }}"{% endif %}
-  {% if include.image_aspect_ratio %}data-image-aspect-ratio="{{ include.image_aspect_ratio }}"{% endif %}
-  {% if include.allow_image_save %}data-allow-image-save="{{ include.allow_image_save }}"{% endif %}
-  {% if include.line_account %}data-line-account="{{ include.line_account }}"{% endif %}
-  {% if include.middle_label_text %}data-middle-label-text="{{ include.middle_label_text }}"{% endif %}
-  {% if include.size_guide %}data-size-guide="{{ include.size_guide }}"{% endif %}
-  {% if include.size_picture %}data-size-picture="{{ include.size_picture }}"{% endif %}
-  {% if include.size_content %}data-size-content="{{ include.size_content }}"{% endif %}
-  {% if include.badge_categories %}{% assign badge_definitions = include.badge_categories | split: "||" %}{% assign badge_color_definitions = include.badge_colors | default: "" | split: "||" %}{% else %}{% assign badge_definitions = "" | split: "" %}{% assign badge_color_definitions = "" | split: "" %}{% endif %}
->
-
-  {% unless include.show_top_filters == false and include.show_dropdown_filters == false %}
+     data-json-url="{{ '/assets/data/' | append: include.json_data_file | relative_url }}">
+  
   <div class="catalog-filters">
     <div class="top-filter-section">
-      {% unless include.show_top_filters == false %}
       <div class="top-filter-tags-wrapper">
-        <div class="top-filter-tags">
-          <a href="#" class="filter-tag active" data-filter="all">All</a>
-          {% if include.top_filters %}
-            {% assign top_filters = include.top_filters | split: "," %}
-            {% for filter in top_filters %}
-              {% assign filter_parts = filter | strip | split: ":" %}
-              {% assign filter_value = filter_parts[0] | strip %}
-              {% assign filter_label = filter_parts[1] | default: filter_value | strip %}
-              {% if filter_value != "" %}
-                <a href="#" class="filter-tag" data-filter="{{ filter_value | slugify }}">{{ filter_label }}</a>
-              {% endif %}
-            {% endfor %}
-          {% endif %}
-        </div>
+        <div class="top-filter-tags"></div>
       </div>
-      {% endunless %}
-      
-      {% unless include.show_dropdown_filters == false %}
       <div class="filter-sort">
-        {% assign filter_button_text = include.filter_button_label | default: "FILTER & SORT" %}
-        <button class="filter-sort-button">{{ filter_button_text }}</button>
-
+        <button class="filter-sort-button"></button>
         <div class="filter-dropdown">
-          {% if include.filter_categories %}
-            {% assign filter_categories = include.filter_categories | split: "||" %}
-            {% for category in filter_categories %}
-              {% assign category_parts = category | strip | split: ":" %}
-              {% assign category_name = category_parts[0] | strip %}
-              {% assign category_filters = category_parts[1] | strip | split: "," %}
-              
-              {% if category_name != "" and category_filters.size > 0 %}
-              <div class="filter-category">
-                <div class="category-header">
-                  <h4 class="category-title">{{ category_name }}</h4>
-                  <button class="toggle-category" aria-label="Toggle category">
-                    <span class="arrow-icon">
-                      <!-- Inlined SVG for fewer HTTP requests -->
-                      <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <polyline points="6 9 12 15 18 9"></polyline>
-                      </svg>
-                    </span>
-                  </button>
-                </div>
-                <div class="category-filters hidden">
-                  {% for filter in category_filters %}
-                    {% assign filter = filter | strip %}
-                    {% if filter != "" %}
-                      <a href="#" class="dropdown-filter-tag" data-filter="{{ filter | slugify }}">{{ filter }}</a>
-                    {% endif %}
-                  {% endfor %}
-                </div>
-              </div>
-              {% endif %}
-            {% endfor %}
-          {% endif %}
-
           <div class="selected-filters">
-            {% assign selected_filters_text = include.selected_filters_label | default: "Selected Filters" %}
-            <h4>{{ selected_filters_text }}</h4>
+            <h4></h4>
             <div class="selected-filters-list"></div>
-            {% assign clear_all_text = include.clear_all_label | default: "Clear All" %}
-            <button class="clear-all-filters">{{ clear_all_text }}</button>
+            <button class="clear-all-filters"></button>
           </div>
         </div>
       </div>
-      {% endunless %}
     </div>
   </div>
-  {% endunless %}
 
-  <div class="product-grid">
-    {% if include.paths %}
-      {% assign image_paths = include.paths | split: "," %}
-      {% assign image_alts = include.alts | split: "," %}
-      {% assign image_titles = include.titles | split: "," %}
-      {% assign image_tags = include.tags | split: "," %}
-      {% assign image_descriptions = include.descriptions | split: "," %}
-      
-      <!-- Calculate dimensions based on aspect ratio -->
-      {% assign aspect_parts = image_aspect_ratio | split: "/" %}
-      {% assign img_width = 400 %}
-      {% assign img_height = 400 %}
-      
-      {% for path in image_paths %}
-        {% assign path = path | strip %}
-        {% if path != "" %}
-          {% assign index = forloop.index0 %}
-          {% assign alt = image_alts[index] | default: "Product" | strip %}
-          {% assign title = image_titles[index] | default: "" | strip %}
-          {% assign tags = image_tags[index] | default: "" | strip %}
-          {% assign tag_list = tags | downcase | strip | split: " " %}
-          {% assign matched_badge = "" %}
-          {% assign matched_color = "" %}
-          {% for badge in badge_definitions %}
-            {% assign parts = badge | split: ":" %}
-            {% assign tag_slug = parts[0] | downcase | strip %}
-            {% assign badge_text = parts[2] | strip %}
-            {% if tag_list contains tag_slug %}
-              {% assign matched_badge = badge_text %}
-              {% for color_def in badge_color_definitions %}
-                {% assign c_parts = color_def | split: ":" %}
-                {% assign color_key = c_parts[0] | downcase | strip %}
-                {% if color_key == tag_slug %}
-                  {% assign matched_color = c_parts[1] | strip %}
-                  {% break %}
-                {% endif %}
-              {% endfor %}
-              {% break %}
-            {% endif %}
-          {% endfor %}
-          {% assign description = image_descriptions[index] | default: "" | strip %}
-          {% assign desc_slug = description | downcase | strip | replace: " ", "-" | replace: "'", "" | replace: "\"", "" %}
-          {% if include.redirect_link %}
-            {% assign slug = include.redirect_link | append: "-" | append: desc_slug %}
-          {% else %}
-            {% assign slug = desc_slug %}
-          {% endif %}
-
-          <!-- Determine loading strategy -->
-          {% assign loading_attr = "eager" %}
-          {% if lazy_load and forloop.index > preload_count %}
-            {% assign loading_attr = "lazy" %}
-            {% assign priority_attr = "low" %}
-          {% else %}
-            {% assign priority_attr = "high" %}
-          {% endif %}
-
-          <div class="product-item" id="enlarge-{{ slug }}" data-tags="{{ tags | downcase | strip }}">
-            <div class="product-image-wrapper">
-              {% if matched_badge != "" %}
-                <span class="product-badge image-badge" style="background-color: {{ matched_color | default: '#e74c3c' }}">{{ matched_badge }}</span>
-              {% endif %}
-              <a href="{{ path }}" class="product-link" data-lightbox="product-catalog" data-title="{{ description }}" data-product-slug="{{ slug }}">
-                <div class="product-image">
-                  <img 
-                    {% if lazy_load and forloop.index > preload_count %}
-                      data-src="{{ path }}"
-                      src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 {{ img_width }} {{ img_height }}' %3E%3C/svg%3E"
-                    {% else %}
-                      src="{{ path }}"
-                    {% endif %}
-                    alt="{{ alt }}" 
-                    title="{{ title | default: description }}"
-                    width="{{ img_width }}"
-                    height="{{ img_height }}"
-                    loading="{{ loading_attr }}"
-                    fetchpriority="{{ priority_attr }}"
-                    class="{% if lazy_load and forloop.index > preload_count %}loading{% endif %}"
-                    {% if include.image_animation %}
-                      data-aos="{{ include.image_animation }}"
-                      {% if include.image_animation_once %}data-aos-once="{{ include.image_animation_once }}"{% endif %}
-                      {% if include.image_animation_duration %}data-aos-duration="{{ include.image_animation_duration }}"{% endif %}
-                      {% if include.image_animation_easing %}data-aos-easing="{{ include.image_animation_easing }}"{% endif %}
-                      {% if include.image_animation_delay != nil %}
-                        {% if include.image_animation_delay == "0" %}
-                          data-aos-delay="0"
-                        {% else %}
-                          {% if include.image_animation_stagger %}
-                            {% assign item_delay = include.image_animation_delay | plus: forloop.index0 | times: include.image_animation_stagger %}
-                            data-aos-delay="{{ item_delay }}"
-                          {% else %}
-                            data-aos-delay="{{ include.image_animation_delay }}"
-                          {% endif %}
-                        {% endif %}
-                      {% endif %}
-                    {% endif %}
-                  >
-                </div>
-              </a>
-            </div>
-            {% if description != "" %}
-            <div class="product-description">
-              {{ description }}
-            </div>
-            {% endif %}
-          </div>
-        {% endif %}
-      {% endfor %}
-    {% endif %}
-  </div>
+  <div class="product-grid"></div>
 </div>
 
-<!-- Preconnect to image domains for faster loading -->
+<!-- Inline critical JS for initial loading -->
 <script>
-  document.addEventListener('DOMContentLoaded', function() {
-    // Extract domains from image paths for preconnect
-    {% if include.paths %}
-      {% assign image_paths = include.paths | split: "," %}
-      var domains = [];
-      {% for path in image_paths %}
-        {% if path contains "://" %}
-          var domain = "{{ path | split: '/' | slice: 0, 3 | join: '/' }}";
-          if (domains.indexOf(domain) === -1) domains.push(domain);
-        {% endif %}
-      {% endfor %}
+  document.addEventListener("DOMContentLoaded", function() {
+    // Global state
+    window.productCatalog = {
+      data: null,
+      activeFilters: [],
+      currentLightboxIndex: -1
+    };
+    
+    // Initialize catalogs
+    const catalogs = document.querySelectorAll('.product-catalog[data-json-url]');
+    
+    catalogs.forEach(function(catalog) {
+      const jsonUrl = catalog.getAttribute('data-json-url');
       
-      // Create preconnect links for each unique domain
-      domains.forEach(function(domain) {
-        var link = document.createElement('link');
-        link.rel = 'preconnect';
-        link.href = domain;
-        document.head.appendChild(link);
+      // Load JSON data
+      fetch(jsonUrl)
+        .then(response => response.json())
+        .then(data => {
+          // Store data globally
+          window.productCatalog.data = data;
+          
+          // Initialize product grid (critical for LCP)
+          initProductGrid(catalog, data);
+          
+          // Load non-critical features after initial render
+          setTimeout(function() {
+            // Load the full JS file which contains filter and lightbox functionality
+            if (!window.productCatalogExtendedLoaded) {
+              const script = document.createElement('script');
+              script.src = "{{ '/assets/js/product-catalog-json.js' | relative_url }}";
+              script.onload = function() {
+                // This will run the filter initialization from the main JS file
+                if (typeof initFilters === 'function') {
+                  initFilters(catalog, data);
+                  setupEventListeners(catalog);
+                }
+              };
+              document.body.appendChild(script);
+              window.productCatalogExtendedLoaded = true;
+            }
+          }, 1000); // 1 second delay to prioritize initial rendering
+        })
+        .catch(error => {
+          console.error("Error loading product data:", error);
+        });
+    });
+    
+    // Create a single product item
+    function createProductItem(product, data, index) {
+      const productItem = document.createElement('div');
+      productItem.className = 'product-item';
+      productItem.id = `enlarge-${product.description}`;
+      productItem.setAttribute('data-tags', product.tags.join(' '));
+      productItem.setAttribute('data-index', index);
+      
+      // Create product image wrapper
+      const imageWrapper = document.createElement('div');
+      imageWrapper.className = 'product-image-wrapper';
+      
+      // Create product badge if needed
+      if (data.ui.badge_categories && product.tags.some(tag => tag === 'ยอดฮิต' || tag === 'TopSell')) {
+        const badge = document.createElement('span');
+        badge.className = 'product-badge image-badge';
+        badge.style.backgroundColor = '#E74C3C';
+        badge.textContent = 'ยอดฮิต';
+        imageWrapper.appendChild(badge);
+      }
+      
+      // Create product link
+      const link = document.createElement('a');
+      link.href = product.path;
+      link.className = 'product-link';
+      link.setAttribute('data-lightbox', 'product-catalog');
+      link.setAttribute('data-title', product.description);
+      link.setAttribute('data-product-slug', product.description);
+      link.setAttribute('data-index', index);
+      
+      // Create product image with proper aspect ratio container
+      const imageContainer = document.createElement('div');
+      imageContainer.className = 'product-image';
+      
+      const img = document.createElement('img');
+      img.alt = product.alt || product.description;
+      img.title = product.title || product.description;
+      img.width = 400;
+      img.height = 400;
+      
+      // Set up lazy loading
+      img.className = 'loading';
+      img.dataset.src = product.path;
+      img.src = 'data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 400 400\' fill=\'%23f0f0f0\'%3E%3Crect width=\'400\' height=\'400\' /%3E%3C/svg%3E';
+      
+      imageContainer.appendChild(img);
+      link.appendChild(imageContainer);
+      imageWrapper.appendChild(link);
+      productItem.appendChild(imageWrapper);
+      
+      // Add description if available
+      if (product.description) {
+        const description = document.createElement('div');
+        description.className = 'product-description';
+        description.textContent = product.description;
+        productItem.appendChild(description);
+      }
+      
+      return productItem;
+    }
+    
+    // Core function to initialize the product grid
+    function initProductGrid(container, data) {
+      const productGrid = container.querySelector('.product-grid');
+      const uiSettings = data.ui;
+      
+      // Create product items
+      data.products.forEach((product, index) => {
+        const productItem = createProductItem(product, data, index);
+        productGrid.appendChild(productItem);
       });
-    {% endif %}
+      
+      // Initialize lazy loading for images
+      initLazyLoading();
+    }
+    
+    // Initialize lazy loading
+    function initLazyLoading() {
+      if ('IntersectionObserver' in window) {
+        const lazyImageObserver = new IntersectionObserver((entries, observer) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              const img = entry.target;
+              if (img.dataset.src) {
+                // Create a new image to preload
+                const tempImg = new Image();
+                
+                // When the new image loads, update the visible image
+                tempImg.onload = function() {
+                  img.src = img.dataset.src;
+                  img.classList.remove('loading');
+                  img.classList.add('loaded');
+                  // Remove the data-src to prevent any potential reloading
+                  img.removeAttribute('data-src');
+                };
+                
+                // Start loading the image
+                tempImg.src = img.dataset.src;
+                
+                // Stop observing this image
+                observer.unobserve(img);
+              }
+            }
+          });
+        }, {
+          rootMargin: '100px 0px', // Load images before they come into view
+          threshold: 0.01
+        });
+        
+        // Observe all lazy images
+        document.querySelectorAll('.product-image img[data-src]').forEach(img => {
+          lazyImageObserver.observe(img);
+        });
+      } else {
+        // Fallback for older browsers - load all images immediately
+        document.querySelectorAll('.product-image img[data-src]').forEach(img => {
+          img.src = img.dataset.src;
+          img.classList.remove('loading');
+          img.classList.add('loaded');
+          img.removeAttribute('data-src');
+        });
+      }
+    }
   });
 </script>
 
-<!-- Load optimized JavaScript with defer attribute -->
-<script src="{{ '/assets/js/product-catalog.js' | relative_url }}" defer></script>
+<script src="{{ '/assets/js/product-catalog-json.js' | relative_url }}" defer></script>
