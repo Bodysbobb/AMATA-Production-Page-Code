@@ -188,12 +188,12 @@ plugins:
   - jekyll-feed
   - jekyll-imagemagick
   - jekyll-link-attributes
-  - jekyll-minifier
+#  - jekyll-minifier
   - jekyll-regex-replace
   - jekyll-seo-tag
   - jekyll-sitemap
   - jekyll-tabs
-  - jekyll-terser
+#  - jekyll-terser
   - jekyll-toc
 
 sass:
