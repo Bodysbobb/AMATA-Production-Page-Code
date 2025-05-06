@@ -235,11 +235,12 @@
 .hero-nav-link {
   display: inline-block;
   font-size: 1.1rem;
+  font-weight: 600;
   color: #FFFFFF;
   text-decoration: none;
   padding: 0.5rem 1.5rem;
   border-radius: 4px;
-  background-color: rgba(255, 255, 255, 0.15);
+  background-color: #ffffff26;
   transition: all 0.2s;
   white-space: nowrap;
   border: 1px solid transparent;
@@ -263,14 +264,6 @@
   }
 }
 
-.hero-nav-link {
-  background-color: rgba(255, 255, 255, 0.15);
-  border-radius: 4px;
-  transition: all 0.2s ease;
-  will-change: transform;
-  -webkit-backface-visibility: hidden;
-  -webkit-transform: translateZ(0);   
-}
 
 // Scroll down indicator with chevron icon
 .scroll-indicator {
