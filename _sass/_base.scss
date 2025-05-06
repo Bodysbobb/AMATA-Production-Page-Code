@@ -252,7 +252,7 @@ progress {
 }
 
 .section-heading {
-  font-size: clamp(1.5rem, 4vw, 2.5rem);
+  font-size: clamp(1.5rem, 3.75vw, 2rem);
   font-weight: bold;
   color: var(--global-text-color);
   text-align: center;
@@ -261,7 +261,7 @@ progress {
 }
 
 .section-text {
-  font-size: clamp(1rem, 2.2vw, 1.2rem) !important;
+  font-size: clamp(0.95rem, 2vw, 1.1rem);
   line-height: 1.8;
 }
 

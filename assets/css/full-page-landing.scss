@@ -152,7 +152,7 @@
   }
   
   @media (max-width: 375px) {
-    font-size: 1.8rem;
+    font-size: 1.65rem;
     margin-bottom: 0.5rem;
   }
 }
@@ -261,6 +261,15 @@
     border-color: rgba(255, 255, 255, 0.5);
     text-decoration: none;
   }
+}
+
+.hero-nav-link {
+  background-color: rgba(255, 255, 255, 0.15);
+  border-radius: 4px;
+  transition: all 0.2s ease;
+  will-change: transform;
+  -webkit-backface-visibility: hidden;
+  -webkit-transform: translateZ(0);   
 }
 
 // Scroll down indicator with chevron icon
