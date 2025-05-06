@@ -36,10 +36,10 @@ jobs:
           export JEKYLL_ENV=production
           bundle exec jekyll build --trace --verbose
       
-      - name: Purge unused CSS 🧹
-        run: |
-          npm install -g purgecss
-          purgecss -c purgecss.config.js
+#      - name: Purge unused CSS 🧹
+#        run: |
+#          npm install -g purgecss
+#          purgecss -c purgecss.config.js
       
       - name: Deploy to AMATA-Production-Page repo 🚀
         uses: peaceiris/actions-gh-pages@v3

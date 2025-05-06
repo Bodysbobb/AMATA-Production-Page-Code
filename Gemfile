@@ -8,12 +8,12 @@ group :jekyll_plugins do
     gem 'jekyll-feed'
     gem 'jekyll-imagemagick'
     gem 'jekyll-link-attributes'
-    gem 'jekyll-minifier'
+   # gem 'jekyll-minifier'
     gem 'jekyll-regex-replace'
     gem 'jekyll-seo-tag'
     gem 'jekyll-sitemap'
     gem 'jekyll-tabs'
-    gem 'jekyll-terser', git: 'https://github.com/RobertoJBeltran/jekyll-terser.git'
+   # gem 'jekyll-terser', git: 'https://github.com/RobertoJBeltran/jekyll-terser.git'
     gem 'jekyll-toc'
   end
 
