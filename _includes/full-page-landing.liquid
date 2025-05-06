@@ -73,7 +73,7 @@
   
   // Original scroll behavior - scroll to first section-heading
   window.addEventListener('wheel', function handler(e) {
-    if (e.deltaY > 0) { // Scrolling down
+    if (e.deltaY > 20) { // Scrolling down
       e.preventDefault();
       
       // Hide the landing page
@@ -84,7 +84,7 @@
       const firstHeading = document.querySelector('.section-heading');
       if (firstHeading) {
         window.scrollTo({
-          top: firstHeading.offsetTop - 100,
+          top: firstHeading.offsetTop - 80,
           behavior: 'smooth'
         });
       }
