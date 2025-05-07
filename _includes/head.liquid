@@ -33,21 +33,28 @@
 <link rel="stylesheet" href="{{ '/assets/css/main.css' | relative_url | bust_css_cache }}">
 
 <!-- Fonts -->
+<!-- Preload Fonts -->
+{% if page.lang == "th" %}
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+        href="{{ "/assets/fonts/prompt/prompt-v11-thai-400.woff2" | relative_url }}">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+        href="{{ "/assets/fonts/prompt/prompt-v11-thai-600.woff2" | relative_url }}">
+{% elsif page.lang == "en" %}
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+        href="{{ "/assets/fonts/roboto/roboto-v47-latin-400.woff2" | relative_url }}">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+        href="{{ "/assets/fonts/roboto/roboto-v47-latin-600.woff2" | relative_url }}">
+{% endif %}
+
+<!-- Font Face Declarations -->
 {% if page.lang == "th" %}
   <style>
     @font-face {
       font-family: 'Prompt';
       font-style: normal;
-      font-weight: 300;
-      font-display: swap;
-      src: url('{{ "/assets/fonts/prompt/prompt-v11-thai-300.woff2" | relative_url }}') format('woff2');
-    }
-    @font-face {
-      font-family: 'Prompt';
-      font-style: normal;
       font-weight: 400;
       font-display: swap;
-      src: url('{{ "/assets/fonts/prompt/prompt-v11-thai-regular.woff2" | relative_url }}') format('woff2');
+      src: url('{{ "/assets/fonts/prompt/prompt-v11-thai-400.woff2" | relative_url }}') format('woff2');
     }
     @font-face {
       font-family: 'Prompt';
@@ -76,16 +83,9 @@
     @font-face {
       font-family: 'Roboto';
       font-style: normal;
-      font-weight: 300;
-      font-display: swap;
-      src: url('{{ "/assets/fonts/roboto/roboto-v47-latin-300.woff2" | relative_url }}') format('woff2');
-    }
-    @font-face {
-      font-family: 'Roboto';
-      font-style: normal;
       font-weight: 400;
       font-display: swap;
-      src: url('{{ "/assets/fonts/roboto/roboto-v47-latin-regular.woff2" | relative_url }}') format('woff2');
+      src: url('{{ "/assets/fonts/roboto/roboto-v47-latin-400.woff2" | relative_url }}') format('woff2');
     }
     @font-face {
       font-family: 'Roboto';
@@ -93,6 +93,13 @@
       font-weight: 500;
       font-display: swap;
       src: url('{{ "/assets/fonts/roboto/roboto-v47-latin-500.woff2" | relative_url }}') format('woff2');
+    }
+    @font-face {
+      font-family: 'Roboto';
+      font-style: normal;
+      font-weight: 600;
+      font-display: swap;
+      src: url('{{ "/assets/fonts/roboto/roboto-v47-latin-600.woff2" | relative_url }}') format('woff2');
     }
     @font-face {
       font-family: 'Roboto';

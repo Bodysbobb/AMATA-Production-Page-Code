@@ -12,11 +12,11 @@
 } /* Error */
 .highlight .k {
   color: #000000;
-  font-weight: bold;
+  font-weight: 600;
 } /* Keyword */
 .highlight .o {
   color: #000000;
-  font-weight: bold;
+  font-weight: 600;
 } /* Operator */
 .highlight .cm {
   color: #999988;
@@ -24,7 +24,7 @@
 } /* Comment.Multiline */
 .highlight .cp {
   color: #999999;
-  font-weight: bold;
+  font-weight: 600;
   font-style: italic;
 } /* Comment.Preproc */
 .highlight .c1 {
@@ -33,7 +33,7 @@
 } /* Comment.Single */
 .highlight .cs {
   color: #999999;
-  font-weight: bold;
+  font-weight: 600;
   font-style: italic;
 } /* Comment.Special */
 .highlight .gd {
@@ -61,7 +61,7 @@
   color: #555555;
 } /* Generic.Prompt */
 .highlight .gs {
-  font-weight: bold;
+  font-weight: 600;
 } /* Generic.Strong */
 .highlight .gu {
   color: #aaaaaa;
@@ -71,27 +71,27 @@
 } /* Generic.Traceback */
 .highlight .kc {
   color: #000000;
-  font-weight: bold;
+  font-weight: 600;
 } /* Keyword.Constant */
 .highlight .kd {
   color: #000000;
-  font-weight: bold;
+  font-weight: 600;
 } /* Keyword.Declaration */
 .highlight .kn {
   color: #000000;
-  font-weight: bold;
+  font-weight: 600;
 } /* Keyword.Namespace */
 .highlight .kp {
   color: #000000;
-  font-weight: bold;
+  font-weight: 600;
 } /* Keyword.Pseudo */
 .highlight .kr {
   color: #000000;
-  font-weight: bold;
+  font-weight: 600;
 } /* Keyword.Reserved */
 .highlight .kt {
   color: #445588;
-  font-weight: bold;
+  font-weight: 600;
 } /* Keyword.Type */
 .highlight .m {
   color: #009999;
@@ -107,29 +107,29 @@
 } /* Name.Builtin */
 .highlight .nc {
   color: #445588;
-  font-weight: bold;
+  font-weight: 600;
 } /* Name.Class */
 .highlight .no {
   color: #008080;
 } /* Name.Constant */
 .highlight .nd {
   color: #3c5d5d;
-  font-weight: bold;
+  font-weight: 600;
 } /* Name.Decorator */
 .highlight .ni {
   color: #800080;
 } /* Name.Entity */
 .highlight .ne {
   color: #990000;
-  font-weight: bold;
+  font-weight: 600;
 } /* Name.Exception */
 .highlight .nf {
   color: #990000;
-  font-weight: bold;
+  font-weight: 600;
 } /* Name.Function */
 .highlight .nl {
   color: #990000;
-  font-weight: bold;
+  font-weight: 600;
 } /* Name.Label */
 .highlight .nn {
   color: #555555;
@@ -142,7 +142,7 @@
 } /* Name.Variable */
 .highlight .ow {
   color: #000000;
-  font-weight: bold;
+  font-weight: 600;
 } /* Operator.Word */
 .highlight .w {
   color: #bbbbbb;

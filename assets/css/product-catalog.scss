@@ -19,6 +19,420 @@
   --catalog-z-modal: 1000;
 }
 
+// Filter dropdown
+.filter-dropdown {
+  position: absolute;
+  right: 0;
+  top: 100%;
+  width: 300px;
+  background: var(--global-card-bg-color, #fff);
+  border: 1px solid var(--global-divider-color, #e5e5e5);
+  border-radius: 4px;
+  box-shadow: 0 4px 12px var(--global-shadow-color, rgba(0, 0, 0, 0.1));
+  padding: 15px;
+  z-index: var(--catalog-z-dropdown);
+  display: none;
+  max-height: 70vh;
+  overflow-y: auto;
+  
+  &.active {
+    display: block;
+  }
+}
+
+.filter-category {
+  margin-bottom: 15px;
+  border-bottom: 1px solid var(--global-divider-color, #e5e5e5);
+  padding-bottom: 10px;
+  
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.category-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+}
+
+.category-title {
+  font-size: clamp(14px, 1vw, 16px);
+  font-weight: 600;
+  margin: 0;
+  padding: 5px 0;
+  color: var(--global-theme-color, #3498db);
+}
+
+.toggle-category {
+  background: none;
+  border: none;
+  color: var(--global-text-color, #333);
+  cursor: pointer;
+  font-size: 18px;
+  padding: 0;
+}
+
+.arrow-icon {
+  display: inline-block;
+  transition: transform var(--catalog-transition-fast) ease;
+  
+  svg {
+    display: block;
+  }
+  
+  &.rotated {
+    transform: rotate(180deg);
+  }
+}
+
+.category-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px;
+  transition: opacity var(--catalog-transition-fast) ease, 
+              visibility var(--catalog-transition-fast) ease;
+  opacity: 1;
+  visibility: visible;
+  
+  &.hidden {
+    opacity: 0;
+    visibility: hidden;
+    height: 0;
+    margin: 0;
+    overflow: hidden;
+  }
+}
+
+.dropdown-filter-tag {
+  padding: 5px 10px;
+  background-color: var(--global-code-bg-color, #f8f9fa);
+  border-radius: 3px;
+  font-size: clamp(11px, 0.8vw, 13px);
+  font-weight: 400;
+  cursor: pointer;
+  white-space: nowrap;
+  color: var(--global-text-color, #333);
+  text-decoration: none;
+  transition: all var(--catalog-transition-fast) ease;
+  
+  &:hover {
+    background-color: var(--global-hover-color, #2980b9);
+    color: var(--global-hover-text-color, #fff);
+    text-decoration: none;
+  }
+  
+  /* Added active state for dropdown filter tags */
+  &.active {
+    background-color: var(--global-theme-color, #3498db);
+    color: var(--global-badge-text-color, #fff);
+    text-decoration: none;
+    
+    &:hover {
+      text-decoration: none;
+    }
+  }
+}
+
+// Selected filters section
+.selected-filters {
+  margin-top: 15px;
+  padding-top: 10px;
+
+  h4 {
+    font-size: clamp(12px, 0.9vw, 14px);
+    margin-bottom: 10px;
+    color: var(--global-text-color, #333);
+  }
+}
+
+.selected-filters-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.no-filters {
+  color: var(--global-text-secondary-color, #777);
+  font-size: clamp(11px, 0.8vw, 13px);
+  font-style: italic;
+}
+
+.filter-badge {
+  background-color: var(--global-link-color, #3498db);
+  color: var(--global-badge-text-color, #fff);
+  padding: 5px 10px;
+  border-radius: 3px;
+  font-size: clamp(11px, 0.8vw, 13px);
+  display: inline-flex;
+  align-items: center;
+}
+
+.remove-filter {
+  margin-left: 5px;
+  font-size: clamp(14px, 1vw, 16px);
+  cursor: pointer;
+  color: var(--global-badge-text-color, #fff);
+}
+
+.clear-all-filters {
+  background-color: var(--global-code-bg-color, #f8f9fa);
+  border: none;
+  padding: 5px 10px;
+  font-size: clamp(11px, 0.8vw, 13px);
+  cursor: pointer;
+  color: var(--global-text-color, #333);
+  border-radius: 3px;
+  transition: all var(--catalog-transition-fast) ease;
+  
+  &:hover {
+    background-color: var(--global-hover-color, #2980b9);
+    color: var(--global-hover-text-color, #fff);
+  }
+}
+
+// =============================================
+// Product Grid Styles - Most moved to critical CSS
+// =============================================
+.product-badge.image-badge {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  font-size: 0.7rem;
+  font-weight: 400;
+  color: #fff;
+  padding: 0.3em 0.6em;
+  border-radius: 6px;
+  z-index: 5;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+// Loading state animations
+.product-image img {
+  &.loading {
+    opacity: 0;
+    filter: blur(5px);
+    transition: opacity 0.3s ease, filter 0.3s ease;
+  }
+  
+  &.loaded {
+    opacity: 1;
+    filter: blur(0);
+    transition: opacity 0.3s ease, filter 0.3s ease;
+  }
+  
+  &:hover {
+    transform: scale(1.05);
+    transition: transform var(--catalog-transition-normal) ease;
+  }
+}
+
+// =============================================
+// Lightbox Styles
+// =============================================
+.lightbox {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: var(--catalog-z-modal);
+  padding-top: 20px; /* Reduced from 30px */
+  opacity: 1;
+  transition: opacity 0.3s ease;
+}
+
+.lightbox-content {
+  position: relative;
+  max-width: 90%;  
+  max-height: 95%; 
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  
+  img {
+    max-width: 95%; /* Increased from original */
+    max-height: 85vh; /* Increased to use more viewport height */
+    display: block;
+    margin: 0 auto;
+    object-fit: scale-down; /* Changed from contain to scale-down */
+    width: auto; /* Add this to maintain aspect ratio */
+    height: auto; /* Add this to maintain aspect ratio */
+  }
+}
+
+.lightbox-caption {
+  text-align: center;
+  color: white;
+  padding: 10px 0;
+  font-size: clamp(14px, 1vw, 16px);
+  width: 100%;
+}
+
+.lightbox-close {
+  position: absolute;
+  right: 10px;   /* Fixed position from right edge */
+  top: 10px;     /* Fixed position from top edge */
+  z-index: calc(var(--catalog-z-modal) + 1);
+  font-size: clamp(24px, 3vw, 36px);  /* Larger font size */
+  font-weight: 400;
+  color: white;
+  cursor: pointer;
+  background: rgba(0,0,0,0.6);  /* Slightly darker background */
+  border-radius: 50%;
+  width: clamp(35px, 5vw, 50px);  /* Larger size */
+  height: clamp(35px, 5vw, 50px); /* Larger size */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background var(--catalog-transition-fast) ease;
+  pointer-events: auto;
+  
+  &:hover {
+    background: rgba(0,0,0,0.8);
+  }
+}
+
+.lightbox-image-wrapper {
+  position: relative;  /* Make this relative */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%; 
+  max-width: 100%;
+}
+
+.lightbox-share {
+  margin: 5px auto;
+  padding: 5px;
+  text-align: center;
+  color: white;
+  background-color: rgba(0, 0, 0, 0.6);
+  border-radius: 6px;
+  width: auto;
+  display: flex;           
+  align-items: center;    
+  justify-content: center; 
+  flex-wrap: wrap;        
+  gap: 8px;                
+}
+
+.share-message {
+  font-size: clamp(14px, 2vw, 18px);
+  margin-bottom: 3px;
+  color: white;
+}
+
+.copy-link-button {
+  background-color: var(--global-theme-color, #3498db);
+  color: var(--global-badge-text-color, #fff);
+  padding: 4px 10px;
+  border-radius: 4px;
+  border: none;
+  cursor: pointer;
+  font-size: 13px;
+  min-width: 90px;
+  height: 26px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  
+  &:hover {
+    background-color: var(--global-hover-color, #2980b9);
+  }
+}
+
+.middle-label {
+  display: none;
+  margin: 0 10px;
+  font-size: 14px;
+  color: white;
+  font-weight: 400;
+}
+
+.line-button {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  margin-left: 10px;
+  padding: 4px 12px;
+  border-radius: 4px;
+  background-color: #06C755;
+  color: white;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color var(--catalog-transition-fast) ease;
+  font-size: 13px;
+  min-width: 90px;
+  height: 26px;        
+  line-height: 1;      
+  white-space: nowrap; 
+  
+  &:hover {
+    background-color: #04a245;
+  }
+
+  .line-icon {
+    width: 16px;
+    height: 16px;
+    fill: white;
+    margin-right: 6px;
+    display: inline-block;
+    vertical-align: middle;
+    position: relative;
+    top: -1px;
+  }
+}
+
+.lightbox-nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  color: white;
+  font-size: 35px;
+  font-weight: 600;
+  cursor: pointer;
+  z-index: calc(var(--catalog-z-modal) + 1);
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color var(--catalog-transition-fast) ease, 
+              opacity var(--catalog-transition-fast) ease;
+  
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.5);
+    opacity: 1 !important;
+  }
+}
+
+.lightbox-prev {
+  left: 20px;
+}
+
+.lightbox-next {
+  right: 20px;
+}
+
+/* Move size guide after description in lightbox */
+.lightbox-size-guide {
+  text-align: center;
+  margin-top: 5px;
+  font-size: 1rem;
+}
+
 // =============================================
 // Container Styles
 // =============================================
@@ -62,7 +476,7 @@
   display: inline-block;
   padding: 12px 24px;
   font-size: 1.25rem;
-  font-weight: normal;
+  font-weight: 400;
   color: white;
   background-color: var(--global-theme-color, #3498db); 
   text-decoration: none;
@@ -203,406 +617,3 @@
     transform: rotate(90deg);
   }
 }
-
-// Filter dropdown
-.filter-dropdown {
-  position: absolute;
-  right: 0;
-  top: 100%;
-  width: 300px;
-  background: var(--global-card-bg-color, #fff);
-  border: 1px solid var(--global-divider-color, #e5e5e5);
-  border-radius: 4px;
-  box-shadow: 0 4px 12px var(--global-shadow-color, rgba(0, 0, 0, 0.1));
-  padding: 15px;
-  z-index: var(--catalog-z-dropdown);
-  display: none;
-  max-height: 70vh;
-  overflow-y: auto;
-  
-  &.active {
-    display: block;
-  }
-}
-
-.filter-category {
-  margin-bottom: 15px;
-  border-bottom: 1px solid var(--global-divider-color, #e5e5e5);
-  padding-bottom: 10px;
-  
-  &:last-child {
-    border-bottom: none;
-  }
-}
-
-.category-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  cursor: pointer;
-}
-
-.category-title {
-  font-size: clamp(14px, 1vw, 16px);
-  font-weight: 600;
-  margin: 0;
-  padding: 5px 0;
-  color: var(--global-theme-color, #3498db);
-}
-
-.toggle-category {
-  background: none;
-  border: none;
-  color: var(--global-text-color, #333);
-  cursor: pointer;
-  font-size: 18px;
-  padding: 0;
-}
-
-.arrow-icon {
-  display: inline-block;
-  transition: transform var(--catalog-transition-fast) ease;
-  
-  svg {
-    display: block;
-  }
-  
-  &.rotated {
-    transform: rotate(180deg);
-  }
-}
-
-.category-filters {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin-top: 10px;
-  transition: opacity var(--catalog-transition-fast) ease, 
-              visibility var(--catalog-transition-fast) ease;
-  opacity: 1;
-  visibility: visible;
-  
-  &.hidden {
-    opacity: 0;
-    visibility: hidden;
-    height: 0;
-    margin: 0;
-    overflow: hidden;
-  }
-}
-
-.dropdown-filter-tag {
-  padding: 5px 10px;
-  background-color: var(--global-code-bg-color, #f8f9fa);
-  border-radius: 3px;
-  font-size: clamp(11px, 0.8vw, 13px);
-  font-weight: normal;
-  cursor: pointer;
-  white-space: nowrap;
-  color: var(--global-text-color, #333);
-  text-decoration: none;
-  transition: all var(--catalog-transition-fast) ease;
-  
-  &:hover {
-    background-color: var(--global-hover-color, #2980b9);
-    color: var(--global-hover-text-color, #fff);
-    text-decoration: none;
-  }
-}
-
-// Selected filters section
-.selected-filters {
-  margin-top: 15px;
-  padding-top: 10px;
-
-  h4 {
-    font-size: clamp(12px, 0.9vw, 14px);
-    margin-bottom: 10px;
-    color: var(--global-text-color, #333);
-  }
-}
-
-.selected-filters-list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin-bottom: 10px;
-}
-
-.no-filters {
-  color: var(--global-text-secondary-color, #777);
-  font-size: clamp(11px, 0.8vw, 13px);
-  font-style: italic;
-}
-
-.filter-badge {
-  background-color: var(--global-link-color, #3498db);
-  color: var(--global-badge-text-color, #fff);
-  padding: 5px 10px;
-  border-radius: 3px;
-  font-size: clamp(11px, 0.8vw, 13px);
-  display: inline-flex;
-  align-items: center;
-}
-
-.remove-filter {
-  margin-left: 5px;
-  font-size: clamp(14px, 1vw, 16px);
-  cursor: pointer;
-  color: var(--global-badge-text-color, #fff);
-}
-
-.clear-all-filters {
-  background-color: var(--global-code-bg-color, #f8f9fa);
-  border: none;
-  padding: 5px 10px;
-  font-size: clamp(11px, 0.8vw, 13px);
-  cursor: pointer;
-  color: var(--global-text-color, #333);
-  border-radius: 3px;
-  transition: all var(--catalog-transition-fast) ease;
-  
-  &:hover {
-    background-color: var(--global-hover-color, #2980b9);
-    color: var(--global-hover-text-color, #fff);
-  }
-}
-
-// =============================================
-// Product Grid Styles - Most moved to critical CSS
-// =============================================
-.product-badge.image-badge {
-  position: absolute;
-  top: 8px;
-  left: 8px;
-  font-size: 0.7rem;
-  font-weight: normal;
-  color: #fff;
-  padding: 0.3em 0.6em;
-  border-radius: 6px;
-  z-index: 5;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-}
-
-// Loading state animations
-.product-image img {
-  &.loading {
-    opacity: 0;
-    filter: blur(5px);
-    transition: opacity 0.3s ease, filter 0.3s ease;
-  }
-  
-  &.loaded {
-    opacity: 1;
-    filter: blur(0);
-    transition: opacity 0.3s ease, filter 0.3s ease;
-  }
-  
-  &:hover {
-    transform: scale(1.05);
-    transition: transform var(--catalog-transition-normal) ease;
-  }
-}
-
-// =============================================
-// Lightbox Styles
-// =============================================
-.lightbox {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.9);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: var(--catalog-z-modal);
-  padding-top: 20px; /* Reduced from 30px */
-  opacity: 1;
-  transition: opacity 0.3s ease;
-}
-
-.lightbox-content {
-  position: relative;
-  max-width: 90%;  
-  max-height: 95%; 
-  margin: 0 auto;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  
-  img {
-    max-width: 95%; /* Increased from original */
-    max-height: 85vh; /* Increased to use more viewport height */
-    display: block;
-    margin: 0 auto;
-    object-fit: scale-down; /* Changed from contain to scale-down */
-    width: auto; /* Add this to maintain aspect ratio */
-    height: auto; /* Add this to maintain aspect ratio */
-  }
-}
-
-.lightbox-caption {
-  text-align: center;
-  color: white;
-  padding: 10px 0;
-  font-size: clamp(14px, 1vw, 16px);
-  width: 100%;
-}
-
-.lightbox-close {
-  position: absolute;
-  right: 10px;   /* Fixed position from right edge */
-  top: 10px;     /* Fixed position from top edge */
-  z-index: calc(var(--catalog-z-modal) + 1);
-  font-size: clamp(24px, 3vw, 36px);  /* Larger font size */
-  font-weight: normal;
-  color: white;
-  cursor: pointer;
-  background: rgba(0,0,0,0.6);  /* Slightly darker background */
-  border-radius: 50%;
-  width: clamp(35px, 5vw, 50px);  /* Larger size */
-  height: clamp(35px, 5vw, 50px); /* Larger size */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: background var(--catalog-transition-fast) ease;
-  pointer-events: auto;
-  
-  &:hover {
-    background: rgba(0,0,0,0.8);
-  }
-}
-
-.lightbox-image-wrapper {
-  position: relative;  /* Make this relative */
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 100%; 
-  max-width: 100%;
-}
-
-.lightbox-share {
-  margin: 5px auto;
-  padding: 5px;
-  text-align: center;
-  color: white;
-  background-color: rgba(0, 0, 0, 0.6);
-  border-radius: 6px;
-  width: auto;
-  display: flex;           
-  align-items: center;    
-  justify-content: center; 
-  flex-wrap: wrap;        
-  gap: 8px;                
-}
-
-.share-message {
-  font-size: clamp(14px, 2vw, 18px);
-  margin-bottom: 3px;
-  color: white;
-}
-
-.copy-link-button {
-  background-color: var(--global-theme-color, #3498db);
-  color: var(--global-badge-text-color, #fff);
-  padding: 4px 10px;
-  border-radius: 4px;
-  border: none;
-  cursor: pointer;
-  font-size: 13px;
-  min-width: 90px;
-  height: 26px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  
-  &:hover {
-    background-color: var(--global-hover-color, #2980b9);
-  }
-}
-
-.middle-label {
-  display: none;
-  margin: 0 10px;
-  font-size: 14px;
-  color: white;
-  font-weight: normal;
-}
-
-.line-button {
-  display: none;
-  align-items: center;
-  justify-content: center;
-  margin-left: 10px;
-  padding: 4px 12px;
-  border-radius: 4px;
-  background-color: #06C755;
-  color: white;
-  text-decoration: none;
-  cursor: pointer;
-  transition: background-color var(--catalog-transition-fast) ease;
-  font-size: 13px;
-  min-width: 90px;
-  height: 26px;        
-  line-height: 1;      
-  white-space: nowrap; 
-  
-  &:hover {
-    background-color: #04a245;
-  }
-
-  .line-icon {
-    width: 16px;
-    height: 16px;
-    fill: white;
-    margin-right: 6px;
-    display: inline-block;
-    vertical-align: middle;
-    position: relative;
-    top: -1px;
-  }
-}
-
-.lightbox-nav {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  color: white;
-  font-size: 35px;
-  font-weight: bold;
-  cursor: pointer;
-  z-index: calc(var(--catalog-z-modal) + 1);
-  background-color: rgba(0, 0, 0, 0.2);
-  border-radius: 50%;
-  width: 50px;
-  height: 50px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: background-color var(--catalog-transition-fast) ease, 
-              opacity var(--catalog-transition-fast) ease;
-  
-  &:hover {
-    background-color: rgba(0, 0, 0, 0.5);
-    opacity: 1 !important;
-  }
-}
-
-.lightbox-prev {
-  left: 20px;
-}
-
-.lightbox-next {
-  right: 20px;
-}
-
-.lightbox-size-guide {
-  text-align: center;
-  margin-top: 0rem;
-  font-size: 1rem;
-}
-

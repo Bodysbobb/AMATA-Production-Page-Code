@@ -8,7 +8,7 @@
 // =========================
 :root {
   // Content width constraint (can be overridden in themes)
-  --max-content-width: 1200px;
+  --max-content-width: 1400px;
   
   // Offsets for fixed elements
   --navbar-height: 65px;
@@ -245,7 +245,7 @@ progress {
 // =========================
 .page-heading {
   font-size: clamp(1.75rem, 4vw, 3rem);
-  font-weight: bold;
+  font-weight: 700;
   color: var(--global-text-color);
   text-align: center;
   margin-top: 0vh;
@@ -253,7 +253,7 @@ progress {
 
 .section-heading {
   font-size: clamp(1.5rem, 3.75vw, 2rem);
-  font-weight: bold;
+  font-weight: 600;
   color: var(--global-text-color);
   text-align: center;
   margin-top: 5vh;
@@ -268,6 +268,7 @@ progress {
 .section-divider {
   border: none;
   height: 1px;
+  font-weight: 500;
   background-color: var(--global-divider-color);
   margin: 2rem 0;
 }
@@ -352,40 +353,20 @@ progress {
 /* =========================
  * Footer Styles
  * ========================= */
-
-.footer-normal {
+ .footer-full-bg {
+  width: 100%;
   background-color: var(--global-footer-bg-color);
   color: var(--global-footer-text-color);
-  font-size: 0.95rem;
-  padding: 1.5rem 0;
-  text-align: center;
-  border-top: 1px solid var(--global-divider-color);
-
-  a {
-    color: var(--global-footer-link-color);
-    text-decoration: none;
-    font-weight: 500;
-
-    &:hover {
-      color: var(--global-hover-color);
-      text-decoration: underline;
-    }
-  }
-
-  .container {
-    max-width: var(--max-content-width);
-    margin: 0 auto;
-    padding: 0 1rem;
-  }
 }
 
-.fixed-bottom {
-  background-color: var(--global-footer-bg-color);
-  color: var(--global-footer-text-color);
-  font-size: 0.9rem;
-  padding: 0.75rem 1rem;
-  border-top: 1px solid var(--global-divider-color);
+.footer-inner-wrapper {
+  max-width: var(--max-content-width);
+  margin: 0 auto;
+}
+
+.footer-copyright {
   text-align: center;
-  width: 100%;
-  z-index: 100;
+  font-size: 0.95rem;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
 }
