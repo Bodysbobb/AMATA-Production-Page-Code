@@ -204,7 +204,7 @@ scroll_text: Why AMATA?
   alts="Vibrant custom sports jerseys with durable printing, Corporate polo shirts with custom logo printing, Smart NFC digital business cards for modern networking, Professional printing services for banners and labels, Custom promotional products for brand recognition, Logo and graphic design services for all needs"
   titles="Sports Jerseys & Custom Printing, Corporate Polos & Uniforms, Smart NFC Business Cards, Advertising Print Services, Custom Promotional Products, Logo & Graphic Design"
   descriptions="Custom printed jerseys, t-shirts and sports uniforms with vibrant colors and free design service, Corporate polo shirts with custom branding for professional teams at competitive prices, NFC digital business cards with modern design for instant contact sharing, Professional printing of banners, product labels, stickers and marketing materials, Premium branded promotional products to increase sales and build brand trust, Professional logo design, graphics, packaging and print design services for all business needs"
-  urls="https://www.amataproduction.com/english/AMATA-Customizable-Sports-Wear-and-Sublimation-en/, https://www.amataproduction.com/english/AMATA-Customizable-Polo-Wear-and-Sublimation-en/,,,,"
+  urls="https://www.amataproduction.com/english/AMATA-Customizable-Sports-Wear-and-Sublimation-en, https://www.amataproduction.com/english/AMATA-Customizable-Polo-Wear-and-Sublimation-en,,,,"
   images_per_row_max="3"
   images_per_row_min="1"
 %}
@@ -219,7 +219,7 @@ scroll_text: Why AMATA?
   paths="/assets/img/Banner/clients/c1.webp, /assets/img/Banner/clients/c2.webp, /assets/img/Banner/clients/c3.webp, /assets/img/Banner/clients/c4.webp"
   alts="Top clients who trust AMATA Production, including PTTEP, Mitsubishi Electric, Thammasat University, government ministries, and private companies"
   titles="Trusted by leading clients – PTTEP, Mitsubishi, Thammasat, Mahidol, Krungsri Bank, Thai Red Cross, government agencies, and more"
-  links="https://www.amataproduction.com/english/AMATA-About-Us-en/"
+  links="https://www.amataproduction.com/english/AMATA-About-Us-en"
   descriptions="Featured client logos from major corporations, universities, and government institutions who choose AMATA Production for apparel and branding services"
   container_width="100%"
   container_height="300px"
