@@ -11,6 +11,9 @@ function initFilters(container, data) {
   if (data.ui.show_top_filters !== false) {
     const topFiltersContainer = container.querySelector('.top-filter-tags');
     if (topFiltersContainer) {
+      // Clear any existing filters (from placeholder)
+      topFiltersContainer.innerHTML = '';
+      
       // Add "All" filter
       const allFilter = document.createElement('a');
       allFilter.href = '#';
@@ -110,6 +113,9 @@ function initFilters(container, data) {
     const filterSort = container.querySelector('.filter-sort');
     if (filterSort) filterSort.style.display = 'none';
   }
+  
+  // Setup event listeners
+  setupEventListeners(container);
 }
 
 // Set up event listeners
@@ -253,6 +259,12 @@ function applyFilters(container) {
     } else {
       tag.classList.toggle('active', window.productCatalog.activeFilters.includes(filter));
     }
+  });
+  
+  // Update dropdown filter tag active states - NEW CODE
+  container.querySelectorAll('.dropdown-filter-tag').forEach(tag => {
+    const filter = tag.getAttribute('data-filter');
+    tag.classList.toggle('active', window.productCatalog.activeFilters.includes(filter));
   });
   
   // Apply filters to products
@@ -407,7 +419,13 @@ function createLightbox(data, index) {
     imageWrapper.appendChild(shareSection);
   }
   
-  // Add size guide if available
+  // Build lightbox structure - REORDERED COMPONENTS
+  imageWrapper.appendChild(image);
+  content.appendChild(closeButton);
+  content.appendChild(imageWrapper);
+  content.appendChild(caption);
+  
+  // Add size guide if available - MOVED AFTER CAPTION
   if (uiSettings.size_guide && uiSettings.size_content && uiSettings.size_picture) {
     const sizeGuide = document.createElement('div');
     sizeGuide.className = 'lightbox-size-guide';
@@ -423,11 +441,6 @@ function createLightbox(data, index) {
     content.appendChild(sizeGuide);
   }
   
-  // Build lightbox structure
-  imageWrapper.appendChild(image);
-  content.appendChild(closeButton);
-  content.appendChild(imageWrapper);
-  content.appendChild(caption);
   lightbox.appendChild(content);
   
   // Add navigation if there are multiple products
@@ -502,3 +515,29 @@ function keyboardNavigation(e) {
     navigateLightbox((window.productCatalog.currentLightboxIndex + 1) % window.productCatalog.data.products.length);
   }
 }
+
+// Initialize immediately when this script loads
+document.addEventListener("DOMContentLoaded", function() {
+  const catalogs = document.querySelectorAll('.product-catalog[data-json-url]');
+  
+  catalogs.forEach(function(catalog) {
+    // Check if data is already loaded (by inline script)
+    if (window.productCatalog && window.productCatalog.data) {
+      // Initialize filters with existing data
+      initFilters(catalog, window.productCatalog.data);
+    } else {
+      // Wait for data to be loaded by inline script
+      const checkInterval = setInterval(function() {
+        if (window.productCatalog && window.productCatalog.data) {
+          clearInterval(checkInterval);
+          initFilters(catalog, window.productCatalog.data);
+        }
+      }, 100);
+      
+      // Safety timeout after 5 seconds
+      setTimeout(function() {
+        clearInterval(checkInterval);
+      }, 5000);
+    }
+  });
+});

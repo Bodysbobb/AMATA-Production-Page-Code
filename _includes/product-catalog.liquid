@@ -1,5 +1,4 @@
 <style>
-/* Critical CSS to be inlined in <head> */
 .product-catalog {
   width: 100%;
   max-width: 1200px;
@@ -7,7 +6,6 @@
   padding: 20px 0;
 }
 
-/* Product Grid - Critical for LCP */
 .product-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -15,7 +13,6 @@
   width: 100%;
 }
 
-/* Prevent layout shift with aspect ratio */
 .product-image-wrapper {
   position: relative;
 }
@@ -120,28 +117,64 @@
           // Initialize product grid (critical for LCP)
           initProductGrid(catalog, data);
           
-          // Load non-critical features after initial render
-          setTimeout(function() {
-            // Load the full JS file which contains filter and lightbox functionality
-            if (!window.productCatalogExtendedLoaded) {
-              const script = document.createElement('script');
-              script.src = "{{ '/assets/js/product-catalog-json.js' | relative_url }}";
-              script.onload = function() {
-                // This will run the filter initialization from the main JS file
-                if (typeof initFilters === 'function') {
-                  initFilters(catalog, data);
-                  setupEventListeners(catalog);
-                }
-              };
-              document.body.appendChild(script);
-              window.productCatalogExtendedLoaded = true;
-            }
-          }, 1000); // 1 second delay to prioritize initial rendering
+          // Initialize filter UI immediately - key change
+          initBasicFilterUI(catalog, data);
         })
         .catch(error => {
           console.error("Error loading product data:", error);
         });
     });
+    
+    // Initialize filter UI with basic structure
+    function initBasicFilterUI(container, data) {
+      // Configure filter UI visibility based on settings
+      if (!data.ui.show_top_filters && !data.ui.show_dropdown_filters) {
+        const filterSection = container.querySelector('.catalog-filters');
+        if (filterSection) filterSection.style.display = 'none';
+        return;
+      }
+      
+      // Set up filter button text
+      const filterSortButton = container.querySelector('.filter-sort-button');
+      if (filterSortButton) {
+        filterSortButton.textContent = data.ui.labels?.filter_button || 'Filter & Sort';
+      }
+      
+      // Hide top filters if disabled
+      if (data.ui.show_top_filters === false) {
+        const topFiltersWrapper = container.querySelector('.top-filter-tags-wrapper');
+        if (topFiltersWrapper) topFiltersWrapper.style.display = 'none';
+      }
+      
+      // Hide dropdown filters if disabled
+      if (data.ui.show_dropdown_filters === false) {
+        const filterSort = container.querySelector('.filter-sort');
+        if (filterSort) filterSort.style.display = 'none';
+      }
+      
+      // Add "All" filter as placeholder until the full JS loads
+      const topFiltersContainer = container.querySelector('.top-filter-tags');
+      if (topFiltersContainer && data.ui.show_top_filters !== false) {
+        const allFilter = document.createElement('a');
+        allFilter.href = '#';
+        allFilter.className = 'filter-tag active';
+        allFilter.setAttribute('data-filter', 'all');
+        allFilter.textContent = 'All';
+        topFiltersContainer.appendChild(allFilter);
+        
+        // Add some placeholder filters with real tag names if available
+        if (data.topFilters && data.topFilters.length > 0) {
+          for (let i = 0; i < Math.min(3, data.topFilters.length); i++) {
+            const filterTag = document.createElement('a');
+            filterTag.href = '#';
+            filterTag.className = 'filter-tag';
+            filterTag.setAttribute('data-filter', data.topFilters[i].value);
+            filterTag.textContent = data.topFilters[i].display;
+            topFiltersContainer.appendChild(filterTag);
+          }
+        }
+      }
+    }
     
     // Create a single product item
     function createProductItem(product, data, index) {
@@ -269,4 +302,5 @@
   });
 </script>
 
+<!-- Use defer attribute directly instead of delayed loading -->
 <script src="{{ '/assets/js/product-catalog-json.js' | relative_url }}" defer></script>
