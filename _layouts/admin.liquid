@@ -1,0 +1,132 @@
+---
+layout: default
+---
+
+<style>
+  .admin-content {
+    display: none; /* Hidden by default */
+  }
+  
+  .login-screen {
+    max-width: 400px;
+    margin: 100px auto;
+    padding: 30px;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    text-align: center;
+  }
+  
+  .login-screen h2 {
+    margin-top: 0;
+    color: #333;
+  }
+  
+  .login-form {
+    margin-top: 20px;
+  }
+  
+  .form-group {
+    margin-bottom: 15px;
+    text-align: left;
+  }
+  
+  .form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 500;
+    color: #555;
+  }
+  
+  .form-control {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 16px;
+    transition: border-color 0.2s;
+  }
+  
+  .form-control:focus {
+    border-color: #3498db;
+    outline: none;
+  }
+  
+  .btn {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #3498db;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+  }
+  
+  .btn:hover {
+    background-color: #2980b9;
+  }
+</style>
+
+<!-- Login Screen -->
+<div class="login-screen" id="login-screen">
+  <h2>Admin Access</h2>
+  <p>Enter the password to access admin pages</p>
+  
+  <div class="login-form">
+    <div class="form-group">
+      <label for="password">Password</label>
+      <input type="password" id="password" class="form-control" placeholder="Enter password">
+    </div>
+    <button type="button" id="login-button" class="btn btn-primary">Login</button>
+  </div>
+</div>
+
+<!-- Admin Content (hidden by default) -->
+<div class="admin-content" id="admin-content">
+  {{ content }}
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // The password for accessing admin pages
+    const ADMIN_PASSWORD = 'admin123'; // CHANGE THIS!
+    
+    // Check if already authenticated
+    let isAuthenticated = sessionStorage.getItem('admin_authenticated') === 'true';
+    
+    // Get elements
+    const loginScreen = document.getElementById('login-screen');
+    const adminContent = document.getElementById('admin-content');
+    const passwordInput = document.getElementById('password');
+    const loginButton = document.getElementById('login-button');
+    
+    // If already authenticated, show content
+    if (isAuthenticated) {
+      loginScreen.style.display = 'none';
+      adminContent.style.display = 'block';
+    }
+    
+    // Login functionality
+    loginButton.addEventListener('click', function() {
+      if (passwordInput.value === ADMIN_PASSWORD) {
+        // Store authentication in session storage
+        sessionStorage.setItem('admin_authenticated', 'true');
+        
+        // Hide login, show content
+        loginScreen.style.display = 'none';
+        adminContent.style.display = 'block';
+      } else {
+        alert('Incorrect password. Please try again.');
+      }
+    });
+    
+    // Also trigger login on Enter key
+    passwordInput.addEventListener('keyup', function(e) {
+      if (e.key === 'Enter') {
+        loginButton.click();
+      }
+    });
+  });
+</script>

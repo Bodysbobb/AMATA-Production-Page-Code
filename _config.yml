@@ -128,6 +128,15 @@ collections:
           type: english
         values:
           layout: page
+  admins:
+    output: true
+    permalink: /admins/:path/
+    defaults:
+      - scope:
+          path: ""
+          type: admins  
+        values:
+          layout: admin 
 
 # -----------------------------------------------------------------------------
 # Jekyll settings

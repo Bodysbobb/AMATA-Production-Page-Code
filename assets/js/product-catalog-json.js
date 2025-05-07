@@ -1,3 +1,84 @@
+// Analytics tracking keys
+const URL_CLICKS_KEY = 'product_url_clicks';
+const LIGHTBOX_OPENS_KEY = 'product_lightbox_opens';
+
+// Add helper function to create clean URL slugs
+function createCleanUrlSlug(text) {
+  // Convert to lowercase, replace spaces and special chars with hyphens
+  return text
+    .toString()
+    .toLowerCase()
+    .trim()
+    .replace(/\s+/g, '-')         // Replace spaces with hyphens
+    .replace(/[^\w\-]+/g, '')     // Remove all non-word chars except hyphens
+    .replace(/\-\-+/g, '-')       // Replace multiple hyphens with single hyphen
+    .replace(/^-+/, '')           // Trim hyphens from start
+    .replace(/-+$/, '');          // Trim hyphens from end
+}
+
+// Analytics functions
+const productAnalytics = {
+  // Track a URL button click
+  trackUrlClick: function(productId) {
+    // Get existing data
+    let trackingData = this.getUrlClickData();
+    
+    // Create product entry if it doesn't exist
+    if (!trackingData[productId]) {
+      trackingData[productId] = {
+        clicks: 0,
+        lastClicked: null
+      };
+    }
+    
+    // Update click data
+    trackingData[productId].clicks++;
+    trackingData[productId].lastClicked = new Date().toISOString();
+    
+    // Save updated data
+    localStorage.setItem(URL_CLICKS_KEY, JSON.stringify(trackingData));
+    
+    // Return the updated click count
+    return trackingData[productId].clicks;
+  },
+  
+  // Track a lightbox opening
+  trackLightboxOpen: function(productId) {
+    // Get existing data
+    let trackingData = this.getLightboxOpenData();
+    
+    // Create product entry if it doesn't exist
+    if (!trackingData[productId]) {
+      trackingData[productId] = {
+        opens: 0,
+        lastOpened: null
+      };
+    }
+    
+    // Update open data
+    trackingData[productId].opens++;
+    trackingData[productId].lastOpened = new Date().toISOString();
+    
+    // Save updated data
+    localStorage.setItem(LIGHTBOX_OPENS_KEY, JSON.stringify(trackingData));
+    
+    // Return the updated open count
+    return trackingData[productId].opens;
+  },
+  
+  // Get URL click data
+  getUrlClickData: function() {
+    const data = localStorage.getItem(URL_CLICKS_KEY);
+    return data ? JSON.parse(data) : {};
+  },
+  
+  // Get lightbox open data
+  getLightboxOpenData: function() {
+    const data = localStorage.getItem(LIGHTBOX_OPENS_KEY);
+    return data ? JSON.parse(data) : {};
+  }
+};
+
 // Initialize filter UI - Non-critical functionality
 function initFilters(container, data) {
   // Only show filter UI if enabled
@@ -261,7 +342,7 @@ function applyFilters(container) {
     }
   });
   
-  // Update dropdown filter tag active states - NEW CODE
+  // Update dropdown filter tag active states
   container.querySelectorAll('.dropdown-filter-tag').forEach(tag => {
     const filter = tag.getAttribute('data-filter');
     tag.classList.toggle('active', window.productCatalog.activeFilters.includes(filter));
@@ -295,10 +376,36 @@ function applyFilters(container) {
   });
 }
 
+// URL parameter handling for direct lightbox opening
+function checkUrlForLightbox() {
+  // Get the URL parameters
+  const urlParams = new URLSearchParams(window.location.search);
+  const productParam = urlParams.get('product');
+  
+  if (productParam && window.productCatalog && window.productCatalog.data) {
+    const products = window.productCatalog.data.products;
+    
+    // Try to find the product by matching the clean URL slug
+    const foundIndex = products.findIndex(product => 
+      createCleanUrlSlug(product.description) === productParam
+    );
+    
+    if (foundIndex !== -1) {
+      // Wait a bit for everything to initialize
+      setTimeout(() => {
+        createLightbox(window.productCatalog.data, foundIndex);
+      }, 500);
+    }
+  }
+}
+
 // Lightbox implementation - only loaded when needed
 function createLightbox(data, index) {
   const product = data.products[index];
   const uiSettings = data.ui;
+  
+  // Track this lightbox opening
+  productAnalytics.trackLightboxOpen(product.description);
   
   // Store current index for navigation
   window.productCatalog.currentLightboxIndex = index;
@@ -354,8 +461,11 @@ function createLightbox(data, index) {
     // Copy button functionality
     copyButton.addEventListener('click', function() {
       // Create a clean URL-friendly version of the product description
-      const productSlug = encodeURIComponent(product.description);
-      const url = window.location.origin + window.location.pathname + '?' + productSlug;
+      const productSlug = createCleanUrlSlug(product.description);
+      const url = window.location.origin + window.location.pathname + '?product=' + productSlug;
+      
+      // Track this URL click
+      productAnalytics.trackUrlClick(product.description);
       
       navigator.clipboard.writeText(url).then(() => {
         copyButton.textContent = uiSettings.labels.copy_button_final;
@@ -422,13 +532,13 @@ function createLightbox(data, index) {
     imageWrapper.appendChild(shareSection);
   }
   
-  // Build lightbox structure - REORDERED COMPONENTS
+  // Build lightbox structure
   imageWrapper.appendChild(image);
   content.appendChild(closeButton);
   content.appendChild(imageWrapper);
   content.appendChild(caption);
   
-  // Add size guide if available - MOVED AFTER CAPTION
+  // Add size guide if available
   if (uiSettings.size_guide && uiSettings.size_content && uiSettings.size_picture) {
     const sizeGuide = document.createElement('div');
     sizeGuide.className = 'lightbox-size-guide';
@@ -516,28 +626,6 @@ function keyboardNavigation(e) {
   } else if (e.key === 'ArrowRight') {
     e.preventDefault();
     navigateLightbox((window.productCatalog.currentLightboxIndex + 1) % window.productCatalog.data.products.length);
-  }
-}
-
-// URL parameter handling for direct lightbox opening
-function checkUrlForLightbox() {
-  // Get the query string without the '?'
-  const queryString = window.location.search.substring(1);
-  
-  if (queryString && window.productCatalog && window.productCatalog.data) {
-    // Find the product with matching description
-    const products = window.productCatalog.data.products;
-    const foundIndex = products.findIndex(product => 
-      product.description === queryString || 
-      product.description === decodeURIComponent(queryString)
-    );
-    
-    if (foundIndex !== -1) {
-      // Wait a bit for everything to initialize
-      setTimeout(() => {
-        createLightbox(window.productCatalog.data, foundIndex);
-      }, 500);
-    }
   }
 }
 
