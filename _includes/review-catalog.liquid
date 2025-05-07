@@ -1,0 +1,530 @@
+<style>
+/* Critical CSS to be inlined in <head> */
+.review-catalog {
+  width: 100%;
+  max-width: 1200px;
+  min-height: 200px;
+  margin: 0 auto;
+  padding: 20px 0;
+}
+
+/* Review Grid - 2 per row */
+.review-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+  width: 100%;
+}
+
+/* 3:2 aspect ratio for images */
+.review-image-wrapper {
+  position: relative;
+}
+
+.review-image {
+  position: relative;
+  width: 100%;
+  height: 0;
+  padding-bottom: 66.67%; /* 3:2 aspect ratio */
+  overflow: hidden;
+  background-color: #f0f0f0; /* Placeholder color */
+  border-radius: 4px;
+}
+
+.review-image img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.review-description {
+  margin-top: 8px;
+  font-size: 14px;
+  color: var(--global-text-color, #333);
+  line-height: 1.4;
+  text-align: center;
+  width: 100%;
+}
+
+/* Top filters (if needed in the future) */
+.top-filter-tags {
+  display: inline-flex;
+  flex-wrap: nowrap;
+  margin-bottom: 20px;
+}
+
+.filter-tag {
+  display: inline-block;
+  padding: 8px 14px;
+  margin-right: 10px;
+  background-color: #f5f5f5;
+  border-radius: 20px;
+  color: #333;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.filter-tag.active {
+  background-color: var(--global-theme-color, #0076de);
+  color: white;
+}
+
+/* Lightbox styling */
+.lightbox {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.85);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  opacity: 1;
+  transition: opacity 0.3s ease;
+}
+
+.lightbox-content {
+  position: relative;
+  background-color: white;
+  padding: 20px;
+  max-width: 90%;
+  max-height: 90%;
+  border-radius: 5px;
+  overflow: auto;
+}
+
+.lightbox-close {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  font-size: 24px;
+  color: #333;
+  cursor: pointer;
+  z-index: 10;
+}
+
+.lightbox-image-wrapper {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 15px;
+}
+
+.lightbox-image-wrapper img {
+  max-width: 100%;
+  max-height: 70vh;
+  object-fit: contain;
+}
+
+.lightbox-caption {
+  text-align: center;
+  padding: 10px 0;
+  font-size: 16px;
+  color: #333;
+}
+
+.lightbox-nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  color: white;
+  font-size: 32px;
+  font-weight: bold;
+  cursor: pointer;
+  padding: 15px;
+  user-select: none;
+}
+
+.lightbox-prev {
+  left: 20px;
+}
+
+.lightbox-next {
+  right: 20px;
+}
+
+/* Responsive breakpoints - keep 2 per row */
+@media screen and (max-width: 768px) {
+  .review-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+  }
+  
+  .review-description {
+    font-size: 13px;
+  }
+}
+
+@media screen and (max-width: 576px) {
+  .review-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+}
+
+/* Lazy loading styles */
+.review-image img.loaded {
+  transition: opacity 0.3s ease;
+  opacity: 1;
+}
+
+.review-image img.loading {
+  opacity: 0.2;
+}
+</style>
+
+<div class="review-catalog" data-json-url="{{ '/assets/data/' | append: include.json_data_file | relative_url }}">
+  <!-- Top filter section (hidden by default, but structure kept for future) -->
+  <div class="top-filter-tags" style="display: none;"></div>
+  
+  <!-- Main review grid -->
+  <div class="review-grid"></div>
+</div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    // Simple state management (no need for global window object)
+    const reviewCatalog = {
+      data: null,
+      currentLightboxIndex: -1
+    };
+    
+    // Initialize review catalogs
+    const catalogs = document.querySelectorAll('.review-catalog[data-json-url]');
+    
+    catalogs.forEach(function(catalog) {
+      const jsonUrl = catalog.getAttribute('data-json-url');
+      
+      // Load JSON data
+      fetch(jsonUrl)
+        .then(response => response.json())
+        .then(data => {
+          // Store data
+          reviewCatalog.data = data;
+          
+          // Initialize review grid
+          initReviewGrid(catalog, data);
+          
+          // Initialize top filters if enabled
+          if (data.ui && data.ui.show_top_filters) {
+            initTopFilters(catalog, data);
+          }
+        })
+        .catch(error => {
+          console.error("Error loading review data:", error);
+        });
+    });
+    
+    // Initialize top filters (only if enabled in the future)
+    function initTopFilters(container, data) {
+      const topFiltersContainer = container.querySelector('.top-filter-tags');
+      if (!topFiltersContainer) return;
+      
+      // Show the filters container
+      topFiltersContainer.style.display = 'flex';
+      
+      // Add "All" filter
+      const allFilter = document.createElement('a');
+      allFilter.href = '#';
+      allFilter.className = 'filter-tag active';
+      allFilter.setAttribute('data-filter', 'all');
+      allFilter.textContent = 'All';
+      topFiltersContainer.appendChild(allFilter);
+      
+      // Add category filters
+      if (data.topFilters && data.topFilters.length > 0) {
+        data.topFilters.forEach(filter => {
+          const filterTag = document.createElement('a');
+          filterTag.href = '#';
+          filterTag.className = 'filter-tag';
+          filterTag.setAttribute('data-filter', filter.value);
+          filterTag.textContent = filter.display;
+          topFiltersContainer.appendChild(filterTag);
+        });
+      }
+      
+      // Set up filter click events
+      topFiltersContainer.addEventListener('click', function(e) {
+        if (e.target.classList.contains('filter-tag')) {
+          e.preventDefault();
+          
+          // Remove active class from all filters
+          topFiltersContainer.querySelectorAll('.filter-tag').forEach(tag => {
+            tag.classList.remove('active');
+          });
+          
+          // Add active class to clicked filter
+          e.target.classList.add('active');
+          
+          // Apply filter
+          const filter = e.target.getAttribute('data-filter');
+          filterReviews(container, filter);
+        }
+      });
+    }
+    
+    // Filter reviews by tag (for possible future use)
+    function filterReviews(container, filter) {
+      const reviewItems = container.querySelectorAll('.review-item');
+      
+      reviewItems.forEach(item => {
+        if (filter === 'all') {
+          item.style.display = 'block';
+        } else {
+          const tags = (item.getAttribute('data-tags') || '').toLowerCase();
+          item.style.display = tags.includes(filter.toLowerCase()) ? 'block' : 'none';
+        }
+      });
+    }
+    
+    // Create a single review item
+    function createReviewItem(review, index) {
+      const reviewItem = document.createElement('div');
+      reviewItem.className = 'review-item';
+      reviewItem.setAttribute('data-tags', review.tags.join(' '));
+      reviewItem.setAttribute('data-index', index);
+      
+      // Create image wrapper
+      const imageWrapper = document.createElement('div');
+      imageWrapper.className = 'review-image-wrapper';
+      
+      // Create product link
+      const link = document.createElement('a');
+      link.href = '#';
+      link.className = 'review-link';
+      link.setAttribute('data-index', index);
+      
+      // Image with aspect ratio container
+      const imageContainer = document.createElement('div');
+      imageContainer.className = 'review-image';
+      
+      const img = document.createElement('img');
+      img.alt = review.alt || review.description;
+      img.title = review.title || review.description;
+      img.width = 600;
+      img.height = 400; // 3:2 ratio
+      
+      // Lazy loading
+      img.className = 'loading';
+      img.dataset.src = review.path;
+      img.src = 'data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 600 400\' fill=\'%23f0f0f0\'%3E%3Crect width=\'600\' height=\'400\' /%3E%3C/svg%3E';
+      
+      imageContainer.appendChild(img);
+      link.appendChild(imageContainer);
+      imageWrapper.appendChild(link);
+      reviewItem.appendChild(imageWrapper);
+      
+      // Add description
+      if (review.description) {
+        const description = document.createElement('div');
+        description.className = 'review-description';
+        description.textContent = review.description;
+        reviewItem.appendChild(description);
+      }
+      
+      return reviewItem;
+    }
+    
+    // Initialize review grid
+    function initReviewGrid(container, data) {
+      const reviewGrid = container.querySelector('.review-grid');
+      
+      // Create review items
+      data.products.forEach((review, index) => {
+        const reviewItem = createReviewItem(review, index);
+        reviewGrid.appendChild(reviewItem);
+      });
+      
+      // Initialize lazy loading
+      initLazyLoading();
+      
+      // Setup lightbox click events
+      setupLightboxEvents(container);
+    }
+    
+    // Setup lightbox click events
+    function setupLightboxEvents(container) {
+      container.addEventListener('click', function(e) {
+        // Handle review links
+        if (e.target.closest('.review-link')) {
+          e.preventDefault();
+          const link = e.target.closest('.review-link');
+          const index = parseInt(link.getAttribute('data-index'), 10);
+          
+          if (!isNaN(index) && reviewCatalog.data) {
+            createLightbox(reviewCatalog.data, index);
+          }
+        }
+      });
+    }
+    
+    // Create lightbox
+    function createLightbox(data, index) {
+      const review = data.products[index];
+      
+      // Store current index for navigation
+      reviewCatalog.currentLightboxIndex = index;
+      
+      // Create lightbox container
+      const lightbox = document.createElement('div');
+      lightbox.className = 'lightbox';
+      
+      // Create lightbox content
+      const content = document.createElement('div');
+      content.className = 'lightbox-content';
+      
+      // Create image wrapper
+      const imageWrapper = document.createElement('div');
+      imageWrapper.className = 'lightbox-image-wrapper';
+      
+      // Create image
+      const image = document.createElement('img');
+      image.src = review.path;
+      image.alt = review.alt || review.description;
+      
+      // Create close button
+      const closeButton = document.createElement('span');
+      closeButton.className = 'lightbox-close';
+      closeButton.innerHTML = '&times;';
+      closeButton.setAttribute('aria-label', 'Close');
+      closeButton.addEventListener('click', closeLightbox);
+      
+      // Create caption
+      const caption = document.createElement('div');
+      caption.className = 'lightbox-caption';
+      caption.textContent = review.description;
+      
+      // Build lightbox structure
+      imageWrapper.appendChild(image);
+      content.appendChild(closeButton);
+      content.appendChild(imageWrapper);
+      content.appendChild(caption);
+      lightbox.appendChild(content);
+      
+      // Add navigation if there are multiple reviews
+      if (data.products.length > 1) {
+        const prevNav = document.createElement('div');
+        prevNav.className = 'lightbox-nav lightbox-prev';
+        prevNav.innerHTML = '&#10094;';
+        prevNav.setAttribute('aria-label', 'Previous image');
+        prevNav.addEventListener('click', function(e) {
+          e.stopPropagation();
+          navigateLightbox((index - 1 + data.products.length) % data.products.length);
+        });
+        
+        const nextNav = document.createElement('div');
+        nextNav.className = 'lightbox-nav lightbox-next';
+        nextNav.innerHTML = '&#10095;';
+        nextNav.setAttribute('aria-label', 'Next image');
+        nextNav.addEventListener('click', function(e) {
+          e.stopPropagation();
+          navigateLightbox((index + 1) % data.products.length);
+        });
+        
+        lightbox.appendChild(prevNav);
+        lightbox.appendChild(nextNav);
+      }
+      
+      // Add keyboard navigation
+      document.addEventListener('keydown', keyboardNavigation);
+      
+      // Close when clicking the background
+      lightbox.addEventListener('click', function(e) {
+        if (e.target === lightbox) {
+          closeLightbox();
+        }
+      });
+      
+      // Add to DOM
+      document.body.appendChild(lightbox);
+      document.body.style.overflow = 'hidden';
+    }
+    
+    // Close lightbox
+    function closeLightbox() {
+      document.removeEventListener('keydown', keyboardNavigation);
+      const lightbox = document.querySelector('.lightbox');
+      if (lightbox) {
+        lightbox.style.opacity = '0';
+        setTimeout(() => {
+          if (lightbox.parentNode) {
+            lightbox.parentNode.removeChild(lightbox);
+          }
+          document.body.style.overflow = '';
+        }, 300);
+      }
+    }
+    
+    // Navigate lightbox
+    function navigateLightbox(newIndex) {
+      closeLightbox();
+      setTimeout(() => {
+        createLightbox(reviewCatalog.data, newIndex);
+      }, 300);
+    }
+    
+    // Keyboard navigation
+    function keyboardNavigation(e) {
+      if (e.key === 'Escape') {
+        closeLightbox();
+      } else if (e.key === 'ArrowLeft') {
+        e.preventDefault();
+        navigateLightbox((reviewCatalog.currentLightboxIndex - 1 + reviewCatalog.data.products.length) % reviewCatalog.data.products.length);
+      } else if (e.key === 'ArrowRight') {
+        e.preventDefault();
+        navigateLightbox((reviewCatalog.currentLightboxIndex + 1) % reviewCatalog.data.products.length);
+      }
+    }
+    
+    // Initialize lazy loading
+    function initLazyLoading() {
+      if ('IntersectionObserver' in window) {
+        const lazyImageObserver = new IntersectionObserver((entries, observer) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              const img = entry.target;
+              if (img.dataset.src) {
+                // Create a new image to preload
+                const tempImg = new Image();
+                
+                // When the new image loads, update the visible image
+                tempImg.onload = function() {
+                  img.src = img.dataset.src;
+                  img.classList.remove('loading');
+                  img.classList.add('loaded');
+                  img.removeAttribute('data-src');
+                };
+                
+                // Start loading the image
+                tempImg.src = img.dataset.src;
+                
+                // Stop observing this image
+                observer.unobserve(img);
+              }
+            }
+          });
+        }, {
+          rootMargin: '100px 0px',
+          threshold: 0.01
+        });
+        
+        // Observe all lazy images
+        document.querySelectorAll('.review-image img[data-src]').forEach(img => {
+          lazyImageObserver.observe(img);
+        });
+      } else {
+        // Fallback for older browsers
+        document.querySelectorAll('.review-image img[data-src]').forEach(img => {
+          img.src = img.dataset.src;
+          img.classList.remove('loading');
+          img.classList.add('loaded');
+          img.removeAttribute('data-src');
+        });
+      }
+    }
+  });
+</script>

@@ -28,6 +28,7 @@ lang: "en"
 alternate_lang_url: "/products/amata-sports-designs"
 
 # ================ Background ================ #
+background: true
 background_logo: /assets/img/custom_logo/amata/AMATA_Logo_Hover.svg
 background_position: center
 

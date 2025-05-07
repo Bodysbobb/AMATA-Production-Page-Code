@@ -111,6 +111,12 @@
   </style>
 {% endif %}
 
+{% if page.background == true and page.background_logo %}
+  <link rel="preload" 
+        href="{{ page.background_logo | relative_url }}" 
+        as="image">
+{% endif %}
+
 <!-- Site Icons -->
 <link rel="apple-touch-icon" sizes="180x180" href="{{ '/apple-touch-icon.png' | relative_url }}">
 <link rel="icon" type="image/png" sizes="32x32" href="{{ '/favicon-32x32.png' | relative_url }}">

@@ -39,7 +39,7 @@ og_description: Real testimonials and praise from satisfied customers who trust 
 og_image: /assets/img/META_pic/Customer_Review_AMATASport.jpg
 ---
 
-{% include product-catalog.liquid 
+{% include review-catalog.liquid 
   json_data_file="review_en.json"
   theme="review"
 %}

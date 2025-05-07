@@ -7,30 +7,24 @@
   margin: 0 auto;
   padding: 20px 0;
 }
-
-/* Product Grid - Critical for LCP */
 .product-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 20px;
   width: 100%;
 }
-
-/* Prevent layout shift with aspect ratio */
 .product-image-wrapper {
   position: relative;
 }
-
 .product-image {
   position: relative;
   width: 100%;
   height: 0;
-  padding-bottom: 100%; /* Default 1:1 aspect ratio */
+  padding-bottom: 100%;
   overflow: hidden;
-  background-color: #f0f0f0; /* Placeholder color */
+  background-color: #f0f0f0;
   border-radius: 4px;
 }
-
 .product-image img {
   position: absolute;
   top: 0;
@@ -39,32 +33,124 @@
   height: 100%;
   object-fit: contain;
 }
-
 .product-description {
   margin-top: 8px;
   font-size: 14px;
   color: var(--global-text-color, #333);
   line-height: 1.4;
-  text-align: center; /* Center align the text */
-  width: 100%; /* Ensure full width */
+  text-align: center;
+  width: 100%;
 }
-
-/* Critical Responsive Breakpoints */
+.top-filter-tags-wrapper {
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  padding-bottom: 5px;
+  flex: 1;
+  max-width: calc(100% - 150px);
+  display: flex;
+  align-items: center;
+  height: 40px;
+}
+.top-filter-tags {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 10px;
+  white-space: nowrap;
+  padding-bottom: 0;
+  width: fit-content;
+  min-width: 100%;
+  height: 100%;
+  align-items: center;
+}
+.filter-tag {
+  padding: 8px 16px;
+  cursor: pointer;
+  font-size: clamp(12px, 0.9vw, 14px);
+  border-radius: 3px;
+  background-color: var(--global-code-bg-color, #f8f9fa);
+  white-space: nowrap;
+  color: var(--global-text-color, #333);
+  text-decoration: none;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  height: 35px;
+}
+.filter-tag:hover:not(.active) {
+  background-color: var(--global-hover-color, #2980b9);
+  color: var(--global-hover-text-color, #fff);
+  text-decoration: none;
+}
+.filter-tag.active {
+  background-color: var(--global-theme-color, #3498db);
+  color: var(--global-badge-text-color, #fff);
+  text-decoration: none;
+}
+.filter-tag.active:hover {
+  text-decoration: none;
+}
+.filter-sort {
+  position: relative;
+  min-width: 100px;
+  width: 100px;
+  height: 40px;
+  margin-left: 10px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+}
+.filter-sort-button {
+  width: 100px;
+  height: 35px;
+}
+.filter-dropdown {
+  position: absolute;
+  right: 0;
+  top: 100%;
+  width: 300px;
+  background: var(--global-card-bg-color, #fff);
+  border: 1px solid var(--global-divider-color, #e5e5e5);
+  border-radius: 4px;
+  box-shadow: 0 4px 12px var(--global-shadow-color, rgba(0, 0, 0, 0.1));
+  padding: 15px;
+  z-index: 100;
+  display: none;
+  max-height: 70vh;
+  overflow-y: auto;
+}
+.filter-dropdown.active {
+  display: block;
+}
 @media screen and (max-width: 1200px) {
   .product-grid {
     grid-template-columns: repeat(3, 1fr);
   }
 }
-
 @media screen and (max-width: 768px) {
   .product-grid {
     grid-template-columns: repeat(2, 1fr);
   }
+  .filter-sort, .filter-sort-button {
+    width: 90px;
+    min-width: 90px;
+  }
+  .top-filter-tags-wrapper {
+    max-width: calc(100% - 120px);
+  }
 }
-
 @media screen and (max-width: 576px) {
   .product-grid {
     grid-template-columns: repeat(2, 1fr);
+  }
+  .filter-sort, .filter-sort-button {
+    width: 80px;
+    min-width: 80px;
+  }
+  .top-filter-tags-wrapper {
+    max-width: calc(100% - 100px);
   }
 }
 </style>
@@ -97,33 +183,24 @@
   <div class="product-grid"></div>
 </div>
 
-<!-- Inline critical JS for initial loading -->
 <script>
   document.addEventListener("DOMContentLoaded", function() {
-    // Global state
     window.productCatalog = {
       data: null,
       activeFilters: [],
       currentLightboxIndex: -1
     };
     
-    // Initialize catalogs
     const catalogs = document.querySelectorAll('.product-catalog[data-json-url]');
     
     catalogs.forEach(function(catalog) {
       const jsonUrl = catalog.getAttribute('data-json-url');
       
-      // Load JSON data
       fetch(jsonUrl)
         .then(response => response.json())
         .then(data => {
-          // Store data globally
           window.productCatalog.data = data;
-          
-          // Initialize product grid (critical for LCP)
           initProductGrid(catalog, data);
-          
-          // Initialize filter UI immediately - key change
           initBasicFilterUI(catalog, data);
         })
         .catch(error => {
@@ -131,34 +208,28 @@
         });
     });
     
-    // Initialize filter UI with basic structure
     function initBasicFilterUI(container, data) {
-      // Configure filter UI visibility based on settings
       if (!data.ui.show_top_filters && !data.ui.show_dropdown_filters) {
         const filterSection = container.querySelector('.catalog-filters');
         if (filterSection) filterSection.style.display = 'none';
         return;
       }
       
-      // Set up filter button text
       const filterSortButton = container.querySelector('.filter-sort-button');
       if (filterSortButton) {
         filterSortButton.textContent = data.ui.labels?.filter_button || 'Filter & Sort';
       }
       
-      // Hide top filters if disabled
       if (data.ui.show_top_filters === false) {
         const topFiltersWrapper = container.querySelector('.top-filter-tags-wrapper');
         if (topFiltersWrapper) topFiltersWrapper.style.display = 'none';
       }
       
-      // Hide dropdown filters if disabled
       if (data.ui.show_dropdown_filters === false) {
         const filterSort = container.querySelector('.filter-sort');
         if (filterSort) filterSort.style.display = 'none';
       }
       
-      // Add "All" filter as placeholder until the full JS loads
       const topFiltersContainer = container.querySelector('.top-filter-tags');
       if (topFiltersContainer && data.ui.show_top_filters !== false) {
         const allFilter = document.createElement('a');
@@ -168,7 +239,6 @@
         allFilter.textContent = 'All';
         topFiltersContainer.appendChild(allFilter);
         
-        // Add some placeholder filters with real tag names if available
         if (data.topFilters && data.topFilters.length > 0) {
           for (let i = 0; i < Math.min(3, data.topFilters.length); i++) {
             const filterTag = document.createElement('a');
@@ -182,7 +252,6 @@
       }
     }
     
-    // Create a single product item
     function createProductItem(product, data, index) {
       const productItem = document.createElement('div');
       productItem.className = 'product-item';
@@ -190,11 +259,9 @@
       productItem.setAttribute('data-tags', product.tags.join(' '));
       productItem.setAttribute('data-index', index);
       
-      // Create product image wrapper
       const imageWrapper = document.createElement('div');
       imageWrapper.className = 'product-image-wrapper';
       
-      // Create product badge if needed
       if (data.ui.badge_categories && product.tags.some(tag => tag === 'ยอดฮิต' || tag === 'TopSell')) {
         const badge = document.createElement('span');
         badge.className = 'product-badge image-badge';
@@ -203,7 +270,6 @@
         imageWrapper.appendChild(badge);
       }
       
-      // Create product link
       const link = document.createElement('a');
       link.href = product.path;
       link.className = 'product-link';
@@ -212,7 +278,6 @@
       link.setAttribute('data-product-slug', product.description);
       link.setAttribute('data-index', index);
       
-      // Create product image with proper aspect ratio container
       const imageContainer = document.createElement('div');
       imageContainer.className = 'product-image';
       
@@ -222,7 +287,6 @@
       img.width = 400;
       img.height = 400;
       
-      // Set up lazy loading
       img.className = 'loading';
       img.dataset.src = product.path;
       img.src = 'data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 400 400\' fill=\'%23f0f0f0\'%3E%3Crect width=\'400\' height=\'400\' /%3E%3C/svg%3E';
@@ -232,7 +296,6 @@
       imageWrapper.appendChild(link);
       productItem.appendChild(imageWrapper);
       
-      // Add description if available
       if (product.description) {
         const description = document.createElement('div');
         description.className = 'product-description';
@@ -243,22 +306,18 @@
       return productItem;
     }
     
-    // Core function to initialize the product grid
     function initProductGrid(container, data) {
       const productGrid = container.querySelector('.product-grid');
       const uiSettings = data.ui;
       
-      // Create product items
       data.products.forEach((product, index) => {
         const productItem = createProductItem(product, data, index);
         productGrid.appendChild(productItem);
       });
       
-      // Initialize lazy loading for images
       initLazyLoading();
     }
     
-    // Initialize lazy loading
     function initLazyLoading() {
       if ('IntersectionObserver' in window) {
         const lazyImageObserver = new IntersectionObserver((entries, observer) => {
@@ -266,37 +325,29 @@
             if (entry.isIntersecting) {
               const img = entry.target;
               if (img.dataset.src) {
-                // Create a new image to preload
                 const tempImg = new Image();
                 
-                // When the new image loads, update the visible image
                 tempImg.onload = function() {
                   img.src = img.dataset.src;
                   img.classList.remove('loading');
                   img.classList.add('loaded');
-                  // Remove the data-src to prevent any potential reloading
                   img.removeAttribute('data-src');
                 };
                 
-                // Start loading the image
                 tempImg.src = img.dataset.src;
-                
-                // Stop observing this image
                 observer.unobserve(img);
               }
             }
           });
         }, {
-          rootMargin: '100px 0px', // Load images before they come into view
+          rootMargin: '100px 0px',
           threshold: 0.01
         });
         
-        // Observe all lazy images
         document.querySelectorAll('.product-image img[data-src]').forEach(img => {
           lazyImageObserver.observe(img);
         });
       } else {
-        // Fallback for older browsers - load all images immediately
         document.querySelectorAll('.product-image img[data-src]').forEach(img => {
           img.src = img.dataset.src;
           img.classList.remove('loading');
@@ -308,5 +359,4 @@
   });
 </script>
 
-<!-- Use defer attribute directly instead of delayed loading -->
 <script src="{{ '/assets/js/product-catalog-json.js' | relative_url }}" defer></script>

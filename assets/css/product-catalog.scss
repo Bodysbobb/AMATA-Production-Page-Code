@@ -589,11 +589,9 @@
   cursor: pointer;
   font-size: clamp(12px, 0.9vw, 14px);
   white-space: nowrap;
-  width: auto;
   text-align: center;
   color: var(--global-text-color, #333);
   transition: all var(--catalog-transition-fast) ease;
-  height: 35px;
   display: flex;
   align-items: center;
   justify-content: center;
