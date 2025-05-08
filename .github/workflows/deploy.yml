@@ -33,16 +33,28 @@ jobs:
         env:
           ADMIN_PASSWORD: ${{ secrets.ADMIN_PASSWORD }}
           MANAGER_PASSWORD: ${{ secrets.MANAGER_PASSWORD }}
+          GOOGLE_SERVICE_ACCOUNT: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_KEY }}
+          GOOGLE_SHEET_ID: ${{ secrets.GOOGLE_SHEET_ID }}
         run: |
+          # Create a temporary file for the service account key
+          echo "$GOOGLE_SERVICE_ACCOUNT" > /tmp/service-account.json
+          
+          # Create config files
           ADMIN_B64=$(echo -n "$ADMIN_PASSWORD" | base64)
           MANAGER_B64=$(echo -n "$MANAGER_PASSWORD" | base64)
 
           echo "env:" > _secrets.yml
           echo "  ADMIN_PASSWORD_B64: \"$ADMIN_B64\"" >> _secrets.yml
           echo "  MANAGER_PASSWORD_B64: \"$MANAGER_B64\"" >> _secrets.yml
-
+          echo "  GOOGLE_SHEET_ID: \"$GOOGLE_SHEET_ID\"" >> _secrets.yml
+          
+          # Build site
           export JEKYLL_ENV=production
+          export GOOGLE_APPLICATION_CREDENTIALS="/tmp/service-account.json"
           bundle exec jekyll build --trace --verbose --config _config.yml,_secrets.yml
+          
+          # Remove sensitive file when done
+          rm /tmp/service-account.json
       
 #      - name: Purge unused CSS 🧹
 #        run: |
