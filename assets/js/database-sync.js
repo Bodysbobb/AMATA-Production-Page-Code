@@ -2,7 +2,7 @@
 const URL_CLICKS_KEY = 'product_url_clicks';
 const LIGHTBOX_OPENS_KEY = 'product_lightbox_opens';
 const LAST_SYNC_KEY = 'last_analytics_sync';
-const SYNC_INTERVAL = 30 * 60 * 1000; // 30 minutes
+const SYNC_INTERVAL = 30 * 1000; // 30 minutes
 
 // Updated URL to your Google Apps Script web app
 const ANALYTICS_API_URL = 'https://script.google.com/macros/s/AKfycbzg-r9e3MaNneQjlV7-56tsW9OjPOxgwSQRp5XpvrtN9M-iNhm9Jn272UMvobTnK0cZ/exec';
