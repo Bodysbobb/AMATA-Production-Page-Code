@@ -30,6 +30,9 @@ jobs:
           cache: "pip"
       
       - name: Install and Build 🔧
+        env:
+          ADMIN_PASSWORD: ${{ secrets.ADMIN_PASSWORD }}
+          MANAGER_PASSWORD: ${{ secrets.MANAGER_PASSWORD }}
         run: |
           sudo apt-get update && sudo apt-get install -y imagemagick
           pip3 install --upgrade nbconvert

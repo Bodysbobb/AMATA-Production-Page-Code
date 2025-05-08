@@ -1,0 +1,255 @@
+<nav id="navbar"
+     class="navbar admin-navbar {% if site.navbar_fixed %}fixed-top{% else %}sticky-top{% endif %}"
+     role="navigation">
+  <div class="container">
+    
+    <!-- Mobile Header (wraps brand and toggle) -->
+    <div class="navbar-header">
+      <!-- Brand Section -->
+      <div class="navbar-brand-container">
+        {% if page.navbar_logo_one %}
+          <a class="navbar-brand d-flex align-items-center" href="{{ '/admins/' | relative_url }}">
+            <div class="navbar-logo-badge">
+              <img src="{{ page.navbar_logo_one | relative_url }}" alt="แดชบอร์ดผู้ดูแลระบบ" class="navbar-logo" height="40">
+            </div>
+            <span class="admin-brand-label">Admin Panel</span>
+          </a>
+        {% else %}
+          <a class="navbar-brand" href="{{ '/admins/' | relative_url }}">
+            Admin Panel
+          </a>
+        {% endif %}
+        
+        {% if page.navbar_scroll_title %}
+          <div class="navbar-title-container d-none">
+            <span class="navbar-title ms-3">{{ page.navbar_scroll_title }}</span>
+          </div>
+        {% endif %}
+      </div>
+      
+      <!-- Custom Toggle Button -->
+      <button class="navbar-toggle" id="navbar-toggle" type="button" aria-controls="navbar-nav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="icon-toggle">
+          <span class="icon-bars">{% include icons/bars-solid.liquid %}</span>
+          <span class="icon-close d-none">{% include icons/times-solid.liquid %}</span>
+        </span>
+      </button>
+    </div>
+    
+    <!-- Navigation Section -->
+    <div class="navbar-navigation" id="navbar-navigation">
+      <!-- Navigation Links -->
+      <ul class="navbar-nav" id="navbar-nav">        
+        <!-- Get all admin pages marked with admin_nav: true -->
+        {% assign admin_pages = site.admins | where_exp: "item", "item.admin_nav == true" | sort: 'admin_nav_order' %}
+        {% for p in admin_pages %}
+          <li class="nav-item">
+            <a class="nav-link {% if page.url == p.url %}active{% endif %}" 
+               href="{{ p.url | relative_url }}">
+              {{ p.title }}
+            </a>
+          </li>
+        {% endfor %}
+        
+        <!-- Link back to main site -->
+        <li class="nav-item">
+          <a class="nav-link" href="{{ '/' | relative_url }}">
+            <span style="display: inline-flex; align-items: center;">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16" style="margin-right: 5px;">
+                <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                <path d="M11 8a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/>
+              </svg>
+              กลับไปที่เว็บไซต์หลัก
+            </span>
+          </a>
+        </li>
+        
+        <!-- Logout -->
+        <li class="nav-item ms-auto">
+          <a class="nav-link" href="#" id="admin-logout">
+            <span style="display: inline-flex; align-items: center;">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16" style="margin-right: 5px;">
+                <path fill-rule="evenodd" d="M10 12.5a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v2a.5.5 0 0 0 1 0v-2A1.5 1.5 0 0 0 9.5 2h-8A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-2a.5.5 0 0 0-1 0v2z"/>
+                <path fill-rule="evenodd" d="M15.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L14.293 7.5H5.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3z"/>
+              </svg>
+              ออกจากระบบ
+            </span>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // Navbar toggle functionality
+    const navbarToggle = document.getElementById('navbar-toggle');
+    const navbarNavigation = document.getElementById('navbar-navigation');
+    const iconBars = document.querySelector('.icon-bars');
+    const iconClose = document.querySelector('.icon-close');
+    
+    if (navbarToggle && navbarNavigation) {
+      navbarToggle.addEventListener('click', function() {
+        navbarNavigation.classList.toggle('active');
+        iconBars.classList.toggle('d-none');
+        iconClose.classList.toggle('d-none');
+      });
+    }
+    
+    // Logout functionality
+    const logoutButton = document.getElementById('admin-logout');
+    if (logoutButton) {
+      logoutButton.addEventListener('click', function(e) {
+        e.preventDefault();
+        sessionStorage.removeItem('admin_authenticated');
+        window.location.reload();
+      });
+    }
+  });
+</script>
+
+<style>
+  /* Admin Navbar Styles */
+  .admin-navbar {
+    background-color: var(--nav-normal-bg, #1a237e);
+    color: white;
+    padding: 0;
+    min-height: 60px;
+    position: relative;
+    width: 100%;
+    transition: all 0.3s ease;
+    z-index: 999;
+    opacity: 0.95;
+  }
+  
+  .admin-navbar .container {
+    max-width: var(--nav-size, 1400px);
+    margin: 0 auto;
+    padding: 0 1rem;
+    display: flex;
+    align-items: center;
+    min-height: 60px;
+    position: relative;
+    
+    @media (min-width: 769px) {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 2rem;
+    }
+  }
+  
+  .admin-navbar .navbar-brand {
+    color: white;
+    font-weight: 600;
+  }
+  
+  .admin-navbar .nav-link {
+    color: rgba(255, 255, 255, 0.85);
+    font-weight: 500;
+    transition: color 0.2s ease;
+  }
+  
+  .admin-navbar .nav-link:hover,
+  .admin-navbar .nav-link.active {
+    color: white;
+  }
+  
+  .admin-navbar .navbar-toggle {
+    color: white;
+    background: transparent;
+    border: none;
+  }
+  
+  .admin-brand-label {
+    margin-left: 1.25rem; 
+  }
+
+  /* Apply the same navbar structure as the main navbar */
+  .admin-navbar .navbar-header {
+    @media (max-width: 768px) {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+      min-height: 60px;
+    }
+  }
+  
+  .admin-navbar .navbar-brand-container {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    
+    @media (min-width: 769px) {
+      grid-column: 1;
+    }
+  }
+  
+  .admin-navbar .navbar-navigation {
+    display: flex;
+    align-items: center;
+    
+    @media (min-width: 769px) {
+      grid-column: 2;
+      justify-content: flex-end;
+    }
+  }
+  
+  .admin-navbar .navbar-nav {
+    display: flex;
+    align-items: center;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  
+  /* Mobile Navigation */
+  @media (max-width: 768px) {
+    .admin-navbar .navbar-navigation {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      background-color: var(--nav-normal-bg, #1a237e);
+      display: none;
+      padding: 0;
+      box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+    }
+    
+    .admin-navbar .navbar-navigation.active {
+      display: block;
+    }
+    
+    .admin-navbar .navbar-nav {
+      flex-direction: column;
+      width: 100%;
+      padding: 0.5rem 0;
+    }
+    
+    .admin-navbar .nav-item {
+      width: 100%;
+      margin-bottom: 0;
+    }
+    
+    .admin-navbar .nav-link {
+      width: 100%;
+      padding: 1rem;
+      text-align: left;
+      padding-left: 1rem;
+    }
+    
+    .admin-navbar .navbar-navigation.show .navbar-nav {
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 0.1rem;
+      padding: 0.25rem 0;
+    }
+    
+    .admin-navbar .navbar-navigation.show .nav-link {
+      text-align: right;
+      padding-left: 0;
+      padding: 0.5rem 1.5rem 0.5rem 0;
+    }
+  }
+</style>
