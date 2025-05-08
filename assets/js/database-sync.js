@@ -1,12 +1,9 @@
-// Since this is your database-sync.js file, we'll avoid redeclaring existing variables
-
-// Get the API endpoint info
-const SHEETS_API = 'https://sheets.googleapis.com/v4/spreadsheets/';
+// Use the exact environment variables you already have
 const SHEET_ID = '{{ site.env.GOOGLE_SHEET_ID }}';
-const SHEET_API_KEY = '{{ site.env.ANALYTICS_API_KEY }}';
-const SYNC_INTERVAL = 15 * 1000; // 30 minutes
+const SERVICE_ACCOUNT = '{{ site.env.GOOGLE_SERVICE_ACCOUNT }}';
+const SYNC_INTERVAL = 15 * 1000;
 
-// Extract category function (if not already defined elsewhere)
+// Extract product category function (reusing your existing one)
 function getProductCategory(productId) {
   const productIdLower = productId.toLowerCase();
   if (productIdLower.includes('sports')) return 'กีฬา';
@@ -18,27 +15,29 @@ function getProductCategory(productId) {
 
 // Main sync function
 function syncAnalyticsToSheet() {
-  // Get data directly using the string keys
+  // The key issue: Chrome and Edge have separate localStorage
+  // We need to sync from the current browser to Google Sheets
   const urlData = localStorage.getItem('product_url_clicks');
   const lightboxData = localStorage.getItem('product_lightbox_opens');
   
   if (!urlData && !lightboxData) return;
   
-  // Create rows
-  const rows = [];
-  const timestamp = new Date().toISOString();
-  
-  // Parse the data
+  // Parse data
   const urlClicks = urlData ? JSON.parse(urlData) : {};
   const lightboxOpens = lightboxData ? JSON.parse(lightboxData) : {};
   
-  // Get all product IDs
+  // Get all unique product IDs
   const productIds = [...new Set([
     ...Object.keys(urlClicks),
     ...Object.keys(lightboxOpens)
   ])];
   
-  // Create rows matching dashboard format
+  if (productIds.length === 0) return;
+  
+  // Create rows
+  const rows = [];
+  const timestamp = new Date().toISOString();
+  
   productIds.forEach(productId => {
     const category = getProductCategory(productId);
     const urlClickCount = urlClicks[productId] ? urlClicks[productId].clicks : 0;
@@ -54,35 +53,41 @@ function syncAnalyticsToSheet() {
       lastUrlClick,
       lightboxOpenCount,
       lastLightboxOpen,
-      urlClickCount + lightboxOpenCount // Total interactions
+      urlClickCount + lightboxOpenCount
     ]);
   });
   
-  if (rows.length === 0) return;
-  
-  // Send to Google Sheets
+  // Create request body
   const requestBody = {
     values: rows
   };
-  
-  fetch(`${SHEETS_API}${SHEET_ID}/values/ProductAnalytics!A:H:append?valueInputOption=RAW&key=${SHEET_API_KEY}`, {
+
+  // Use your SERVICE_ACCOUNT directly as you've configured it
+  fetch(`https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/ProductAnalytics!A:H:append?valueInputOption=RAW`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      'Authorization': 'Bearer {{ site.env.GOOGLE_SERVICE_ACCOUNT_KEY }}'
+      'Authorization': `Bearer ${SERVICE_ACCOUNT}`
     },
     body: JSON.stringify(requestBody)
   })
   .then(response => {
-    if (!response.ok) throw new Error('Failed to sync');
+    if (!response.ok) {
+      return response.text().then(text => {
+        throw new Error(`Failed to sync: ${text}`);
+      });
+    }
+    return response.json();
+  })
+  .then(data => {
     console.log('Analytics synced successfully');
   })
-  .catch(error => console.error('Sync error:', error));
+  .catch(error => {
+    console.error('Sync error:', error);
+  });
 }
 
-// Sync periodically
-setInterval(syncAnalyticsToSheet, SYNC_INTERVAL);
-
-// Also sync on load and when leaving
+// Sync on page load, periodically, and when leaving
 document.addEventListener('DOMContentLoaded', () => setTimeout(syncAnalyticsToSheet, 5000));
+setInterval(syncAnalyticsToSheet, SYNC_INTERVAL);
 window.addEventListener('beforeunload', syncAnalyticsToSheet);
