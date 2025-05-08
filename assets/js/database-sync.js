@@ -1,9 +1,11 @@
-// Simple script to sync only NEW localStorage data to Google Sheets
+// Admin panel data sync and cleanup script
 (function() {
-  // Google Apps Script web app URL
+  // Constants
   const SHEET_API_URL = 'https://script.google.com/macros/s/AKfycbzg-r9e3MaNneQjlV7-56tsW9OjPOxgwSQRp5XpvrtN9M-iNhm9Jn272UMvobTnK0cZ/exec';
   const SYNC_INTERVAL = 30 * 60 * 1000; // 30 minutes
   const LAST_SYNC_KEY = 'last_sheet_sync_state';
+  const LAST_CLEANUP_KEY = 'last_analytics_cleanup_date';
+  const CLEANUP_INTERVAL_DAYS = 3; // Clear data every 3 days
   
   // Extract product category
   function getProductCategory(productId) {
@@ -40,7 +42,7 @@
     return false;
   }
 
-  // Sync function - only syncs changed/new data
+  // PART 1: Sync function - only syncs changed/new data
   function syncToSheet() {
     // Get current data
     const urlData = localStorage.getItem('product_url_clicks');
@@ -126,10 +128,77 @@
     });
   }
 
+  // PART 2: Clean up function - clears analytics data every 3 days
+  function checkAndCleanupData() {
+    // Get last cleanup date
+    const lastCleanupDate = localStorage.getItem(LAST_CLEANUP_KEY);
+    
+    // If never cleaned up before, set initial date and exit
+    if (!lastCleanupDate) {
+      localStorage.setItem(LAST_CLEANUP_KEY, new Date().toISOString());
+      return;
+    }
+    
+    // Calculate days since last cleanup
+    const lastCleanup = new Date(lastCleanupDate);
+    const now = new Date();
+    const daysSinceCleanup = Math.floor((now - lastCleanup) / (1000 * 60 * 60 * 24));
+    
+    // If it's been at least 3 days since last cleanup
+    if (daysSinceCleanup >= CLEANUP_INTERVAL_DAYS) {
+      console.log(`Performing ${CLEANUP_INTERVAL_DAYS}-day cleanup of analytics data`);
+      
+      // First sync any pending data
+      syncToSheet();
+      
+      // After brief delay to allow sync to complete
+      setTimeout(() => {
+        // Get current data before clearing
+        const urlData = localStorage.getItem('product_url_clicks');
+        const lightboxData = localStorage.getItem('product_lightbox_opens');
+        
+        // Create a backup of current data with date
+        const backupDate = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
+        if (urlData) {
+          localStorage.setItem(`product_url_clicks_backup_${backupDate}`, urlData);
+        }
+        if (lightboxData) {
+          localStorage.setItem(`product_lightbox_opens_backup_${backupDate}`, lightboxData);
+        }
+        
+        // Clear current data
+        localStorage.removeItem('product_url_clicks');
+        localStorage.removeItem('product_lightbox_opens');
+        
+        // Also clear sync state
+        localStorage.removeItem(LAST_SYNC_KEY);
+        
+        // Update last cleanup date
+        localStorage.setItem(LAST_CLEANUP_KEY, now.toISOString());
+        
+        console.log(`Analytics data cleared and backed up as of ${backupDate}`);
+        
+        // Reload the page to refresh the admin dashboard
+        window.location.reload();
+        
+      }, 5000); // 5-second delay to allow sync to complete
+    } else {
+      console.log(`Next data cleanup in ${CLEANUP_INTERVAL_DAYS - daysSinceCleanup} days`);
+    }
+  }
+
+  // Initialize
+  console.log('Admin panel sync and cleanup script loaded');
+  
   // Run sync when page loads (with delay)
-  console.log('Admin panel sync script loaded');
   setTimeout(syncToSheet, 5000);
+  
+  // Check for cleanup when page loads (after sync starts)
+  setTimeout(checkAndCleanupData, 10000);
   
   // Run sync periodically
   setInterval(syncToSheet, SYNC_INTERVAL);
+  
+  // Check for cleanup periodically (once per day is sufficient)
+  setInterval(checkAndCleanupData, 24 * 60 * 60 * 1000);
 })();
