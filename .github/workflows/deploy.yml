@@ -34,10 +34,15 @@ jobs:
           ADMIN_PASSWORD: ${{ secrets.ADMIN_PASSWORD }}
           MANAGER_PASSWORD: ${{ secrets.MANAGER_PASSWORD }}
         run: |
-          sudo apt-get update && sudo apt-get install -y imagemagick
-          pip3 install --upgrade nbconvert
+          ADMIN_B64=$(echo -n "$ADMIN_PASSWORD" | base64)
+          MANAGER_B64=$(echo -n "$MANAGER_PASSWORD" | base64)
+
+          echo "env:" > _secrets.yml
+          echo "  ADMIN_PASSWORD_B64: \"$ADMIN_B64\"" >> _secrets.yml
+          echo "  MANAGER_PASSWORD_B64: \"$MANAGER_B64\"" >> _secrets.yml
+
           export JEKYLL_ENV=production
-          bundle exec jekyll build --trace --verbose
+          bundle exec jekyll build --trace --verbose --config _config.yml,_secrets.yml
       
 #      - name: Purge unused CSS 🧹
 #        run: |

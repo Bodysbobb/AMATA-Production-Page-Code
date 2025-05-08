@@ -453,11 +453,12 @@ table {
 <!-- Manager password for data reset -->
 <script>
   {% if jekyll.environment == "development" %}
-    window.MANAGER_PASSWORD = "manager123";
+    window.MANAGER_PASSWORD_OBFUSCATED = "{{ 'manager123' | base64_encode }}";
   {% else %}
-    window.MANAGER_PASSWORD = "{{ site.env.MANAGER_PASSWORD }}";
+    window.MANAGER_PASSWORD_OBFUSCATED = "{{ site.env.MANAGER_PASSWORD_B64 }}";
   {% endif %}
 </script>
+
 
 <!-- Load the external JavaScript file -->
 <script src="{{ '/assets/js/admin-product-analytics.js' | relative_url | bust_js_cache }}"></script>

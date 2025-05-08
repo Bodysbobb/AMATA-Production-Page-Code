@@ -140,9 +140,7 @@ collections:
           sitemap: false  # Add this line
 
 # Environment variables
-env:
-  ADMIN_PASSWORD: <%= ENV['ADMIN_PASSWORD'] %>
-  MANAGER_PASSWORD: <%= ENV['MANAGER_PASSWORD'] %>
+env: {}
   
 # -----------------------------------------------------------------------------
 # Jekyll settings

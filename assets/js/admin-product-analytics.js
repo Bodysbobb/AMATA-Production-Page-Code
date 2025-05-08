@@ -95,9 +95,11 @@ function setupEventListeners() {
   // Modal events
   closeModalBtn.addEventListener('click', closeModal);
   cancelResetBtn.addEventListener('click', closeModal);
-  confirmResetBtn.addEventListener('click', function() {
+  confirmResetBtn.addEventListener('click', function () {
     const inputPassword = managerPasswordInput.value;
-    if (inputPassword === window.MANAGER_PASSWORD) {
+    const decodedManagerPassword = atob(window.MANAGER_PASSWORD_OBFUSCATED); // decode base64
+  
+    if (inputPassword === decodedManagerPassword) {
       resetAllData();
     } else {
       alert('รหัสผ่านไม่ถูกต้อง กรุณาลองอีกครั้ง');

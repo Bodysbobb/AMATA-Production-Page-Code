@@ -52,7 +52,7 @@
       {% if jekyll.environment == "development" %}
         window.ADMIN_PASSWORD = "admin123";
       {% else %}
-        window.ADMIN_PASSWORD = "{{ site.env.ADMIN_PASSWORD }}";
+        window.ADMIN_PASSWORD_OBFUSCATED = "{{ site.env.ADMIN_PASSWORD_B64 }}";
       {% endif %}
     </script>
     <script src="{{ '/assets/js/admin-panel.js' | relative_url | bust_js_cache }}"></script>
