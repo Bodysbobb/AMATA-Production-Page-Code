@@ -1,15 +1,13 @@
-// Constants
-const URL_CLICKS_KEY = 'product_url_clicks';
-const LIGHTBOX_OPENS_KEY = 'product_lightbox_opens';
-const SYNC_INTERVAL = 15 * 1000; 
+// Since this is your database-sync.js file, we'll avoid redeclaring existing variables
 
-// Google Sheets API endpoint
+// Get the API endpoint info
 const SHEETS_API = 'https://sheets.googleapis.com/v4/spreadsheets/';
 const SHEET_ID = '{{ site.env.GOOGLE_SHEET_ID }}';
-const API_KEY = '{{ site.env.ANALYTICS_API_KEY }}';
+const SHEET_API_KEY = '{{ site.env.ANALYTICS_API_KEY }}';
+const SYNC_INTERVAL = 15 * 1000; // 30 minutes
 
-// Extract category from product name - using your existing function
-function extractCategory(productId) {
+// Extract category function (if not already defined elsewhere)
+function getProductCategory(productId) {
   const productIdLower = productId.toLowerCase();
   if (productIdLower.includes('sports')) return 'กีฬา';
   else if (productIdLower.includes('polo')) return 'เสื้อโปโล';
@@ -18,13 +16,15 @@ function extractCategory(productId) {
   else return 'อื่นๆ';
 }
 
-function syncToSheet() {
-  const urlData = localStorage.getItem(URL_CLICKS_KEY);
-  const lightboxData = localStorage.getItem(LIGHTBOX_OPENS_KEY);
+// Main sync function
+function syncAnalyticsToSheet() {
+  // Get data directly using the string keys
+  const urlData = localStorage.getItem('product_url_clicks');
+  const lightboxData = localStorage.getItem('product_lightbox_opens');
   
   if (!urlData && !lightboxData) return;
   
-  // Create rows exactly matching your current dashboard format
+  // Create rows
   const rows = [];
   const timestamp = new Date().toISOString();
   
@@ -33,14 +33,14 @@ function syncToSheet() {
   const lightboxOpens = lightboxData ? JSON.parse(lightboxData) : {};
   
   // Get all product IDs
-  const productIds = new Set([
+  const productIds = [...new Set([
     ...Object.keys(urlClicks),
     ...Object.keys(lightboxOpens)
-  ]);
+  ])];
   
-  // Create rows matching your dashboard format
+  // Create rows matching dashboard format
   productIds.forEach(productId => {
-    const category = extractCategory(productId);
+    const category = getProductCategory(productId);
     const urlClickCount = urlClicks[productId] ? urlClicks[productId].clicks : 0;
     const lastUrlClick = urlClicks[productId] && urlClicks[productId].lastClicked ? urlClicks[productId].lastClicked : '';
     const lightboxOpenCount = lightboxOpens[productId] ? lightboxOpens[productId].opens : 0;
@@ -65,7 +65,7 @@ function syncToSheet() {
     values: rows
   };
   
-  fetch(`${SHEETS_API}${SHEET_ID}/values/ProductAnalytics!A:H:append?valueInputOption=RAW&key=${API_KEY}`, {
+  fetch(`${SHEETS_API}${SHEET_ID}/values/ProductAnalytics!A:H:append?valueInputOption=RAW&key=${SHEET_API_KEY}`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -81,8 +81,8 @@ function syncToSheet() {
 }
 
 // Sync periodically
-setInterval(syncToSheet, SYNC_INTERVAL);
+setInterval(syncAnalyticsToSheet, SYNC_INTERVAL);
 
 // Also sync on load and when leaving
-document.addEventListener('DOMContentLoaded', () => setTimeout(syncToSheet, 5000));
-window.addEventListener('beforeunload', syncToSheet);
+document.addEventListener('DOMContentLoaded', () => setTimeout(syncAnalyticsToSheet, 5000));
+window.addEventListener('beforeunload', syncAnalyticsToSheet);
