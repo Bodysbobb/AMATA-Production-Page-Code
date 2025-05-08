@@ -1,16 +1,160 @@
 ---
-title: Product Analytics Dashboard
+title: วิเคราะห์สินค้า
 layout: admin
 permalink: /admins/ProductAnalytics/
 navbar_logo_one: /assets/img/page_logo/amata_main_logo.webp
 lang: "th"
+admin_nav: true
+admin_nav_order: 1
 ---
+
+<div class="dashboard-container">
+  <h1>วิเคราะห์สินค้า</h1>
+  
+  <div class="analytics-tabs">
+    <button class="tab-button active" data-tab="overview">ภาพรวม</button>
+    <button class="tab-button" data-tab="url-clicks">สถิติคลิก URL</button>
+    <button class="tab-button" data-tab="lightbox-clicks">สถิติ Lightbox</button>
+    <button class="tab-button" data-tab="combined">สถิติรวม</button>
+  </div>
+  
+  <!-- Tab: Overview -->
+  <div class="tab-content active" id="overview">
+    <div class="stats-grid">
+      <div class="stat-card url-stats">
+        <div class="stat-label">คลิก URL ทั้งหมด</div>
+        <div class="stat-value" id="total-url-clicks">0</div>
+      </div>
+      <div class="stat-card lightbox-stats">
+        <div class="stat-label">เปิด Lightbox ทั้งหมด</div>
+        <div class="stat-value" id="total-lightbox-opens">0</div>
+      </div>
+      <div class="stat-card total-stats">
+        <div class="stat-label">ผลิตภัณฑ์ทั้งหมด</div>
+        <div class="stat-value" id="total-products">0</div>
+      </div>
+    </div>
+    
+    <div class="filter-container">
+      <label for="category-filter">กรองตามประเภทสินค้า:</label>
+      <select id="category-filter" class="form-control">
+        <option value="all">ทั้งหมด</option>
+        <!-- Options will be populated by JavaScript -->
+      </select>
+    </div>
+    
+    <div class="button-group">
+      <button id="refresh-btn" class="btn btn-primary">รีเฟรชข้อมูล</button>
+      <button id="export-btn" class="btn btn-warning">ส่งออก CSV</button>
+      <button id="reset-all-btn" class="btn btn-danger">รีเซ็ตข้อมูลทั้งหมด</button>
+    </div>
+    
+    <h2>5 ผลิตภัณฑ์ยอดนิยม</h2>
+    <table id="top-products-table">
+      <thead>
+        <tr>
+          <th>ผลิตภัณฑ์</th>
+          <th>ประเภทสินค้า</th>
+          <th>คลิก URL</th>
+          <th>เปิด Lightbox</th>
+          <th>การโต้ตอบทั้งหมด</th>
+        </tr>
+      </thead>
+      <tbody id="top-products-body">
+        <!-- Will be filled by JavaScript -->
+      </tbody>
+    </table>
+  </div>
+  
+  <!-- Tab: URL Click Stats -->
+  <div class="tab-content" id="url-clicks">
+    <h2>สถิติการคลิก URL</h2>
+    <p>การติดตามการคลิกปุ่ม "คัดลอก URL" สำหรับแต่ละผลิตภัณฑ์</p>
+    
+    <table id="url-clicks-table">
+      <thead>
+        <tr>
+          <th>ผลิตภัณฑ์</th>
+          <th>ประเภทสินค้า</th>
+          <th>คลิก URL</th>
+          <th>คลิกล่าสุด</th>
+          <th>ประสิทธิภาพ</th>
+          <th>การดำเนินการ</th>
+        </tr>
+      </thead>
+      <tbody id="url-clicks-body">
+        <!-- Will be filled by JavaScript -->
+      </tbody>
+    </table>
+  </div>
+  
+  <!-- Tab: Lightbox Stats -->
+  <div class="tab-content" id="lightbox-clicks">
+    <h2>สถิติการเปิด Lightbox</h2>
+    <p>การติดตามการเปิด Lightbox สำหรับแต่ละผลิตภัณฑ์</p>
+    
+    <table id="lightbox-opens-table">
+      <thead>
+        <tr>
+          <th>ผลิตภัณฑ์</th>
+          <th>ประเภทสินค้า</th>
+          <th>เปิด Lightbox</th>
+          <th>เปิดล่าสุด</th>
+          <th>ประสิทธิภาพ</th>
+          <th>การดำเนินการ</th>
+        </tr>
+      </thead>
+      <tbody id="lightbox-opens-body">
+        <!-- Will be filled by JavaScript -->
+      </tbody>
+    </table>
+  </div>
+  
+  <!-- Tab: Combined Stats -->
+  <div class="tab-content" id="combined">
+    <h2>สถิติรวม</h2>
+    <p>การโต้ตอบผลิตภัณฑ์ทั้งหมด (คลิก URL และเปิด Lightbox)</p>
+    
+    <table id="combined-stats-table">
+      <thead>
+        <tr>
+          <th>ผลิตภัณฑ์</th>
+          <th>ประเภทสินค้า</th>
+          <th>คลิก URL</th>
+          <th>เปิด Lightbox</th>
+          <th>รวม</th>
+          <th>อัตราการแปลง</th>
+          <th>การดำเนินการ</th>
+        </tr>
+      </thead>
+      <tbody id="combined-stats-body">
+        <!-- Will be filled by JavaScript -->
+      </tbody>
+    </table>
+  </div>
+  
+  <!-- Reset Data Confirmation Modal -->
+  <div id="reset-confirm-modal" class="modal">
+    <div class="modal-content">
+      <span class="close-modal">&times;</span>
+      <h2>ยืนยันการรีเซ็ต</h2>
+      <p>คุณแน่ใจหรือไม่ว่าต้องการรีเซ็ตข้อมูลทั้งหมด? การดำเนินการนี้ไม่สามารถย้อนกลับได้</p>
+      <div class="form-group">
+        <label for="manager-password">รหัสผ่านผู้จัดการ:</label>
+        <input type="password" id="manager-password" class="form-control" placeholder="กรุณาใส่รหัสผ่านผู้จัดการ">
+      </div>
+      <div class="modal-buttons">
+        <button id="confirm-reset" class="btn btn-danger">ยืนยันการรีเซ็ต</button>
+        <button id="cancel-reset" class="btn btn-secondary">ยกเลิก</button>
+      </div>
+    </div>
+  </div>
+</div>
 
 <style>
   .dashboard-container {
-    max-width: 1200px;
+    max-width: 1400px;
     margin: 0 auto;
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   }
   
   .stats-grid {
@@ -58,6 +202,28 @@ lang: "th"
     letter-spacing: 1px;
   }
   
+  .filter-container {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+    gap: 10px;
+  }
+  
+  .filter-container label {
+    font-weight: 500;
+    margin-bottom: 0;
+    white-space: nowrap;
+  }
+  
+  .filter-container select {
+    width: auto;
+    min-width: 150px;
+    padding: 8px 12px;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+    background-color: white;
+  }
+  
   .button-group {
     display: flex;
     gap: 10px;
@@ -89,6 +255,11 @@ lang: "th"
   
   .btn-danger {
     background-color: #e74c3c;
+    color: white;
+  }
+  
+  .btn-secondary {
+    background-color: #95a5a6;
     color: white;
   }
   
@@ -127,7 +298,7 @@ lang: "th"
     display: block;
   }
   
-  table {
+table {
     width: 100%;
     border-collapse: collapse;
     margin-top: 20px;
@@ -202,513 +373,91 @@ lang: "th"
     background-color: rgba(155, 89, 182, 0.1);
     color: #9b59b6;
   }
+  
+  /* Modal styles */
+  .modal {
+    display: none;
+    position: fixed;
+    z-index: 9999;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    overflow: auto;
+  }
+  
+  .modal-content {
+    background-color: #fff;
+    margin: 15% auto;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    width: 90%;
+    max-width: 500px;
+    position: relative;
+  }
+  
+  .close-modal {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    font-size: 24px;
+    font-weight: bold;
+    color: #aaa;
+    cursor: pointer;
+  }
+  
+  .close-modal:hover {
+    color: #333;
+  }
+  
+  .form-group {
+    margin-bottom: 20px;
+  }
+  
+  .form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+  }
+  
+  .form-control {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 16px;
+  }
+  
+  .modal-buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 20px;
+  }
+  
+  @media screen and (max-width: 768px) {
+    .filter-container {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 5px;
+    }
+    
+    .filter-container select {
+      width: 100%;
+    }
+  }
 </style>
 
-<div class="dashboard-container">
-  <h1>Product Analytics Dashboard</h1>
-  
-  <div class="analytics-tabs">
-    <button class="tab-button active" data-tab="overview">Overview</button>
-    <button class="tab-button" data-tab="url-clicks">URL Click Stats</button>
-    <button class="tab-button" data-tab="lightbox-clicks">Lightbox Stats</button>
-    <button class="tab-button" data-tab="combined">Combined Stats</button>
-  </div>
-  
-  <!-- Tab: Overview -->
-  <div class="tab-content active" id="overview">
-    <div class="stats-grid">
-      <div class="stat-card url-stats">
-        <div class="stat-label">Total URL Clicks</div>
-        <div class="stat-value" id="total-url-clicks">0</div>
-      </div>
-      <div class="stat-card lightbox-stats">
-        <div class="stat-label">Total Lightbox Opens</div>
-        <div class="stat-value" id="total-lightbox-opens">0</div>
-      </div>
-      <div class="stat-card total-stats">
-        <div class="stat-label">Total Products</div>
-        <div class="stat-value" id="total-products">0</div>
-      </div>
-    </div>
-    
-    <div class="button-group">
-      <button id="refresh-btn" class="btn btn-primary">Refresh Data</button>
-      <button id="export-btn" class="btn btn-warning">Export CSV</button>
-      <button id="reset-all-btn" class="btn btn-danger">Reset All Data</button>
-    </div>
-    
-    <h2>Top 5 Products</h2>
-    <table id="top-products-table">
-      <thead>
-        <tr>
-          <th>Product</th>
-          <th>URL Clicks</th>
-          <th>Lightbox Opens</th>
-          <th>Total Interactions</th>
-        </tr>
-      </thead>
-      <tbody id="top-products-body">
-        <!-- Will be filled by JavaScript -->
-      </tbody>
-    </table>
-  </div>
-  
-  <!-- Tab: URL Click Stats -->
-  <div class="tab-content" id="url-clicks">
-    <h2>URL Click Statistics</h2>
-    <p>Tracking of "Copy URL" button clicks for each product</p>
-    
-    <table id="url-clicks-table">
-      <thead>
-        <tr>
-          <th>Product</th>
-          <th>URL Clicks</th>
-          <th>Last Clicked</th>
-          <th>Performance</th>
-          <th>Actions</th>
-        </tr>
-      </thead>
-      <tbody id="url-clicks-body">
-        <!-- Will be filled by JavaScript -->
-      </tbody>
-    </table>
-  </div>
-  
-  <!-- Tab: Lightbox Stats -->
-  <div class="tab-content" id="lightbox-clicks">
-    <h2>Lightbox Open Statistics</h2>
-    <p>Tracking of lightbox openings for each product</p>
-    
-    <table id="lightbox-opens-table">
-      <thead>
-        <tr>
-          <th>Product</th>
-          <th>Lightbox Opens</th>
-          <th>Last Opened</th>
-          <th>Performance</th>
-          <th>Actions</th>
-        </tr>
-      </thead>
-      <tbody id="lightbox-opens-body">
-        <!-- Will be filled by JavaScript -->
-      </tbody>
-    </table>
-  </div>
-  
-  <!-- Tab: Combined Stats -->
-  <div class="tab-content" id="combined">
-    <h2>Combined Statistics</h2>
-    <p>All product interactions (URL clicks and lightbox opens)</p>
-    
-    <table id="combined-stats-table">
-      <thead>
-        <tr>
-          <th>Product</th>
-          <th>URL Clicks</th>
-          <th>Lightbox Opens</th>
-          <th>Total</th>
-          <th>Conversion Rate</th>
-          <th>Actions</th>
-        </tr>
-      </thead>
-      <tbody id="combined-stats-body">
-        <!-- Will be filled by JavaScript -->
-      </tbody>
-    </table>
-  </div>
-</div>
-
+<!-- Manager password for data reset -->
 <script>
-  // Constants for localStorage keys
-  const URL_CLICKS_KEY = 'product_url_clicks';
-  const LIGHTBOX_OPENS_KEY = 'product_lightbox_opens';
-  
-  // DOM Elements
-  const totalUrlClicksElement = document.getElementById('total-url-clicks');
-  const totalLightboxOpensElement = document.getElementById('total-lightbox-opens');
-  const totalProductsElement = document.getElementById('total-products');
-  const topProductsTableBody = document.getElementById('top-products-body');
-  const urlClicksTableBody = document.getElementById('url-clicks-body');
-  const lightboxOpensTableBody = document.getElementById('lightbox-opens-body');
-  const combinedStatsTableBody = document.getElementById('combined-stats-body');
-  
-  // Buttons
-  const refreshButton = document.getElementById('refresh-btn');
-  const exportButton = document.getElementById('export-btn');
-  const resetAllButton = document.getElementById('reset-all-btn');
-  const tabButtons = document.querySelectorAll('.tab-button');
-  
-  // Tab switching
-  tabButtons.forEach(button => {
-    button.addEventListener('click', () => {
-      // Remove active class from all tabs
-      tabButtons.forEach(btn => btn.classList.remove('active'));
-      document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
-      
-      // Add active class to clicked tab
-      button.classList.add('active');
-      const tabId = button.dataset.tab;
-      document.getElementById(tabId).classList.add('active');
-    });
-  });
-  
-  // Data functions
-  function getUrlClickData() {
-    const data = localStorage.getItem(URL_CLICKS_KEY);
-    return data ? JSON.parse(data) : {};
-  }
-  
-  function getLightboxOpenData() {
-    const data = localStorage.getItem(LIGHTBOX_OPENS_KEY);
-    return data ? JSON.parse(data) : {};
-  }
-  
-  function resetProduct(productId, dataType) {
-    if (dataType === 'url' || dataType === 'all') {
-      const urlData = getUrlClickData();
-      if (urlData[productId]) {
-        urlData[productId] = {
-          clicks: 0,
-          lastClicked: null
-        };
-        localStorage.setItem(URL_CLICKS_KEY, JSON.stringify(urlData));
-      }
-    }
-    
-    if (dataType === 'lightbox' || dataType === 'all') {
-      const lightboxData = getLightboxOpenData();
-      if (lightboxData[productId]) {
-        lightboxData[productId] = {
-          opens: 0,
-          lastOpened: null
-        };
-        localStorage.setItem(LIGHTBOX_OPENS_KEY, JSON.stringify(lightboxData));
-      }
-    }
-  }
-  
-  function resetAllData() {
-    if (confirm('Are you sure you want to reset ALL analytics data? This cannot be undone.')) {
-      localStorage.removeItem(URL_CLICKS_KEY);
-      localStorage.removeItem(LIGHTBOX_OPENS_KEY);
-      loadData();
-    }
-  }
-  
-  function exportToCsv() {
-    const urlData = getUrlClickData();
-    const lightboxData = getLightboxOpenData();
-    
-    // Get all product IDs from both datasets
-    const productIds = new Set([
-      ...Object.keys(urlData),
-      ...Object.keys(lightboxData)
-    ]);
-    
-    if (productIds.size === 0) {
-      alert('No data to export.');
-      return;
-    }
-    
-    // Create CSV content
-    let csvContent = 'Product,URL Clicks,Last URL Click,Lightbox Opens,Last Lightbox Open,Total Interactions\n';
-    
-    productIds.forEach(productId => {
-      const urlClicks = urlData[productId] ? urlData[productId].clicks : 0;
-      const lastUrlClick = urlData[productId] && urlData[productId].lastClicked ? urlData[productId].lastClicked : '';
-      const lightboxOpens = lightboxData[productId] ? lightboxData[productId].opens : 0;
-      const lastLightboxOpen = lightboxData[productId] && lightboxData[productId].lastOpened ? lightboxData[productId].lastOpened : '';
-      const totalInteractions = urlClicks + lightboxOpens;
-      
-      csvContent += `"${productId}",${urlClicks},"${lastUrlClick}",${lightboxOpens},"${lastLightboxOpen}",${totalInteractions}\n`;
-    });
-    
-    // Create download link
-    const blob = new Blob([csvContent], { type: 'text/csv' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'product_analytics.csv';
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
-  }
-  
-  // Load and display data
-  function loadData() {
-    const urlData = getUrlClickData();
-    const lightboxData = getLightboxOpenData();
-    
-    // Get all product IDs from both datasets
-    const productIds = new Set([
-      ...Object.keys(urlData),
-      ...Object.keys(lightboxData)
-    ]);
-    
-    // Calculate summary stats
-    const totalUrlClicks = Object.values(urlData).reduce((sum, product) => sum + (product.clicks || 0), 0);
-    const totalLightboxOpens = Object.values(lightboxData).reduce((sum, product) => sum + (product.opens || 0), 0);
-    
-    // Update summary displays
-    totalUrlClicksElement.textContent = totalUrlClicks;
-    totalLightboxOpensElement.textContent = totalLightboxOpens;
-    totalProductsElement.textContent = productIds.size;
-    
-    // Create combined data for tables
-    const combinedData = Array.from(productIds).map(productId => {
-      const urlClicks = urlData[productId] ? urlData[productId].clicks || 0 : 0;
-      const lastUrlClick = urlData[productId] && urlData[productId].lastClicked ? new Date(urlData[productId].lastClicked) : null;
-      
-      const lightboxOpens = lightboxData[productId] ? lightboxData[productId].opens || 0 : 0;
-      const lastLightboxOpen = lightboxData[productId] && lightboxData[productId].lastOpened ? new Date(lightboxData[productId].lastOpened) : null;
-      
-      return {
-        productId,
-        urlClicks,
-        lastUrlClick,
-        lightboxOpens,
-        lastLightboxOpen,
-        totalInteractions: urlClicks + lightboxOpens,
-        conversionRate: lightboxOpens > 0 ? (urlClicks / lightboxOpens).toFixed(2) : 'N/A'
-      };
-    });
-    
-    // Sort by total interactions (descending)
-    combinedData.sort((a, b) => b.totalInteractions - a.totalInteractions);
-    
-    // Update top products table
-    topProductsTableBody.innerHTML = '';
-    
-    if (combinedData.length === 0) {
-      const row = document.createElement('tr');
-      const cell = document.createElement('td');
-      cell.colSpan = 4;
-      cell.className = 'no-data-message';
-      cell.textContent = 'No data available yet';
-      row.appendChild(cell);
-      topProductsTableBody.appendChild(row);
-    } else {
-      // Get top 5 products
-      const topProducts = combinedData.slice(0, 5);
-      
-      topProducts.forEach(product => {
-        const row = document.createElement('tr');
-        
-        const productCell = document.createElement('td');
-        productCell.textContent = product.productId;
-        productCell.title = product.productId; // For tooltip on long names
-        row.appendChild(productCell);
-        
-        const urlClicksCell = document.createElement('td');
-        urlClicksCell.textContent = product.urlClicks;
-        row.appendChild(urlClicksCell);
-        
-        const lightboxOpensCell = document.createElement('td');
-        lightboxOpensCell.textContent = product.lightboxOpens;
-        row.appendChild(lightboxOpensCell);
-        
-        const totalCell = document.createElement('td');
-        totalCell.textContent = product.totalInteractions;
-        row.appendChild(totalCell);
-        
-        topProductsTableBody.appendChild(row);
-      });
-    }
-    
-    // Update URL clicks table
-    urlClicksTableBody.innerHTML = '';
-    
-    if (Object.keys(urlData).length === 0) {
-      const row = document.createElement('tr');
-      const cell = document.createElement('td');
-      cell.colSpan = 5;
-      cell.className = 'no-data-message';
-      cell.textContent = 'No URL click data available yet';
-      row.appendChild(cell);
-      urlClicksTableBody.appendChild(row);
-    } else {
-      // Sort by URL clicks (descending)
-      const sortedUrlData = combinedData.sort((a, b) => b.urlClicks - a.urlClicks);
-      
-      // Find max clicks for relative bar width
-      const maxUrlClicks = sortedUrlData[0].urlClicks;
-      
-      sortedUrlData.forEach(product => {
-        if (product.urlClicks === 0) return; // Skip products with no URL clicks
-        
-        const row = document.createElement('tr');
-        
-        const productCell = document.createElement('td');
-        productCell.textContent = product.productId;
-        productCell.title = product.productId;
-        row.appendChild(productCell);
-        
-        const clicksCell = document.createElement('td');
-        clicksCell.textContent = product.urlClicks;
-        row.appendChild(clicksCell);
-        
-        const lastClickedCell = document.createElement('td');
-        lastClickedCell.textContent = product.lastUrlClick ? product.lastUrlClick.toLocaleString() : '-';
-        row.appendChild(lastClickedCell);
-        
-        const performanceCell = document.createElement('td');
-        const progressBar = document.createElement('div');
-        progressBar.className = 'progress-bar';
-        const progressFill = document.createElement('div');
-        progressFill.className = 'progress-bar-fill';
-        progressFill.style.width = `${(product.urlClicks / maxUrlClicks) * 100}%`;
-        progressBar.appendChild(progressFill);
-        performanceCell.appendChild(progressBar);
-        row.appendChild(performanceCell);
-        
-        const actionsCell = document.createElement('td');
-        const resetButton = document.createElement('button');
-        resetButton.className = 'btn btn-danger btn-sm';
-        resetButton.textContent = 'Reset';
-        resetButton.addEventListener('click', function() {
-          if (confirm(`Reset URL click count for "${product.productId}"?`)) {
-            resetProduct(product.productId, 'url');
-            loadData();
-          }
-        });
-        actionsCell.appendChild(resetButton);
-        row.appendChild(actionsCell);
-        
-        urlClicksTableBody.appendChild(row);
-      });
-    }
-    
-    // Update lightbox opens table
-    lightboxOpensTableBody.innerHTML = '';
-    
-    if (Object.keys(lightboxData).length === 0) {
-      const row = document.createElement('tr');
-      const cell = document.createElement('td');
-      cell.colSpan = 5;
-      cell.className = 'no-data-message';
-      cell.textContent = 'No lightbox open data available yet';
-      row.appendChild(cell);
-      lightboxOpensTableBody.appendChild(row);
-    } else {
-      // Sort by lightbox opens (descending)
-      const sortedLightboxData = combinedData.sort((a, b) => b.lightboxOpens - a.lightboxOpens);
-      
-      // Find max opens for relative bar width
-      const maxLightboxOpens = sortedLightboxData[0].lightboxOpens;
-      
-      sortedLightboxData.forEach(product => {
-        if (product.lightboxOpens === 0) return; // Skip products with no lightbox opens
-        
-        const row = document.createElement('tr');
-        
-        const productCell = document.createElement('td');
-        productCell.textContent = product.productId;
-        productCell.title = product.productId;
-        row.appendChild(productCell);
-        
-        const opensCell = document.createElement('td');
-        opensCell.textContent = product.lightboxOpens;
-        row.appendChild(opensCell);
-        
-        const lastOpenedCell = document.createElement('td');
-        lastOpenedCell.textContent = product.lastLightboxOpen ? product.lastLightboxOpen.toLocaleString() : '-';
-        row.appendChild(lastOpenedCell);
-        
-        const performanceCell = document.createElement('td');
-        const progressBar = document.createElement('div');
-        progressBar.className = 'progress-bar';
-        const progressFill = document.createElement('div');
-        progressFill.className = 'progress-bar-fill lightbox-fill';
-        progressFill.style.width = `${(product.lightboxOpens / maxLightboxOpens) * 100}%`;
-        progressBar.appendChild(progressFill);
-        performanceCell.appendChild(progressBar);
-        row.appendChild(performanceCell);
-        
-        const actionsCell = document.createElement('td');
-        const resetButton = document.createElement('button');
-        resetButton.className = 'btn btn-danger btn-sm';
-        resetButton.textContent = 'Reset';
-        resetButton.addEventListener('click', function() {
-          if (confirm(`Reset lightbox open count for "${product.productId}"?`)) {
-            resetProduct(product.productId, 'lightbox');
-            loadData();
-          }
-        });
-        actionsCell.appendChild(resetButton);
-        row.appendChild(actionsCell);
-        
-        lightboxOpensTableBody.appendChild(row);
-      });
-    }
-    
-    // Update combined stats table
-    combinedStatsTableBody.innerHTML = '';
-    
-    if (combinedData.length === 0) {
-      const row = document.createElement('tr');
-      const cell = document.createElement('td');
-      cell.colSpan = 6;
-      cell.className = 'no-data-message';
-      cell.textContent = 'No analytics data available yet';
-      row.appendChild(cell);
-      combinedStatsTableBody.appendChild(row);
-    } else {
-      // Sort by total interactions (descending)
-      const sortedCombinedData = combinedData.sort((a, b) => b.totalInteractions - a.totalInteractions);
-      
-      sortedCombinedData.forEach(product => {
-        const row = document.createElement('tr');
-        
-        const productCell = document.createElement('td');
-        productCell.textContent = product.productId;
-        productCell.title = product.productId;
-        row.appendChild(productCell);
-        
-        const urlClicksCell = document.createElement('td');
-        urlClicksCell.innerHTML = `<span class="click-type url-type">URL</span> ${product.urlClicks}`;
-        row.appendChild(urlClicksCell);
-        
-        const lightboxOpensCell = document.createElement('td');
-        lightboxOpensCell.innerHTML = `<span class="click-type lightbox-type">LB</span> ${product.lightboxOpens}`;
-        row.appendChild(lightboxOpensCell);
-        
-        const totalCell = document.createElement('td');
-        totalCell.textContent = product.totalInteractions;
-        row.appendChild(totalCell);
-        
-        const conversionCell = document.createElement('td');
-        if (product.lightboxOpens > 0) {
-          const rate = (product.urlClicks / product.lightboxOpens).toFixed(2);
-          conversionCell.textContent = `${rate}x`;
-        } else {
-          conversionCell.textContent = '-';
-        }
-        row.appendChild(conversionCell);
-        
-        const actionsCell = document.createElement('td');
-        const resetButton = document.createElement('button');
-        resetButton.className = 'btn btn-danger btn-sm';
-        resetButton.textContent = 'Reset All';
-        resetButton.addEventListener('click', function() {
-          if (confirm(`Reset all stats for "${product.productId}"?`)) {
-            resetProduct(product.productId, 'all');
-            loadData();
-          }
-        });
-        actionsCell.appendChild(resetButton);
-        row.appendChild(actionsCell);
-        
-        combinedStatsTableBody.appendChild(row);
-      });
-    }
-  }
-  
-  // Event listeners
-  refreshButton.addEventListener('click', loadData);
-  exportButton.addEventListener('click', exportToCsv);
-  resetAllButton.addEventListener('click', resetAllData);
-  
-  // Initialize on load
-  document.addEventListener('DOMContentLoaded', loadData);
+  {% if jekyll.environment == "development" %}
+    window.MANAGER_PASSWORD = "manager123";
+  {% else %}
+    window.MANAGER_PASSWORD = "{{ site.env.MANAGER_PASSWORD }}";
+  {% endif %}
 </script>
+
+<!-- Load the external JavaScript file -->
+<script src="{{ '/assets/js/admin-product-analytics.js' | relative_url | bust_js_cache }}"></script>
