@@ -1,4 +1,4 @@
-// supabase-sync.js - Sync product analytics to Supabase with duplicate prevention
+// supabase-sync.js - Production version
 (function() {
   // Constants
   const SYNC_DELAY = 15 * 1000; // 15 seconds after interaction
@@ -10,9 +10,9 @@
   const LAST_INTERACTION_KEY = 'last_product_interaction';
   const SYNCED_STATE_KEY = 'product_analytics_synced_state';
   
-  // Supabase configuration
+  // Supabase configuration - Updated with correct values
   const SUPABASE_URL = 'https://twvwpdzcgtgyysxntill.supabase.co';
-  const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InR3dndwZHpjZ3RneXlzeG50aWxsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTU5NzMxNjMsImV4cCI6MjAzMTU0OTE2M30.XXXXXX'; // Replace with your actual anon key
+  const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InR3dndwZHpjZ3RneXlzeG50aWxsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDY3NTg1MjUsImV4cCI6MjA2MjMzNDUyNX0.8PMguWXxjTZ_9Fjn-mlNIQ01bBLJvVHHN00_R7oWl7c';
   
   // Extract product category
   function getProductCategory(productId) {
@@ -25,16 +25,29 @@
   }
   
   // Function to make Supabase API requests
-  function createSupabaseRequest(path, method, data) {
-    return fetch(`${SUPABASE_URL}${path}`, {
-      method: method,
-      headers: {
-        'Content-Type': 'application/json',
-        'apikey': SUPABASE_ANON_KEY,
-        'Authorization': `Bearer ${SUPABASE_ANON_KEY}`
-      },
-      body: data ? JSON.stringify(data) : undefined
-    });
+  async function createSupabaseRequest(path, method, data) {
+    try {
+      const response = await fetch(`${SUPABASE_URL}${path}`, {
+        method: method,
+        headers: {
+          'Content-Type': 'application/json',
+          'apikey': SUPABASE_ANON_KEY,
+          'Authorization': `Bearer ${SUPABASE_ANON_KEY}`
+        },
+        body: data ? JSON.stringify(data) : undefined
+      });
+      
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error('Supabase request failed:', errorText);
+        return { ok: false, status: response.status, error: errorText };
+      }
+      
+      return { ok: true, status: response.status };
+    } catch (error) {
+      console.error('Fetch error:', error);
+      return { ok: false, error: error.message };
+    }
   }
   
   // Get the last synced state to prevent duplicate uploads
@@ -76,8 +89,7 @@
       scheduleSync();
     });
     
-    // Check if these events aren't already defined in product-catalog-json.js
-    // If not, modify the tracking functions to dispatch events
+    // Check if productAnalytics object exists and hook into it
     if (window.productAnalytics) {
       // Original trackUrlClick function - add event dispatch
       const originalTrackUrlClick = productAnalytics.trackUrlClick;
@@ -117,14 +129,11 @@
   
   // Sync function - only syncs changes since last sync
   async function syncToSupabase() {
-    console.log('Starting sync to Supabase...');
-    
     // Get current data
     const urlData = localStorage.getItem(URL_CLICKS_KEY);
     const lightboxData = localStorage.getItem(LIGHTBOX_OPENS_KEY);
     
     if (!urlData && !lightboxData) {
-      console.log('No analytics data to sync');
       return;
     }
     
@@ -137,12 +146,12 @@
     
     // Prepare data to send (only new or changed data)
     const batchData = [];
-    let changesMade = false;
     
     // Process URL clicks - only send new/changed data
     Object.entries(currentUrlClicks).forEach(([productId, data]) => {
-      const lastSyncedClicks = lastSyncedState.urlClicks[productId]?.clicks || 0;
-      const newClicks = data.clicks - lastSyncedClicks;
+      const lastSyncedClicks = (lastSyncedState.urlClicks[productId]?.clicks) || 0;
+      const currentClicks = data.clicks || 0;
+      const newClicks = currentClicks - lastSyncedClicks;
       
       if (newClicks > 0) {
         batchData.push({
@@ -152,14 +161,14 @@
           count: newClicks, // Only sync the new clicks
           timestamp: data.lastClicked || new Date().toISOString()
         });
-        changesMade = true;
       }
     });
     
     // Process lightbox opens - only send new/changed data
     Object.entries(currentLightboxOpens).forEach(([productId, data]) => {
-      const lastSyncedOpens = lastSyncedState.lightboxOpens[productId]?.opens || 0;
-      const newOpens = data.opens - lastSyncedOpens;
+      const lastSyncedOpens = (lastSyncedState.lightboxOpens[productId]?.opens) || 0;
+      const currentOpens = data.opens || 0;
+      const newOpens = currentOpens - lastSyncedOpens;
       
       if (newOpens > 0) {
         batchData.push({
@@ -169,38 +178,32 @@
           count: newOpens, // Only sync the new opens
           timestamp: data.lastOpened || new Date().toISOString()
         });
-        changesMade = true;
       }
     });
     
     if (batchData.length === 0) {
-      console.log('No new analytics data to sync');
       return;
     }
     
-    console.log(`Syncing ${batchData.length} new analytics records to Supabase`);
+    // Try both table paths to handle possible schema configuration
+    let response;
     
-    // Send data to Supabase
-    try {
-      const response = await createSupabaseRequest('/rest/v1/website_analytics.product_clicks', 'POST', batchData);
-      
-      if (response.ok) {
-        console.log('Successfully synced data to Supabase');
-        
-        // Update the synced state to match current state
-        saveSyncState(currentUrlClicks, currentLightboxOpens);
-        
-        localStorage.setItem('last_sync_success', new Date().toISOString());
-        console.log('Synced state updated');
-      } else {
-        console.error('Failed to sync to Supabase:', await response.text());
-      }
-    } catch (error) {
-      console.error('Error syncing to Supabase:', error);
+    // First try with schema prefix (website_analytics.product_clicks)
+    response = await createSupabaseRequest('/rest/v1/website_analytics.product_clicks', 'POST', batchData);
+    
+    // If that fails, try without schema prefix (product_clicks)
+    if (!response.ok) {
+      response = await createSupabaseRequest('/rest/v1/product_clicks', 'POST', batchData);
+    }
+    
+    if (response.ok) {
+      // Update the synced state to match current state
+      saveSyncState(currentUrlClicks, currentLightboxOpens);
+      localStorage.setItem('last_sync_success', new Date().toISOString());
     }
   }
   
-  // Check and cleanup function - run regularly
+  // Check and cleanup function - run regularly to maintain storage
   function checkAndCleanupData() {
     // Get last cleanup date
     const lastCleanupDate = localStorage.getItem(LAST_CLEANUP_KEY);
@@ -218,8 +221,6 @@
     
     // If it's been at least 2 days since last cleanup
     if (daysSinceCleanup >= CLEANUP_INTERVAL_DAYS) {
-      console.log(`Performing ${CLEANUP_INTERVAL_DAYS}-day cleanup of analytics data`);
-      
       // First sync any pending data
       syncToSupabase();
       
@@ -245,16 +246,12 @@
         
         // Update last cleanup date
         localStorage.setItem(LAST_CLEANUP_KEY, now.toISOString());
-        
-        console.log(`Analytics data cleared and backed up as of ${backupDate}`);
       }, 5000); // 5-second delay to allow sync to complete
     }
   }
   
   // Initialize
   function init() {
-    console.log('Supabase sync script loaded');
-    
     // Set up interaction observer
     setupInteractionObserver();
     
@@ -265,7 +262,6 @@
       if (timeSinceInteraction < SYNC_DELAY) {
         // Schedule sync for remaining time
         const remainingTime = Math.max(0, SYNC_DELAY - timeSinceInteraction);
-        console.log(`Scheduling sync in ${remainingTime}ms due to recent interaction`);
         setTimeout(syncToSupabase, remainingTime);
       } else {
         // Sync immediately if it's been a while
