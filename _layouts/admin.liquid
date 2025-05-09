@@ -57,7 +57,147 @@
     </script>
     <script src="{{ '/assets/js/admin-panel.js' | relative_url | bust_js_cache }}"></script>
     <script src="{{ '/assets/js/supabase-sync.js' | relative_url | bust_js_cache }}" defer></script>
-
+    <!-- Add this new debug script -->
+    <script>
+    // Debug script - Add this to your admin.liquid layout to troubleshoot
+    (function() {
+      // Add visible debug panel
+      const debugPanel = document.createElement('div');
+      debugPanel.style.position = 'fixed';
+      debugPanel.style.bottom = '0';
+      debugPanel.style.right = '0';
+      debugPanel.style.width = '400px';
+      debugPanel.style.height = 'auto';
+      debugPanel.style.maxHeight = '300px';
+      debugPanel.style.background = 'rgba(0,0,0,0.8)';
+      debugPanel.style.color = 'lime';
+      debugPanel.style.padding = '10px';
+      debugPanel.style.fontFamily = 'monospace';
+      debugPanel.style.fontSize = '12px';
+      debugPanel.style.zIndex = '99999';
+      debugPanel.style.overflowY = 'auto';
+      debugPanel.innerHTML = '<h3>Supabase Debug</h3><div id="debug-log"></div>';
+      document.body.appendChild(debugPanel);
+      
+      // Function to log messages
+      function logMessage(msg, data) {
+        const logDiv = document.getElementById('debug-log');
+        const entry = document.createElement('div');
+        entry.innerHTML = `<p>${new Date().toLocaleTimeString()}: ${msg}</p>`;
+        if (data) {
+          entry.innerHTML += `<pre>${JSON.stringify(data, null, 2)}</pre>`;
+        }
+        logDiv.insertBefore(entry, logDiv.firstChild);
+        console.log(msg, data);
+      }
+      
+      // Monitor localStorage changes
+      logMessage('Debug monitor started');
+      
+      // Show current localStorage state
+      const urlClicks = localStorage.getItem('product_url_clicks');
+      const lightboxOpens = localStorage.getItem('product_lightbox_opens');
+      
+      if (urlClicks) {
+        logMessage('Current URL clicks', JSON.parse(urlClicks));
+      }
+      
+      if (lightboxOpens) {
+        logMessage('Current lightbox opens', JSON.parse(lightboxOpens));
+      }
+      
+      // Test Supabase connection directly
+      logMessage('Testing Supabase connection...');
+      
+      fetch('https://twvwpdzcgtgyysxntill.supabase.co/rest/v1/website_analytics.product_clicks?limit=1', {
+        method: 'GET',
+        headers: {
+          'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InR3dndwZHpjZ3RneXlzeG50aWxsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDY3NTg1MjUsImV4cCI6MjA2MjMzNDUyNX0.8PMguWXxjTZ_9Fjn-mlNIQ01bBLJvVHHN00_R7oWl7c',
+          'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InR3dndwZHpjZ3RneXlzeG50aWxsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDY3NTg1MjUsImV4cCI6MjA2MjMzNDUyNX0.8PMguWXxjTZ_9Fjn-mlNIQ01bBLJvVHHN00_R7oWl7c'
+        }
+      })
+      .then(response => {
+        logMessage(`Connection test: ${response.status} ${response.ok ? 'OK' : 'FAILED'}`);
+        return response.text();
+      })
+      .then(text => {
+        if (text) {
+          logMessage('Response:', text);
+        }
+      })
+      .catch(error => {
+        logMessage('Connection error:', error.message);
+      });
+      
+      // Try a direct insert
+      const testData = {
+        product_id: 'test-product',
+        type: 'urlClick',
+        category: 'test',
+        count: 1,
+        timestamp: new Date().toISOString()
+      };
+      
+      logMessage('Trying direct test insert:', testData);
+      
+      fetch('https://twvwpdzcgtgyysxntill.supabase.co/rest/v1/website_analytics.product_clicks', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InR3dndwZHpjZ3RneXlzeG50aWxsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDY3NTg1MjUsImV4cCI6MjA2MjMzNDUyNX0.8PMguWXxjTZ_9Fjn-mlNIQ01bBLJvVHHN00_R7oWl7c',
+          'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InR3dndwZHpjZ3RneXlzeG50aWxsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDY3NTg1MjUsImV4cCI6MjA2MjMzNDUyNX0.8PMguWXxjTZ_9Fjn-mlNIQ01bBLJvVHHN00_R7oWl7c',
+          'Prefer': 'return=minimal'
+        },
+        body: JSON.stringify([testData])
+      })
+      .then(response => {
+        logMessage(`Test insert: ${response.status} ${response.ok ? 'OK' : 'FAILED'}`);
+        return response.text();
+      })
+      .then(text => {
+        if (text) {
+          logMessage('Insert response:', text);
+        } else {
+          logMessage('Insert succeeded');
+        }
+      })
+      .catch(error => {
+        logMessage('Insert error:', error.message);
+      });
+      
+      // Override the fetch API to log all requests
+      const originalFetch = window.fetch;
+      window.fetch = function(url, options) {
+        // Only log Supabase calls
+        if (url.includes('supabase')) {
+          logMessage(`FETCH: ${options?.method || 'GET'} ${url}`, 
+            options?.body ? JSON.parse(options.body) : null);
+        }
+        
+        return originalFetch.apply(this, arguments)
+          .then(response => {
+            if (url.includes('supabase')) {
+              logMessage(`RESPONSE: ${response.status}`);
+              
+              // Clone the response so we can read its text while still returning the original
+              const clone = response.clone();
+              clone.text().then(text => {
+                if (text) {
+                  logMessage('RESPONSE BODY:', text);
+                }
+              });
+            }
+            return response;
+          })
+          .catch(error => {
+            if (url.includes('supabase')) {
+              logMessage(`ERROR: ${error.message}`);
+            }
+            throw error;
+          });
+      };
+    })();
+    </script>
     <!-- Styles -->
     <style>
       html, body {
