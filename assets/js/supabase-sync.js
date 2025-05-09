@@ -1,27 +1,23 @@
-// supabase-sync.js - Fixed version
+// supabase-sync.js - With Thailand timestamp (UTC+7)
 (function() {
   // Constants
-  const SYNC_DELAY = 15 * 1000; // Exactly 15 seconds after interaction
-  const SYNC_INTERVAL = 5 * 60 * 1000; // 5 minutes background check
-  const CLEANUP_INTERVAL_DAYS = 3; // Clear data every 3 days
-  const LAST_CLEANUP_KEY = 'last_analytics_cleanup_date';
   const URL_CLICKS_KEY = 'product_url_clicks';
   const LIGHTBOX_OPENS_KEY = 'product_lightbox_opens';
-  const LAST_INTERACTION_KEY = 'last_product_interaction';
-  const SYNCED_STATE_KEY = 'product_analytics_synced_state';
+  const CLEANUP_INTERVAL_DAYS = 3; // Clear data every 3 days
+  const LAST_CLEANUP_KEY = 'last_analytics_cleanup_date';
+  const LAST_SYNC_KEY = 'last_supabase_sync_state';
   
   // Supabase configuration
   const SUPABASE_URL = 'https://twvwpdzcgtgyysxntill.supabase.co';
   const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InR3dndwZHpjZ3RneXlzeG50aWxsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDY3NTg1MjUsImV4cCI6MjA2MjMzNDUyNX0.8PMguWXxjTZ_9Fjn-mlNIQ01bBLJvVHHN00_R7oWl7c';
   
-  // Only initialize on pages with product catalog
-  // This prevents it from interfering with login pages
-  function shouldInitialize() {
-    // Check if we're on a page with products
-    return window.productAnalytics || 
-           document.querySelector('.product-catalog') || 
-           document.querySelector('.product-item') ||
-           window.location.pathname.includes('/products/');
+  // Get Thailand timestamp (UTC+7)
+  function getThailandTimestamp() {
+    const now = new Date();
+    // Get the current time adjusted to UTC+7
+    const utcTime = now.getTime() + (now.getTimezoneOffset() * 60000);
+    const thailandTime = new Date(utcTime + (7 * 3600000));
+    return thailandTime.toISOString();
   }
   
   // Extract product category
@@ -34,193 +30,151 @@
     else return 'อื่นๆ';
   }
   
-  // Function to make Supabase API requests
-  async function createSupabaseRequest(path, method, data) {
-    try {
-      const response = await fetch(`${SUPABASE_URL}${path}`, {
-        method: method,
-        headers: {
-          'Content-Type': 'application/json',
-          'apikey': SUPABASE_ANON_KEY,
-          'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
-          'Prefer': 'return=minimal'
-        },
-        body: data ? JSON.stringify(data) : undefined
-      });
-      
-      if (!response.ok) {
-        const errorText = await response.text();
-        console.error('Supabase request failed:', errorText);
-        return { ok: false, status: response.status, error: errorText };
-      }
-      
-      return { ok: true, status: response.status };
-    } catch (error) {
-      console.error('Fetch error:', error);
-      return { ok: false, error: error.message };
-    }
-  }
-  
-  // Get the last synced state to prevent duplicate uploads
-  function getLastSyncedState() {
-    const storedState = localStorage.getItem(SYNCED_STATE_KEY);
-    if (storedState) {
-      try {
-        return JSON.parse(storedState);
-      } catch (e) {
-        console.error('Error parsing synced state:', e);
-      }
-    }
-    return {
+  // Get previously synced state
+  function getLastSyncState() {
+    const lastState = localStorage.getItem(LAST_SYNC_KEY);
+    return lastState ? JSON.parse(lastState) : {
       urlClicks: {},
       lightboxOpens: {}
     };
   }
   
-  // Save current sync state
-  function saveSyncState(urlClicks, lightboxOpens) {
-    const state = {
+  // Save current state as last synced
+  function saveCurrentAsLastSync(urlClicks, lightboxOpens) {
+    localStorage.setItem(LAST_SYNC_KEY, JSON.stringify({
       urlClicks: urlClicks || {},
       lightboxOpens: lightboxOpens || {}
-    };
-    localStorage.setItem(SYNCED_STATE_KEY, JSON.stringify(state));
+    }));
   }
   
-  // Set up interaction observer to detect product interactions
-  function setupInteractionObserver() {
-    // Listen for URL clicks
-    document.addEventListener('urlClickTracked', function(e) {
-      localStorage.setItem(LAST_INTERACTION_KEY, Date.now().toString());
-      scheduleSync();
-    });
+  // Check if product has changed since last sync
+  function hasChanged(productId, currentData, lastSyncData, type) {
+    if (!lastSyncData[productId]) return true;
     
-    // Listen for lightbox opens
-    document.addEventListener('lightboxOpenTracked', function(e) {
-      localStorage.setItem(LAST_INTERACTION_KEY, Date.now().toString());
-      scheduleSync();
-    });
+    const currentCount = type === 'url' ? currentData[productId].clicks : currentData[productId].opens;
+    const lastCount = type === 'url' ? 
+                     (lastSyncData[productId].clicks || 0) : 
+                     (lastSyncData[productId].opens || 0);
     
-    // Check if productAnalytics object exists and hook into it
-    if (window.productAnalytics) {
-      // Original trackUrlClick function - add event dispatch
-      const originalTrackUrlClick = productAnalytics.trackUrlClick;
-      if (originalTrackUrlClick && typeof originalTrackUrlClick === 'function') {
-        productAnalytics.trackUrlClick = function(productId) {
-          const result = originalTrackUrlClick.call(this, productId);
-          document.dispatchEvent(new CustomEvent('urlClickTracked', { detail: { productId } }));
-          return result;
-        };
-      }
-      
-      // Original trackLightboxOpen function - add event dispatch
-      const originalTrackLightboxOpen = productAnalytics.trackLightboxOpen;
-      if (originalTrackLightboxOpen && typeof originalTrackLightboxOpen === 'function') {
-        productAnalytics.trackLightboxOpen = function(productId) {
-          const result = originalTrackLightboxOpen.call(this, productId);
-          document.dispatchEvent(new CustomEvent('lightboxOpenTracked', { detail: { productId } }));
-          return result;
-        };
-      }
-    }
-    
-    // Force immediate sync of any existing data
-    syncToSupabase();
+    return currentCount > lastCount;
   }
   
-  // Schedule a sync after delay
-  let syncTimeout = null;
-  function scheduleSync() {
-    // Clear existing timeout if any
-    if (syncTimeout) {
-      clearTimeout(syncTimeout);
-    }
-    
-    // Set new timeout - exactly 15 seconds
-    syncTimeout = setTimeout(function() {
-      syncToSupabase();
-    }, SYNC_DELAY);
-  }
-  
-  // Sync function - only syncs changes since last sync
+  // Sync function - works like the Google Sheets version
   async function syncToSupabase() {
-    try {
-      // Get current data
-      const urlData = localStorage.getItem(URL_CLICKS_KEY);
-      const lightboxData = localStorage.getItem(LIGHTBOX_OPENS_KEY);
-      
-      if (!urlData && !lightboxData) {
-        return;
+    // Get current data
+    const urlData = localStorage.getItem(URL_CLICKS_KEY);
+    const lightboxData = localStorage.getItem(LIGHTBOX_OPENS_KEY);
+    
+    if (!urlData && !lightboxData) {
+      return;
+    }
+    
+    // Parse data
+    const urlClicks = urlData ? JSON.parse(urlData) : {};
+    const lightboxOpens = lightboxData ? JSON.parse(lightboxData) : {};
+    
+    // Get last synced state
+    const lastSyncState = getLastSyncState();
+    
+    // Find products that have changed since last sync
+    const changedProducts = new Set();
+    
+    // Check URL clicks
+    Object.keys(urlClicks).forEach(productId => {
+      if (hasChanged(productId, urlClicks, lastSyncState.urlClicks, 'url')) {
+        changedProducts.add(productId);
       }
+    });
+    
+    // Check lightbox opens
+    Object.keys(lightboxOpens).forEach(productId => {
+      if (hasChanged(productId, lightboxOpens, lastSyncState.lightboxOpens, 'lightbox')) {
+        changedProducts.add(productId);
+      }
+    });
+    
+    if (changedProducts.size === 0) {
+      return;
+    }
+    
+    // Prepare batch of data to upload
+    const batchData = [];
+    
+    // For each changed product, prepare data
+    changedProducts.forEach(productId => {
+      const category = getProductCategory(productId);
       
-      // Parse data
-      const currentUrlClicks = urlData ? JSON.parse(urlData) : {};
-      const currentLightboxOpens = lightboxData ? JSON.parse(lightboxData) : {};
-      
-      // Get last synced state
-      const lastSyncedState = getLastSyncedState();
-      
-      // Prepare data to send (only new or changed data)
-      const batchData = [];
-      
-      // Process URL clicks - only send new/changed data
-      Object.entries(currentUrlClicks).forEach(([productId, data]) => {
-        const lastSyncedClicks = (lastSyncedState.urlClicks[productId]?.clicks) || 0;
-        const currentClicks = data.clicks || 0;
+      // Add URL click events if they exist and have changed
+      if (urlClicks[productId]) {
+        const lastSyncedClicks = lastSyncState.urlClicks[productId]?.clicks || 0;
+        const currentClicks = urlClicks[productId].clicks || 0;
         const newClicks = currentClicks - lastSyncedClicks;
         
         if (newClicks > 0) {
           batchData.push({
             product_id: productId,
             type: 'urlClick',
-            category: getProductCategory(productId),
-            count: newClicks, // Only sync the new clicks
-            timestamp: data.lastClicked || new Date().toISOString()
+            category: category,
+            count: newClicks,
+            timestamp: urlClicks[productId].lastClicked || getThailandTimestamp()
           });
         }
-      });
+      }
       
-      // Process lightbox opens - only send new/changed data
-      Object.entries(currentLightboxOpens).forEach(([productId, data]) => {
-        const lastSyncedOpens = (lastSyncedState.lightboxOpens[productId]?.opens) || 0;
-        const currentOpens = data.opens || 0;
+      // Add lightbox open events if they exist and have changed
+      if (lightboxOpens[productId]) {
+        const lastSyncedOpens = lastSyncState.lightboxOpens[productId]?.opens || 0;
+        const currentOpens = lightboxOpens[productId].opens || 0;
         const newOpens = currentOpens - lastSyncedOpens;
         
         if (newOpens > 0) {
           batchData.push({
             product_id: productId,
             type: 'lightboxOpen',
-            category: getProductCategory(productId),
-            count: newOpens, // Only sync the new opens
-            timestamp: data.lastOpened || new Date().toISOString()
+            category: category,
+            count: newOpens,
+            timestamp: lightboxOpens[productId].lastOpened || getThailandTimestamp()
           });
         }
+      }
+    });
+    
+    if (batchData.length === 0) {
+      return;
+    }
+    
+    try {
+      // Send to Supabase
+      const response = await fetch(`${SUPABASE_URL}/rest/v1/product_clicks`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'apikey': SUPABASE_ANON_KEY,
+          'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+          'Prefer': 'return=minimal'
+        },
+        body: JSON.stringify(batchData)
       });
       
-      if (batchData.length === 0) {
-        return;
-      }
-      
-      // Use path for public schema
-      const response = await createSupabaseRequest('/rest/v1/product_clicks', 'POST', batchData);
-      
       if (response.ok) {
-        // Update the synced state to match current state
-        saveSyncState(currentUrlClicks, currentLightboxOpens);
-        localStorage.setItem('last_sync_success', new Date().toISOString());
+        // Save current state as last synced state
+        saveCurrentAsLastSync(urlClicks, lightboxOpens);
+      } else {
+        console.error('Failed to sync to Supabase:', await response.text());
       }
     } catch (error) {
-      console.error('Error in syncToSupabase:', error);
+      console.error('Error syncing to Supabase:', error);
     }
   }
   
-  // Check and cleanup function - run every 3 days
+  // Check and cleanup function
   function checkAndCleanupData() {
     // Get last cleanup date
     const lastCleanupDate = localStorage.getItem(LAST_CLEANUP_KEY);
     
     // If never cleaned up before, set initial date and exit
     if (!lastCleanupDate) {
-      localStorage.setItem(LAST_CLEANUP_KEY, new Date().toISOString());
+      localStorage.setItem(LAST_CLEANUP_KEY, getThailandTimestamp());
       return;
     }
     
@@ -252,44 +206,27 @@
         // Clear current data
         localStorage.removeItem(URL_CLICKS_KEY);
         localStorage.removeItem(LIGHTBOX_OPENS_KEY);
-        localStorage.removeItem(SYNCED_STATE_KEY);
+        localStorage.removeItem(LAST_SYNC_KEY);
         
         // Update last cleanup date
-        localStorage.setItem(LAST_CLEANUP_KEY, now.toISOString());
+        localStorage.setItem(LAST_CLEANUP_KEY, getThailandTimestamp());
       }, 5000); // 5-second delay to allow sync to complete
     }
   }
   
   // Initialize
   function init() {
-    // Only initialize on product pages
-    if (!shouldInitialize()) {
-      return;
-    }
-    
-    // Set up interaction observer
-    setupInteractionObserver();
-    
-    // Check if there was a recent interaction
-    const lastInteraction = localStorage.getItem(LAST_INTERACTION_KEY);
-    if (lastInteraction) {
-      const timeSinceInteraction = Date.now() - parseInt(lastInteraction);
-      if (timeSinceInteraction < SYNC_DELAY) {
-        // Schedule sync for remaining time
-        const remainingTime = Math.max(0, SYNC_DELAY - timeSinceInteraction);
-        setTimeout(syncToSupabase, remainingTime);
-      } else {
-        // Sync immediately if it's been a while
-        syncToSupabase();
-      }
-    }
+    // Run sync when page loads (with no delay)
+    syncToSupabase();
     
     // Run cleanup check
     checkAndCleanupData();
     
-    // Set up periodic sync and cleanup
-    setInterval(syncToSupabase, SYNC_INTERVAL);
-    setInterval(checkAndCleanupData, 12 * 60 * 60 * 1000); // Check cleanup twice daily
+    // Run sync every 30 seconds to catch any new data quickly
+    setInterval(syncToSupabase, 30 * 1000);
+    
+    // Check for cleanup once a day
+    setInterval(checkAndCleanupData, 24 * 60 * 60 * 1000);
   }
   
   // Start the script
