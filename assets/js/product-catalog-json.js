@@ -2,6 +2,19 @@
 const URL_CLICKS_KEY = 'product_url_clicks';
 const LIGHTBOX_OPENS_KEY = 'product_lightbox_opens';
 
+// Supabase configuration
+const SUPABASE_URL = 'https://twvwpdzcgtgyysxntill.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InR3dndwZHpjZ3RneXlzeG50aWxsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDY3NTg1MjUsImV4cCI6MjA2MjMzNDUyNX0.8PMguWXxjTZ_9Fjn-mlNIQ01bBLJvVHHN00_R7oWl7c';
+
+// Get Thailand timestamp (UTC+7)
+function getThailandTimestamp() {
+  const now = new Date();
+  // Get the current time adjusted to UTC+7
+  const utcTime = now.getTime() + (now.getTimezoneOffset() * 60000);
+  const thailandTime = new Date(utcTime + (7 * 3600000));
+  return thailandTime.toISOString();
+}
+
 // Add helper function to create clean URL slugs
 function createCleanUrlSlug(text) {
   // Convert to lowercase, replace spaces and special chars with hyphens
@@ -18,6 +31,16 @@ function createCleanUrlSlug(text) {
 
 // Analytics functions
 const productAnalytics = {
+  // Helper function to get product category
+  getProductCategory: function(productId) {
+    const productIdLower = productId.toLowerCase();
+    if (productIdLower.includes('sports')) return 'กีฬา';
+    else if (productIdLower.includes('polo')) return 'เสื้อโปโล';
+    else if (productIdLower.includes('tshirt')) return 'เสื้อยืด';
+    else if (productIdLower.includes('printing')) return 'สิ่งพิมพ์';
+    else return 'อื่นๆ';
+  },
+  
   // Track a URL button click
   trackUrlClick: function(productId) {
     // Get existing data
@@ -37,6 +60,24 @@ const productAnalytics = {
     
     // Save updated data
     localStorage.setItem(URL_CLICKS_KEY, JSON.stringify(trackingData));
+    
+    // Send to Supabase
+    fetch(`${SUPABASE_URL}/rest/v1/product_clicks`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'apikey': SUPABASE_ANON_KEY,
+        'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+        'Prefer': 'return=minimal'
+      },
+      body: JSON.stringify([{
+        product_id: productId,
+        type: 'urlClick',
+        category: this.getProductCategory(productId),
+        count: 1,
+        timestamp: getThailandTimestamp()
+      }])
+    }).catch(error => console.error('Error sending to Supabase:', error));
     
     // Return the updated click count
     return trackingData[productId].clicks;
@@ -61,6 +102,24 @@ const productAnalytics = {
     
     // Save updated data
     localStorage.setItem(LIGHTBOX_OPENS_KEY, JSON.stringify(trackingData));
+    
+    // Send to Supabase
+    fetch(`${SUPABASE_URL}/rest/v1/product_clicks`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'apikey': SUPABASE_ANON_KEY,
+        'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+        'Prefer': 'return=minimal'
+      },
+      body: JSON.stringify([{
+        product_id: productId,
+        type: 'lightboxOpen',
+        category: this.getProductCategory(productId),
+        count: 1,
+        timestamp: getThailandTimestamp()
+      }])
+    }).catch(error => console.error('Error sending to Supabase:', error));
     
     // Return the updated open count
     return trackingData[productId].opens;
