@@ -1,11 +1,11 @@
-// supabase-sync.js - With Thailand timestamp (UTC+7)
+// supabase-sync.js - One row per interaction
 (function() {
   // Constants
   const URL_CLICKS_KEY = 'product_url_clicks';
   const LIGHTBOX_OPENS_KEY = 'product_lightbox_opens';
   const CLEANUP_INTERVAL_DAYS = 3; // Clear data every 3 days
   const LAST_CLEANUP_KEY = 'last_analytics_cleanup_date';
-  const LAST_SYNC_KEY = 'last_supabase_sync_state';
+  const PROCESSED_INTERACTIONS_KEY = 'processed_supabase_interactions';
   
   // Supabase configuration
   const SUPABASE_URL = 'https://twvwpdzcgtgyysxntill.supabase.co';
@@ -30,120 +30,116 @@
     else return 'อื่นๆ';
   }
   
-  // Get previously synced state
-  function getLastSyncState() {
-    const lastState = localStorage.getItem(LAST_SYNC_KEY);
-    return lastState ? JSON.parse(lastState) : {
+  // Get processed interactions to avoid duplicates
+  function getProcessedInteractions() {
+    const processed = localStorage.getItem(PROCESSED_INTERACTIONS_KEY);
+    return processed ? JSON.parse(processed) : {
       urlClicks: {},
       lightboxOpens: {}
     };
   }
   
-  // Save current state as last synced
-  function saveCurrentAsLastSync(urlClicks, lightboxOpens) {
-    localStorage.setItem(LAST_SYNC_KEY, JSON.stringify({
-      urlClicks: urlClicks || {},
-      lightboxOpens: lightboxOpens || {}
-    }));
+  // Mark interactions as processed
+  function markAsProcessed(urlClicks, lightboxOpens) {
+    const processed = getProcessedInteractions();
+    
+    // Update URL clicks
+    if (urlClicks) {
+      Object.entries(urlClicks).forEach(([productId, data]) => {
+        processed.urlClicks[productId] = {
+          lastProcessed: data.lastClicked,
+          count: data.clicks
+        };
+      });
+    }
+    
+    // Update lightbox opens
+    if (lightboxOpens) {
+      Object.entries(lightboxOpens).forEach(([productId, data]) => {
+        processed.lightboxOpens[productId] = {
+          lastProcessed: data.lastOpened,
+          count: data.opens
+        };
+      });
+    }
+    
+    // Save updated processed state
+    localStorage.setItem(PROCESSED_INTERACTIONS_KEY, JSON.stringify(processed));
   }
   
-  // Check if product has changed since last sync
-  function hasChanged(productId, currentData, lastSyncData, type) {
-    if (!lastSyncData[productId]) return true;
-    
-    const currentCount = type === 'url' ? currentData[productId].clicks : currentData[productId].opens;
-    const lastCount = type === 'url' ? 
-                     (lastSyncData[productId].clicks || 0) : 
-                     (lastSyncData[productId].opens || 0);
-    
-    return currentCount > lastCount;
-  }
-  
-  // Sync function - works like the Google Sheets version
-  async function syncToSupabase() {
+  // Extract interactions that haven't been processed yet
+  function getNewInteractions() {
     // Get current data
     const urlData = localStorage.getItem(URL_CLICKS_KEY);
     const lightboxData = localStorage.getItem(LIGHTBOX_OPENS_KEY);
     
     if (!urlData && !lightboxData) {
-      return;
+      return { newInteractions: [], currentUrlClicks: {}, currentLightboxOpens: {} };
     }
     
     // Parse data
-    const urlClicks = urlData ? JSON.parse(urlData) : {};
-    const lightboxOpens = lightboxData ? JSON.parse(lightboxData) : {};
+    const currentUrlClicks = urlData ? JSON.parse(urlData) : {};
+    const currentLightboxOpens = lightboxData ? JSON.parse(lightboxData) : {};
     
-    // Get last synced state
-    const lastSyncState = getLastSyncState();
+    // Get previously processed interactions
+    const processed = getProcessedInteractions();
     
-    // Find products that have changed since last sync
-    const changedProducts = new Set();
+    // Prepare list of new interactions
+    const newInteractions = [];
     
-    // Check URL clicks
-    Object.keys(urlClicks).forEach(productId => {
-      if (hasChanged(productId, urlClicks, lastSyncState.urlClicks, 'url')) {
-        changedProducts.add(productId);
-      }
-    });
-    
-    // Check lightbox opens
-    Object.keys(lightboxOpens).forEach(productId => {
-      if (hasChanged(productId, lightboxOpens, lastSyncState.lightboxOpens, 'lightbox')) {
-        changedProducts.add(productId);
-      }
-    });
-    
-    if (changedProducts.size === 0) {
-      return;
-    }
-    
-    // Prepare batch of data to upload
-    const batchData = [];
-    
-    // For each changed product, prepare data
-    changedProducts.forEach(productId => {
-      const category = getProductCategory(productId);
+    // Process URL clicks
+    Object.entries(currentUrlClicks).forEach(([productId, data]) => {
+      const processedCount = processed.urlClicks[productId]?.count || 0;
+      const currentCount = data.clicks || 0;
+      const newCount = currentCount - processedCount;
       
-      // Add URL click events if they exist and have changed
-      if (urlClicks[productId]) {
-        const lastSyncedClicks = lastSyncState.urlClicks[productId]?.clicks || 0;
-        const currentClicks = urlClicks[productId].clicks || 0;
-        const newClicks = currentClicks - lastSyncedClicks;
-        
-        if (newClicks > 0) {
-          batchData.push({
-            product_id: productId,
-            type: 'urlClick',
-            category: category,
-            count: newClicks,
-            timestamp: urlClicks[productId].lastClicked || getThailandTimestamp()
-          });
-        }
-      }
-      
-      // Add lightbox open events if they exist and have changed
-      if (lightboxOpens[productId]) {
-        const lastSyncedOpens = lastSyncState.lightboxOpens[productId]?.opens || 0;
-        const currentOpens = lightboxOpens[productId].opens || 0;
-        const newOpens = currentOpens - lastSyncedOpens;
-        
-        if (newOpens > 0) {
-          batchData.push({
-            product_id: productId,
-            type: 'lightboxOpen',
-            category: category,
-            count: newOpens,
-            timestamp: lightboxOpens[productId].lastOpened || getThailandTimestamp()
-          });
-        }
+      // Add an entry for each new click
+      for (let i = 0; i < newCount; i++) {
+        newInteractions.push({
+          product_id: productId,
+          type: 'urlClick',
+          category: getProductCategory(productId),
+          count: 1,
+          timestamp: data.lastClicked || getThailandTimestamp()
+        });
       }
     });
     
-    if (batchData.length === 0) {
-      return;
-    }
+    // Process lightbox opens
+    Object.entries(currentLightboxOpens).forEach(([productId, data]) => {
+      const processedCount = processed.lightboxOpens[productId]?.count || 0;
+      const currentCount = data.opens || 0;
+      const newCount = currentCount - processedCount;
+      
+      // Add an entry for each new open
+      for (let i = 0; i < newCount; i++) {
+        newInteractions.push({
+          product_id: productId,
+          type: 'lightboxOpen',
+          category: getProductCategory(productId),
+          count: 1,
+          timestamp: data.lastOpened || getThailandTimestamp()
+        });
+      }
+    });
     
+    return { 
+      newInteractions,
+      currentUrlClicks,
+      currentLightboxOpens
+    };
+  }
+  
+  // Sync function
+  async function syncToSupabase() {
     try {
+      // Get new interactions
+      const { newInteractions, currentUrlClicks, currentLightboxOpens } = getNewInteractions();
+      
+      if (newInteractions.length === 0) {
+        return;
+      }
+      
       // Send to Supabase
       const response = await fetch(`${SUPABASE_URL}/rest/v1/product_clicks`, {
         method: 'POST',
@@ -153,12 +149,12 @@
           'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
           'Prefer': 'return=minimal'
         },
-        body: JSON.stringify(batchData)
+        body: JSON.stringify(newInteractions)
       });
       
       if (response.ok) {
-        // Save current state as last synced state
-        saveCurrentAsLastSync(urlClicks, lightboxOpens);
+        // Mark as processed
+        markAsProcessed(currentUrlClicks, currentLightboxOpens);
       } else {
         console.error('Failed to sync to Supabase:', await response.text());
       }
@@ -195,7 +191,7 @@
         const lightboxData = localStorage.getItem(LIGHTBOX_OPENS_KEY);
         
         // Create a backup of current data with date
-        const backupDate = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
+        const backupDate = now.toISOString().split('T')[0]; // YYYY-MM-DD
         if (urlData) {
           localStorage.setItem(`product_url_clicks_backup_${backupDate}`, urlData);
         }
@@ -206,7 +202,7 @@
         // Clear current data
         localStorage.removeItem(URL_CLICKS_KEY);
         localStorage.removeItem(LIGHTBOX_OPENS_KEY);
-        localStorage.removeItem(LAST_SYNC_KEY);
+        localStorage.removeItem(PROCESSED_INTERACTIONS_KEY);
         
         // Update last cleanup date
         localStorage.setItem(LAST_CLEANUP_KEY, getThailandTimestamp());
@@ -222,8 +218,8 @@
     // Run cleanup check
     checkAndCleanupData();
     
-    // Run sync every 30 seconds to catch any new data quickly
-    setInterval(syncToSupabase, 30 * 1000);
+    // Run sync every 15 seconds to catch any new data quickly
+    setInterval(syncToSupabase, 15 * 1000);
     
     // Check for cleanup once a day
     setInterval(checkAndCleanupData, 24 * 60 * 60 * 1000);
