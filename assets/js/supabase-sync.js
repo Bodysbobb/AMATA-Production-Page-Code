@@ -1,18 +1,28 @@
-// supabase-sync.js - Production version
+// supabase-sync.js - Fixed version
 (function() {
   // Constants
-  const SYNC_DELAY = 15 * 1000; // 15 seconds after interaction
+  const SYNC_DELAY = 15 * 1000; // Exactly 15 seconds after interaction
   const SYNC_INTERVAL = 5 * 60 * 1000; // 5 minutes background check
-  const CLEANUP_INTERVAL_DAYS = 2; // Clear data every 2 days
+  const CLEANUP_INTERVAL_DAYS = 3; // Clear data every 3 days
   const LAST_CLEANUP_KEY = 'last_analytics_cleanup_date';
   const URL_CLICKS_KEY = 'product_url_clicks';
   const LIGHTBOX_OPENS_KEY = 'product_lightbox_opens';
   const LAST_INTERACTION_KEY = 'last_product_interaction';
   const SYNCED_STATE_KEY = 'product_analytics_synced_state';
   
-  // Supabase configuration - Updated with correct values
+  // Supabase configuration
   const SUPABASE_URL = 'https://twvwpdzcgtgyysxntill.supabase.co';
   const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InR3dndwZHpjZ3RneXlzeG50aWxsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDY3NTg1MjUsImV4cCI6MjA2MjMzNDUyNX0.8PMguWXxjTZ_9Fjn-mlNIQ01bBLJvVHHN00_R7oWl7c';
+  
+  // Only initialize on pages with product catalog
+  // This prevents it from interfering with login pages
+  function shouldInitialize() {
+    // Check if we're on a page with products
+    return window.productAnalytics || 
+           document.querySelector('.product-catalog') || 
+           document.querySelector('.product-item') ||
+           window.location.pathname.includes('/products/');
+  }
   
   // Extract product category
   function getProductCategory(productId) {
@@ -32,7 +42,8 @@
         headers: {
           'Content-Type': 'application/json',
           'apikey': SUPABASE_ANON_KEY,
-          'Authorization': `Bearer ${SUPABASE_ANON_KEY}`
+          'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+          'Prefer': 'return=minimal'
         },
         body: data ? JSON.stringify(data) : undefined
       });
@@ -111,6 +122,9 @@
         };
       }
     }
+    
+    // Force immediate sync of any existing data
+    syncToSupabase();
   }
   
   // Schedule a sync after delay
@@ -121,7 +135,7 @@
       clearTimeout(syncTimeout);
     }
     
-    // Set new timeout
+    // Set new timeout - exactly 15 seconds
     syncTimeout = setTimeout(function() {
       syncToSupabase();
     }, SYNC_DELAY);
@@ -129,81 +143,77 @@
   
   // Sync function - only syncs changes since last sync
   async function syncToSupabase() {
-    // Get current data
-    const urlData = localStorage.getItem(URL_CLICKS_KEY);
-    const lightboxData = localStorage.getItem(LIGHTBOX_OPENS_KEY);
-    
-    if (!urlData && !lightboxData) {
-      return;
-    }
-    
-    // Parse data
-    const currentUrlClicks = urlData ? JSON.parse(urlData) : {};
-    const currentLightboxOpens = lightboxData ? JSON.parse(lightboxData) : {};
-    
-    // Get last synced state
-    const lastSyncedState = getLastSyncedState();
-    
-    // Prepare data to send (only new or changed data)
-    const batchData = [];
-    
-    // Process URL clicks - only send new/changed data
-    Object.entries(currentUrlClicks).forEach(([productId, data]) => {
-      const lastSyncedClicks = (lastSyncedState.urlClicks[productId]?.clicks) || 0;
-      const currentClicks = data.clicks || 0;
-      const newClicks = currentClicks - lastSyncedClicks;
+    try {
+      // Get current data
+      const urlData = localStorage.getItem(URL_CLICKS_KEY);
+      const lightboxData = localStorage.getItem(LIGHTBOX_OPENS_KEY);
       
-      if (newClicks > 0) {
-        batchData.push({
-          product_id: productId,
-          type: 'urlClick',
-          category: getProductCategory(productId),
-          count: newClicks, // Only sync the new clicks
-          timestamp: data.lastClicked || new Date().toISOString()
-        });
+      if (!urlData && !lightboxData) {
+        return;
       }
-    });
-    
-    // Process lightbox opens - only send new/changed data
-    Object.entries(currentLightboxOpens).forEach(([productId, data]) => {
-      const lastSyncedOpens = (lastSyncedState.lightboxOpens[productId]?.opens) || 0;
-      const currentOpens = data.opens || 0;
-      const newOpens = currentOpens - lastSyncedOpens;
       
-      if (newOpens > 0) {
-        batchData.push({
-          product_id: productId,
-          type: 'lightboxOpen',
-          category: getProductCategory(productId),
-          count: newOpens, // Only sync the new opens
-          timestamp: data.lastOpened || new Date().toISOString()
-        });
+      // Parse data
+      const currentUrlClicks = urlData ? JSON.parse(urlData) : {};
+      const currentLightboxOpens = lightboxData ? JSON.parse(lightboxData) : {};
+      
+      // Get last synced state
+      const lastSyncedState = getLastSyncedState();
+      
+      // Prepare data to send (only new or changed data)
+      const batchData = [];
+      
+      // Process URL clicks - only send new/changed data
+      Object.entries(currentUrlClicks).forEach(([productId, data]) => {
+        const lastSyncedClicks = (lastSyncedState.urlClicks[productId]?.clicks) || 0;
+        const currentClicks = data.clicks || 0;
+        const newClicks = currentClicks - lastSyncedClicks;
+        
+        if (newClicks > 0) {
+          batchData.push({
+            product_id: productId,
+            type: 'urlClick',
+            category: getProductCategory(productId),
+            count: newClicks, // Only sync the new clicks
+            timestamp: data.lastClicked || new Date().toISOString()
+          });
+        }
+      });
+      
+      // Process lightbox opens - only send new/changed data
+      Object.entries(currentLightboxOpens).forEach(([productId, data]) => {
+        const lastSyncedOpens = (lastSyncedState.lightboxOpens[productId]?.opens) || 0;
+        const currentOpens = data.opens || 0;
+        const newOpens = currentOpens - lastSyncedOpens;
+        
+        if (newOpens > 0) {
+          batchData.push({
+            product_id: productId,
+            type: 'lightboxOpen',
+            category: getProductCategory(productId),
+            count: newOpens, // Only sync the new opens
+            timestamp: data.lastOpened || new Date().toISOString()
+          });
+        }
+      });
+      
+      if (batchData.length === 0) {
+        return;
       }
-    });
-    
-    if (batchData.length === 0) {
-      return;
-    }
-    
-    // Try both table paths to handle possible schema configuration
-    let response;
-    
-    // First try with schema prefix (website_analytics.product_clicks)
-    response = await createSupabaseRequest('/rest/v1/website_analytics.product_clicks', 'POST', batchData);
-    
-    // If that fails, try without schema prefix (product_clicks)
-    if (!response.ok) {
-      response = await createSupabaseRequest('/rest/v1/product_clicks', 'POST', batchData);
-    }
-    
-    if (response.ok) {
-      // Update the synced state to match current state
-      saveSyncState(currentUrlClicks, currentLightboxOpens);
-      localStorage.setItem('last_sync_success', new Date().toISOString());
+      
+      // Use path for public schema
+      const response = await createSupabaseRequest('/rest/v1/product_clicks', 'POST', batchData);
+      
+      if (response.ok) {
+        // Update the synced state to match current state
+        saveSyncState(currentUrlClicks, currentLightboxOpens);
+        localStorage.setItem('last_sync_success', new Date().toISOString());
+      }
+    } catch (error) {
+      console.error('Error in syncToSupabase:', error);
     }
   }
   
-  // Check and cleanup function - run regularly to maintain storage
+  // Check and cleanup function - run every 3 days
   function checkAndCleanupData() {
     // Get last cleanup date
     const lastCleanupDate = localStorage.getItem(LAST_CLEANUP_KEY);
@@ -219,7 +229,7 @@
     const now = new Date();
     const daysSinceCleanup = Math.floor((now - lastCleanup) / (1000 * 60 * 60 * 24));
     
-    // If it's been at least 2 days since last cleanup
+    // If it's been at least 3 days since last cleanup
     if (daysSinceCleanup >= CLEANUP_INTERVAL_DAYS) {
       // First sync any pending data
       syncToSupabase();
@@ -252,6 +262,11 @@
   
   // Initialize
   function init() {
+    // Only initialize on product pages
+    if (!shouldInitialize()) {
+      return;
+    }
+    
     // Set up interaction observer
     setupInteractionObserver();
     
